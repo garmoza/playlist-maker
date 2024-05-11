@@ -1,4 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="font_size_title">22sp</dimen>
+    <!-- Screen-->
+    <dimen name="padding_horizontal_screen">16dp</dimen>
+
+    <!-- Text size-->
+    <dimen name="title_text_size">22sp</dimen>
+    <dimen name="menu_text_size">16sp</dimen>
+
+    <!-- Header-->
+    <dimen name="header_padding_vertical">4dp</dimen>
+    <dimen name="header_margin_bottom">24dp</dimen>
+    <dimen name="header_text_padding_top">10dp</dimen>
+    <dimen name="header_text_padding_bottom">12dp</dimen>
+    <dimen name="header_ic_padding">12dp</dimen>
+    <dimen name="header_ic_margin_end">12dp</dimen>
+
+    <!-- Main activity -->
+    <dimen name="main_button_corner_radius">16dp</dimen>
+    <dimen name="main_button_icon_padding">8dp</dimen>
+
+    <!-- Settings activity -->
+    <dimen name="settings_menu_item_padding_vertical">21dp</dimen>
 </resources>
