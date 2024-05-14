@@ -5,33 +5,22 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:paddingHorizontal="@dimen/padding_horizontal_screen"
     android:background="@color/app_blue"
     tools:context=".MainActivity">
 
-    <FrameLayout
+    <Toolbar
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/header_margin_bottom"
-        android:paddingVertical="@dimen/header_padding_vertical">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="start"
-            android:paddingTop="@dimen/header_text_padding_top"
-            android:paddingBottom="@dimen/header_text_padding_bottom"
-            android:text="@string/app_name"
-            android:textColor="@color/white"
-            android:textSize="@dimen/title_text_size" />
-
-    </FrameLayout>
+        android:title="@string/app_name"
+        android:titleTextColor="@color/white" />
 
     <Button
         android:id="@+id/buttonSearch"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
+        android:layout_marginHorizontal="@dimen/screen_horizontal_indent"
         android:layout_marginBottom="16dp"
         android:backgroundTint="@color/white"
         android:text="@string/search"
@@ -48,6 +37,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
+        android:layout_marginHorizontal="@dimen/screen_horizontal_indent"
         android:layout_marginBottom="16dp"
         android:backgroundTint="@color/white"
         android:text="@string/library"
@@ -64,6 +54,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
+        android:layout_marginHorizontal="@dimen/screen_horizontal_indent"
         android:layout_marginBottom="28dp"
         android:backgroundTint="@color/white"
         android:text="@string/settings"

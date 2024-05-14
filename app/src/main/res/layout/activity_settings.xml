@@ -1,125 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:paddingHorizontal="@dimen/padding_horizontal_screen"
     android:background="@color/white">
 
-    <LinearLayout
+    <Toolbar
+        android:id="@+id/toolbarSettings"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/header_margin_bottom"
-        android:paddingVertical="@dimen/header_padding_vertical"
-        android:orientation="horizontal">
+        android:title="@string/settings"
+        android:titleTextColor="@color/app_black"
+        android:navigationIcon="@drawable/ic_arrow_back" />
 
-        <ImageView
-            android:id="@+id/imageViewBack"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_gravity="center_vertical"
-            android:layout_marginEnd="@dimen/header_ic_margin_end"
-            android:paddingStart="0dp"
-            android:paddingEnd="@dimen/header_ic_padding"
-            android:src="@drawable/ic_arrow_back"
-            android:contentDescription="@string/back" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="start"
-            android:paddingTop="@dimen/header_text_padding_top"
-            android:paddingBottom="@dimen/header_text_padding_bottom"
-            android:text="@string/settings"
-            android:textColor="@color/app_black"
-            android:textSize="@dimen/title_text_size" />
-
-    </LinearLayout>
-
-    <FrameLayout
+    <Switch
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingVertical="@dimen/settings_menu_item_padding_vertical">
+        android:layout_gravity="end"
+        android:paddingHorizontal="@dimen/screen_horizontal_indent"
+        android:paddingVertical="@dimen/settings_menu_item_padding_vertical"
+        android:text="@string/dark_theme"
+        android:textColor="@color/black"
+        android:textSize="@dimen/menu_text_size" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="start"
-            android:text="@string/dark_theme"
-            android:textColor="@color/black"
-            android:textSize="@dimen/menu_text_size" />
-
-        <Switch
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end" />
-
-    </FrameLayout>
-
-    <FrameLayout
+    <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingVertical="@dimen/settings_menu_item_padding_vertical">
+        android:layout_gravity="start"
+        android:paddingHorizontal="@dimen/screen_horizontal_indent"
+        android:paddingVertical="@dimen/settings_menu_item_padding_vertical"
+        android:text="@string/share_app"
+        android:textColor="@color/black"
+        android:textSize="@dimen/menu_text_size"
+        app:drawableEndCompat="@drawable/ic_share" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="start"
-            android:text="@string/share_app"
-            android:textColor="@color/black"
-            android:textSize="@dimen/menu_text_size" />
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end"
-            android:src="@drawable/ic_share"
-            android:contentDescription="@string/share_app" />
-
-    </FrameLayout>
-
-    <FrameLayout
+    <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingVertical="@dimen/settings_menu_item_padding_vertical">
+        android:layout_gravity="start"
+        android:paddingHorizontal="@dimen/screen_horizontal_indent"
+        android:paddingVertical="@dimen/settings_menu_item_padding_vertical"
+        android:text="@string/write_to_support"
+        android:textColor="@color/black"
+        android:textSize="@dimen/menu_text_size"
+        app:drawableEndCompat="@drawable/ic_support" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="start"
-            android:text="@string/write_to_support"
-            android:textColor="@color/black"
-            android:textSize="@dimen/menu_text_size" />
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end"
-            android:src="@drawable/ic_support"
-            android:contentDescription="@string/write_to_support" />
-
-    </FrameLayout>
-
-    <FrameLayout
+    <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingVertical="@dimen/settings_menu_item_padding_vertical">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="start"
-            android:text="@string/license_agreement"
-            android:textColor="@color/black"
-            android:textSize="@dimen/menu_text_size" />
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end"
-            android:src="@drawable/ic_arrow_forward"
-            android:contentDescription="@string/license_agreement"/>
-
-    </FrameLayout>
+        android:layout_gravity="start"
+        android:paddingHorizontal="@dimen/screen_horizontal_indent"
+        android:paddingVertical="@dimen/settings_menu_item_padding_vertical"
+        android:text="@string/license_agreement"
+        android:textColor="@color/black"
+        android:textSize="@dimen/menu_text_size"
+        app:drawableEndCompat="@drawable/ic_arrow_forward" />
 
 </LinearLayout>
