@@ -2,16 +2,13 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="@color/app_blue"
+    style="@style/LinerLayoutMainActivityStyle"
     tools:context=".MainActivity">
 
     <Toolbar
         style="@style/ToolbarStyle"
         android:title="@string/app_name"
-        android:titleTextColor="@color/white" />
+        android:titleTextColor="@color/app_white" />
 
     <Button
         android:id="@+id/buttonSearch"
