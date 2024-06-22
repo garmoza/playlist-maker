@@ -17,16 +17,19 @@
         android:text="@string/dark_theme" />
 
     <TextView
+        android:id="@+id/textViewShareApp"
         style="@style/TextViewMenuItemWithIconStyle"
         android:text="@string/share_app"
         app:drawableEndCompat="@drawable/ic_share" />
 
     <TextView
+        android:id="@+id/textViewSupport"
         style="@style/TextViewMenuItemWithIconStyle"
         android:text="@string/write_to_support"
         app:drawableEndCompat="@drawable/ic_support" />
 
     <TextView
+        android:id="@+id/textViewLicenseAgreement"
         style="@style/TextViewMenuItemWithIconStyle"
         android:text="@string/license_agreement"
         app:drawableEndCompat="@drawable/ic_arrow_forward" />
