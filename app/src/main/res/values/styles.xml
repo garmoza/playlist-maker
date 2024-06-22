@@ -1,12 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <style name="LinerLayoutMainActivityStyle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:orientation">vertical</item>
+        <item name="android:background">@color/app_blue</item>
+    </style>
     <style name="ButtonMainActivityStyle">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">0dp</item>
         <item name="android:layout_weight">1</item>
         <item name="android:layout_marginHorizontal">@dimen/screen_horizontal_indent</item>
         <item name="android:layout_marginBottom">16dp</item>
-        <item name="android:backgroundTint">@color/white</item>
+        <item name="android:backgroundTint">@color/app_white</item>
         <item name="android:text">@string/text</item>
         <item name="android:textColor">@color/app_black</item>
         <item name="android:textSize">@dimen/title_text_size</item>
@@ -25,7 +31,7 @@
         <item name="android:paddingHorizontal">@dimen/screen_horizontal_indent</item>
         <item name="android:paddingVertical">@dimen/settings_menu_item_padding_vertical</item>
         <item name="android:text">@string/text</item>
-        <item name="android:textColor">@color/black</item>
+        <item name="android:textColor">?attr/colorOnPrimary</item>
         <item name="android:textSize">@dimen/menu_text_size</item>
     </style>
     <style name="TextViewMenuItemWithIconStyle" parent="MenuItemStyle">
@@ -37,7 +43,7 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_marginBottom">@dimen/header_margin_bottom</item>
         <item name="android:title">@string/text</item>
-        <item name="android:titleTextColor">@color/app_black</item>
+        <item name="android:titleTextColor">?attr/colorOnPrimary</item>
     </style>
     <style name="ToolbarWithNavigationIconStyle" parent="ToolbarStyle">
         <item name="android:navigationIcon">@drawable/ic_arrow_back</item>
