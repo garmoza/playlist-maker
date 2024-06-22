@@ -9,4 +9,10 @@
     <string name="write_to_support">Write to support</string>
     <string name="license_agreement">License agreement</string>
     <string name="back">Back</string>
+
+    <string name="developer_email" translatable="false">garmozanikita@gmail.com</string>
+    <string name="support_email_subject">Message to the developers and developers of the Playlist Maker application</string>
+    <string name="support_email_body">Thanks to the developers for the cool application!</string>
+    <string name="ya_practicum_android_course_url" translatable="false">https://practicum.yandex.ru/android-developer</string>
+    <string name="ya_practicum_license_agreement_url" translatable="false">https://yandex.ru/legal/practicum_offer</string>
 </resources>
