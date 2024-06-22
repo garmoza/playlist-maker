@@ -10,6 +10,7 @@
         <item name="android:text">@string/text</item>
         <item name="android:textColor">@color/app_black</item>
         <item name="android:textSize">@dimen/title_text_size</item>
+        <item name="android:fontFamily">@font/ys_display_medium</item>
         <item name="icon">@drawable/ic_library</item>
         <item name="iconGravity">textStart</item>
         <item name="iconPadding">@dimen/main_button_icon_padding</item>
