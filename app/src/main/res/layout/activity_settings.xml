@@ -8,54 +8,27 @@
 
     <Toolbar
         android:id="@+id/toolbarSettings"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/header_margin_bottom"
-        android:title="@string/settings"
-        android:titleTextColor="@color/app_black"
-        android:navigationIcon="@drawable/ic_arrow_back" />
+        style="@style/ToolbarWithNavigationIconStyle"
+        android:title="@string/settings" />
 
     <Switch
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        style="@style/MenuItemStyle"
         android:layout_gravity="end"
-        android:paddingHorizontal="@dimen/screen_horizontal_indent"
-        android:paddingVertical="@dimen/settings_menu_item_padding_vertical"
-        android:text="@string/dark_theme"
-        android:textColor="@color/black"
-        android:textSize="@dimen/menu_text_size" />
+        android:text="@string/dark_theme" />
 
     <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="start"
-        android:paddingHorizontal="@dimen/screen_horizontal_indent"
-        android:paddingVertical="@dimen/settings_menu_item_padding_vertical"
+        style="@style/TextViewMenuItemWithIconStyle"
         android:text="@string/share_app"
-        android:textColor="@color/black"
-        android:textSize="@dimen/menu_text_size"
         app:drawableEndCompat="@drawable/ic_share" />
 
     <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="start"
-        android:paddingHorizontal="@dimen/screen_horizontal_indent"
-        android:paddingVertical="@dimen/settings_menu_item_padding_vertical"
+        style="@style/TextViewMenuItemWithIconStyle"
         android:text="@string/write_to_support"
-        android:textColor="@color/black"
-        android:textSize="@dimen/menu_text_size"
         app:drawableEndCompat="@drawable/ic_support" />
 
     <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="start"
-        android:paddingHorizontal="@dimen/screen_horizontal_indent"
-        android:paddingVertical="@dimen/settings_menu_item_padding_vertical"
+        style="@style/TextViewMenuItemWithIconStyle"
         android:text="@string/license_agreement"
-        android:textColor="@color/black"
-        android:textSize="@dimen/menu_text_size"
         app:drawableEndCompat="@drawable/ic_arrow_forward" />
 
 </LinearLayout>
