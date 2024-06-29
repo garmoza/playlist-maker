@@ -16,4 +16,7 @@
 
     <!-- Settings activity -->
     <dimen name="settings_menu_item_padding_vertical">21dp</dimen>
+
+    <!-- Input -->
+    <dimen name="input_text_size">16sp</dimen>
 </resources>
