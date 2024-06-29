@@ -9,6 +9,7 @@
     <Toolbar
         android:id="@+id/toolbarSettings"
         style="@style/ToolbarWithNavigationIconStyle"
+        android:layout_marginBottom="@dimen/header_margin_bottom"
         android:title="@string/settings" />
 
     <Switch

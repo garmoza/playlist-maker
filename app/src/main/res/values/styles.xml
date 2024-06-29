@@ -41,7 +41,6 @@
     <style name="ToolbarStyle">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_marginBottom">@dimen/header_margin_bottom</item>
         <item name="android:title">@string/text</item>
         <item name="android:titleTextColor">?attr/colorOnPrimary</item>
     </style>
