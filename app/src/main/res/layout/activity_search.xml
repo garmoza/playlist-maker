@@ -23,15 +23,18 @@
             android:contentDescription="@string/search" />
         
         <EditText
+            android:id="@+id/editTextSearch"
             style="@style/InputEditTextStyle"
             android:hint="@string/search" />
 
         <ImageView
+            android:id="@+id/imageViewClear"
             style="@style/InputIconAfterEditTextStyle"
             android:layout_width="12dp"
             android:layout_height="12dp"
             android:src="@drawable/ic_clear"
-            android:contentDescription="@string/clear" />
+            android:contentDescription="@string/clear"
+            android:visibility="gone" />
 
     </LinearLayout>
 
