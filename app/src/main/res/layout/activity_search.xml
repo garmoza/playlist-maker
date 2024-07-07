@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -12,38 +12,22 @@
         style="@style/ToolbarWithNavigationIconStyle"
         android:title="@string/search" />
 
-    <LinearLayout
-        style="@style/InputLinearLayoutStyle">
+    <FrameLayout
+        style="@style/InputFrameLayoutStyle">
+
+        <EditText
+            android:id="@+id/editTextSearch"
+            style="@style/InputEditTextWithIconBeforeStyle"
+            android:hint="@string/search"
+            android:drawableStart="@drawable/ic_search"
+            />
 
         <ImageView
-            style="@style/InputIconBeforeEditTextStyle"
-            android:layout_width="16dp"
-            android:layout_height="16dp"
-            android:src="@drawable/ic_search"
-            android:contentDescription="@string/search" />
+            android:id="@+id/imageViewClear"
+            style="@style/InputCloseIconStyle"
+            android:contentDescription="@string/clear"
+            android:visibility="gone"/>
 
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <EditText
-                android:id="@+id/editTextSearch"
-                style="@style/InputEditTextStyle"
-                android:hint="@string/search"
-                android:layout_gravity="center_vertical|start" />
-
-            <ImageView
-                android:id="@+id/imageViewClear"
-                style="@style/InputIconAfterEditTextStyle"
-                android:layout_width="12dp"
-                android:layout_height="12dp"
-                android:src="@drawable/ic_clear"
-                android:contentDescription="@string/clear"
-                android:layout_gravity="center_vertical|end"
-                android:visibility="gone" />
-
-        </FrameLayout>
-
-    </LinearLayout>
+    </FrameLayout>
 
 </LinearLayout>

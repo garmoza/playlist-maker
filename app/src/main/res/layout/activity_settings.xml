@@ -12,7 +12,7 @@
         android:layout_marginBottom="@dimen/header_margin_bottom"
         android:title="@string/settings" />
 
-    <Switch
+    <androidx.appcompat.widget.SwitchCompat
         style="@style/MenuItemStyle"
         android:layout_gravity="end"
         android:text="@string/dark_theme" />
