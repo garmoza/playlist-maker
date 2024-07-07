@@ -8,9 +8,8 @@
     </style>
 
     <style name="InputEditTextStyle">
-        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">match_parent</item>
-        <item name="android:layout_weight">1</item>
         <item name="android:inputType">text</item>
         <item name="android:hint">@string/text</item>
         <item name="android:maxLines">1</item>

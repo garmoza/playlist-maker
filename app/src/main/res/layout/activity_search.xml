@@ -21,20 +21,28 @@
             android:layout_height="16dp"
             android:src="@drawable/ic_search"
             android:contentDescription="@string/search" />
-        
-        <EditText
-            android:id="@+id/editTextSearch"
-            style="@style/InputEditTextStyle"
-            android:hint="@string/search" />
 
-        <ImageView
-            android:id="@+id/imageViewClear"
-            style="@style/InputIconAfterEditTextStyle"
-            android:layout_width="12dp"
-            android:layout_height="12dp"
-            android:src="@drawable/ic_clear"
-            android:contentDescription="@string/clear"
-            android:visibility="gone" />
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <EditText
+                android:id="@+id/editTextSearch"
+                style="@style/InputEditTextStyle"
+                android:hint="@string/search"
+                android:layout_gravity="center_vertical|start" />
+
+            <ImageView
+                android:id="@+id/imageViewClear"
+                style="@style/InputIconAfterEditTextStyle"
+                android:layout_width="12dp"
+                android:layout_height="12dp"
+                android:src="@drawable/ic_clear"
+                android:contentDescription="@string/clear"
+                android:layout_gravity="center_vertical|end"
+                android:visibility="gone" />
+
+        </FrameLayout>
 
     </LinearLayout>
 

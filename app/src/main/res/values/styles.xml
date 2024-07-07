@@ -6,7 +6,7 @@
         <item name="android:orientation">vertical</item>
         <item name="android:background">@color/app_blue</item>
     </style>
-    <style name="ButtonMainActivityStyle">
+    <style name="ButtonMainActivityStyle" parent="Widget.MaterialComponents.Button.UnelevatedButton">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">0dp</item>
         <item name="android:layout_weight">1</item>
@@ -56,9 +56,8 @@
         <item name="android:background">@drawable/bg_input</item>
     </style>
     <style name="InputEditTextStyle">
-        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">match_parent</item>
-        <item name="android:layout_weight">1</item>
         <item name="android:inputType">text</item>
         <item name="android:hint">@string/text</item>
         <item name="android:maxLines">1</item>
