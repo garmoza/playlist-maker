@@ -2,68 +2,32 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="@color/app_blue"
+    style="@style/LinerLayoutMainActivityStyle"
     tools:context=".MainActivity">
 
     <Toolbar
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        style="@style/ToolbarStyle"
         android:layout_marginBottom="@dimen/header_margin_bottom"
         android:title="@string/app_name"
-        android:titleTextColor="@color/white" />
+        android:titleTextColor="@color/app_white" />
 
     <Button
         android:id="@+id/buttonSearch"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:layout_marginHorizontal="@dimen/screen_horizontal_indent"
-        android:layout_marginBottom="16dp"
-        android:backgroundTint="@color/white"
+        style="@style/ButtonMainActivityStyle"
         android:text="@string/search"
-        android:textColor="@color/app_black"
-        android:textSize="@dimen/title_text_size"
-        app:icon="@drawable/ic_search"
-        app:iconGravity="textStart"
-        app:iconPadding="@dimen/main_button_icon_padding"
-        app:iconTint="@color/app_black"
-        app:cornerRadius="@dimen/main_button_corner_radius" />
+        app:icon="@drawable/ic_search" />
 
     <Button
         android:id="@+id/buttonLibrary"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:layout_marginHorizontal="@dimen/screen_horizontal_indent"
-        android:layout_marginBottom="16dp"
-        android:backgroundTint="@color/white"
+        style="@style/ButtonMainActivityStyle"
         android:text="@string/library"
-        android:textColor="@color/app_black"
-        android:textSize="@dimen/title_text_size"
-        app:icon="@drawable/ic_library"
-        app:iconGravity="textStart"
-        app:iconPadding="@dimen/main_button_icon_padding"
-        app:iconTint="@color/app_black"
-        app:cornerRadius="@dimen/main_button_corner_radius" />
+        app:icon="@drawable/ic_library" />
 
     <Button
         android:id="@+id/buttonSettings"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:layout_marginHorizontal="@dimen/screen_horizontal_indent"
+        style="@style/ButtonMainActivityStyle"
         android:layout_marginBottom="28dp"
-        android:backgroundTint="@color/white"
         android:text="@string/settings"
-        android:textColor="@color/app_black"
-        android:textSize="@dimen/title_text_size"
-        app:icon="@drawable/ic_settings"
-        app:iconGravity="textStart"
-        app:iconPadding="@dimen/main_button_icon_padding"
-        app:iconTint="@color/app_black"
-        app:cornerRadius="@dimen/main_button_corner_radius" />
+        app:icon="@drawable/ic_settings" />
 
 </LinearLayout>
