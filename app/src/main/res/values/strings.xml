@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name" translatable="false">Playlist Maker</string>
     <string name="text" translatable="false">Text</string>
+    <string name="long_text" translatable="false">Text Very Long Long Long Long Long Long Long Long Long Long Long Long Long</string>
     <string name="search">Search</string>
     <string name="library">Library</string>
     <string name="settings">Settings</string>

@@ -32,7 +32,7 @@
         <item name="android:paddingVertical">@dimen/settings_menu_item_padding_vertical</item>
         <item name="android:text">@string/text</item>
         <item name="android:textColor">?attr/colorOnPrimary</item>
-        <item name="android:textSize">@dimen/menu_text_size</item>
+        <item name="android:textSize">@dimen/list_item_text_size</item>
     </style>
     <style name="TextViewMenuItemWithIconStyle" parent="MenuItemStyle">
         <item name="drawableEndCompat">@drawable/ic_arrow_forward</item>
