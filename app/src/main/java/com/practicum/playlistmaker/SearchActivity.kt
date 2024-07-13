@@ -10,6 +10,7 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.Toolbar
+import androidx.recyclerview.widget.RecyclerView
 
 class SearchActivity : AppCompatActivity() {
 
@@ -49,6 +50,10 @@ class SearchActivity : AppCompatActivity() {
             }
         }
         editTextSearch.addTextChangedListener(searchTextWatcher)
+
+        val recyclerViewTrack = findViewById<RecyclerView>(R.id.recyclerViewTrack)
+        val trackAdapter = TrackAdapter(getTracks())
+        recyclerViewTrack.adapter = trackAdapter
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
