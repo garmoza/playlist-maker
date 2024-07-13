@@ -18,6 +18,9 @@
     <!-- Settings activity -->
     <dimen name="settings_menu_item_padding_vertical">21dp</dimen>
 
+    <!-- Search activity -->
+    <dimen name="label_image_size">45dp</dimen>
+
     <!-- Input -->
     <dimen name="input_text_size">16sp</dimen>
 </resources>

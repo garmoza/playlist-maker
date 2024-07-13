@@ -8,10 +8,10 @@
 
     <ImageView
         android:id="@+id/label"
-        android:layout_width="45dp"
-        android:layout_height="45dp"
+        android:layout_width="@dimen/label_image_size"
+        android:layout_height="@dimen/label_image_size"
         android:layout_gravity="start"
-        android:layout_marginStart="13dp"
+        android:layout_marginStart="12dp"
         android:layout_marginEnd="8dp"
         tools:src="@mipmap/ic_launcher" />
 
@@ -26,7 +26,7 @@
             android:id="@+id/title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            tools:text="@string/long_text"
+            tools:text="Text Very Long Long Long Long Long Long Long Long Long Long Long Long Long"
             android:textSize="@dimen/list_item_text_size"
             android:textColor="?attr/colorOnPrimary"
             android:maxLines="1"
@@ -42,7 +42,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                tools:text="@string/long_text"
+                tools:text="Text Very Long Long Long Long Long Long Long Long Long Long Long Long Long"
                 android:textSize="@dimen/list_sub_item_text_size"
                 android:textColor="?attr/colorOnPrimaryVariant"
                 android:maxLines="1"
