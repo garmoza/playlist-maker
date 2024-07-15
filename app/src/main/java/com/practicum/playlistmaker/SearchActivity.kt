@@ -23,8 +23,6 @@ import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import java.text.SimpleDateFormat
-import java.util.Locale
 
 class SearchActivity : AppCompatActivity() {
 
@@ -58,14 +56,7 @@ class SearchActivity : AppCompatActivity() {
                 200 -> {
                     Log.i(TAG, "search response is 200")
                     if (response.body()?.results?.isNotEmpty() == true) {
-                        tracks.addAll(response.body()?.results!!.map {
-                                iTunseTrack ->  Track(
-                            iTunseTrack.trackName,
-                            iTunseTrack.artistName,
-                            SimpleDateFormat("mm:ss", Locale.getDefault()).format( iTunseTrack.trackTimeMillis),
-                            iTunseTrack.artworkUrl100
-                        )
-                        })
+                        tracks.addAll(response.body()?.results!!)
                         setPlaceholder(GONE)
                     } else {
                         Log.i(TAG, "search empty response")

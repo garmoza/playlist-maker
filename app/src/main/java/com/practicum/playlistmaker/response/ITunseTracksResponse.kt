@@ -1,5 +1,5 @@
 package com.practicum.playlistmaker.response
 
-import com.practicum.playlistmaker.model.ITunseTrack
+import com.practicum.playlistmaker.model.Track
 
-class ITunseTracksResponse(val results: ArrayList<ITunseTrack>)
+class ITunseTracksResponse(val results: ArrayList<Track>)
