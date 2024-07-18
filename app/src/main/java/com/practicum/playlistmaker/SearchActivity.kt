@@ -9,14 +9,11 @@ import android.util.Log
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
-import android.widget.Button
 import android.widget.EditText
-import android.widget.ImageView
-import android.widget.TextView
-import android.widget.Toolbar
-import androidx.recyclerview.widget.RecyclerView
+import androidx.core.view.isVisible
 import com.practicum.playlistmaker.response.ITunseTracksResponse
 import com.practicum.playlistmaker.SearchPlaceholderState.*
+import com.practicum.playlistmaker.databinding.ActivitySearchBinding
 import com.practicum.playlistmaker.model.Track
 import retrofit2.Call
 import retrofit2.Callback
@@ -36,14 +33,7 @@ class SearchActivity : AppCompatActivity() {
 
     private var searchedValue = DEFAULT_SEARCHED_VALUE
 
-    private lateinit var toolbarSettings: Toolbar
-    private lateinit var editTextSearch: EditText
-    private lateinit var imageViewClear: ImageView
-    private lateinit var recyclerViewTrack: RecyclerView
-    private lateinit var placeholderImage: ImageView
-    private lateinit var placeholderMessage: TextView
-    private lateinit var placeholderAdditionalMessage: TextView
-    private lateinit var placeholderButton: Button
+    private lateinit var binding: ActivitySearchBinding
 
     private val iTunseTracksResponseHandler = object : Callback<ITunseTracksResponse> {
         override fun onResponse(
@@ -80,28 +70,20 @@ class SearchActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_search)
+        binding = ActivitySearchBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-        toolbarSettings = findViewById(R.id.toolbarSearch)
-        editTextSearch = findViewById(R.id.editTextSearch)
-        imageViewClear = findViewById(R.id.imageViewClear)
-        recyclerViewTrack = findViewById(R.id.recyclerViewTrack)
-        placeholderImage = findViewById(R.id.placeholderImage)
-        placeholderMessage = findViewById(R.id.placeholderMessage)
-        placeholderAdditionalMessage = findViewById(R.id.placeholderAdditionalMessage)
-        placeholderButton = findViewById(R.id.placeholderButton)
-
-        toolbarSettings.setOnClickListener {
+        binding.toolbarSearch.setOnClickListener {
             finish()
         }
 
-        imageViewClear.setOnClickListener {
+        binding.imageViewClear.setOnClickListener {
             tracks.clear()
             trackAdapter.notifyDataSetChanged()
-            editTextSearch.setText("")
-            editTextSearch.clearFocus()
+            binding.editTextSearch.setText("")
+            binding.editTextSearch.clearFocus()
             val manager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-            manager.hideSoftInputFromWindow(editTextSearch.windowToken, 0)
+            manager.hideSoftInputFromWindow(binding.editTextSearch.windowToken, 0)
         }
 
         val searchTextWatcher = object : TextWatcher {
@@ -111,29 +93,29 @@ class SearchActivity : AppCompatActivity() {
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 searchedValue = s.toString()
-                imageViewClear.visibility = if (s.isNullOrEmpty()) View.GONE else View.VISIBLE
+                binding.imageViewClear.visibility = if (s.isNullOrEmpty()) View.GONE else View.VISIBLE
             }
 
             override fun afterTextChanged(s: Editable?) {
                 // empty
             }
         }
-        editTextSearch.addTextChangedListener(searchTextWatcher)
+        binding.editTextSearch.addTextChangedListener(searchTextWatcher)
 
-        recyclerViewTrack.adapter = trackAdapter
+        binding.recyclerViewTrack.adapter = trackAdapter
 
-        editTextSearch.setOnEditorActionListener { _, actionId, _ ->
+        binding.editTextSearch.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 Log.i(TAG, "search action editor click")
-                iTunseService.search(editTextSearch.text.toString())
+                iTunseService.search(binding.editTextSearch.text.toString())
                     .enqueue(iTunseTracksResponseHandler)
             }
             false
         }
 
-        placeholderButton.setOnClickListener {
+        binding.placeholderButton.setOnClickListener {
             Log.i(TAG, "search action button click")
-            iTunseService.search(editTextSearch.text.toString())
+            iTunseService.search(binding.editTextSearch.text.toString())
                 .enqueue(iTunseTracksResponseHandler)
         }
     }
@@ -150,31 +132,30 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun setPlaceholder(state: SearchPlaceholderState) {
-        recyclerViewTrack.visibility = when (state) {
-            GONE -> View.VISIBLE
-            else -> View.GONE
-        }
+        with(binding) {
+            recyclerViewTrack.isVisible = state == GONE
 
-        placeholderImage.visibility = View.GONE
-        placeholderMessage.visibility = View.GONE
-        placeholderAdditionalMessage.visibility = View.GONE
-        placeholderButton.visibility = View.GONE
+            placeholderImage.visibility = View.GONE
+            placeholderMessage.visibility = View.GONE
+            placeholderAdditionalMessage.visibility = View.GONE
+            placeholderButton.visibility = View.GONE
 
-        state.image?.let {
-            placeholderImage.setImageResource(it)
-            placeholderImage.visibility = View.VISIBLE
-        }
-        state.message?.let {
-            placeholderMessage.text = getString(it)
-            placeholderMessage.visibility = View.VISIBLE
-        }
-        state.additionalMessage?.let {
-            placeholderAdditionalMessage.text = getString(it)
-            placeholderAdditionalMessage.visibility = View.VISIBLE
-        }
-        state.button?.let {
-            placeholderButton.text = getString(it)
-            placeholderButton.visibility = View.VISIBLE
+            state.image?.let {
+                placeholderImage.setImageResource(it)
+                placeholderImage.visibility = View.VISIBLE
+            }
+            state.message?.let {
+                placeholderMessage.text = getString(it)
+                placeholderMessage.visibility = View.VISIBLE
+            }
+            state.additionalMessage?.let {
+                placeholderAdditionalMessage.text = getString(it)
+                placeholderAdditionalMessage.visibility = View.VISIBLE
+            }
+            state.button?.let {
+                placeholderButton.text = getString(it)
+                placeholderButton.visibility = View.VISIBLE
+            }
         }
     }
 
