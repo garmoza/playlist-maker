@@ -7,6 +7,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.practicum.playlistmaker.model.Track
 
 class TrackViewHolder(parent: ViewGroup) : RecyclerView.ViewHolder(
     LayoutInflater.from(parent.context).inflate(R.layout.list_item_track, parent, false)
@@ -24,8 +25,14 @@ class TrackViewHolder(parent: ViewGroup) : RecyclerView.ViewHolder(
             .centerCrop()
             .transform(RoundedCorners(dpToPx(2F, itemView.context)))
             .into(label)
-        title.text = model.trackName
-        artistName.text = model.artistName
-        trackTime.text = model.trackTime
+        title.text = model.trackName ?: UNKNOWN_TRACK_NAME
+        artistName.text = model.artistName ?: UNKNOWN_ARTIST_NAME
+        trackTime.text = model.trackTime ?: UNKNOWN_TIME
+    }
+
+    companion object {
+        const val UNKNOWN_TRACK_NAME = "Track Unknown"
+        const val UNKNOWN_ARTIST_NAME = "Artist Unknown"
+        const val UNKNOWN_TIME = "--:--"
     }
 }

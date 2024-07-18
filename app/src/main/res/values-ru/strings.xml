@@ -9,6 +9,10 @@
     <string name="license_agreement">Пользовательское соглашение</string>
     <string name="back">Назад</string>
     <string name="clear">Очистить</string>
+    <string name="update">Обновить</string>
     <string name="support_email_subject">Сообщение разработчикам и разработчицам приложения Playlist Maker</string>
     <string name="support_email_body">Спасибо разработчикам и разработчицам за крутое приложение!</string>
+    <string name="placeholder_message_not_found">Ничего не нашлось</string>
+    <string name="placeholder_message_network_problem">Проблемы со связью</string>
+    <string name="placeholder_aditional_message_network_problems">Загрузка не удалась. Проверьте подключение к интернету</string>
 </resources>

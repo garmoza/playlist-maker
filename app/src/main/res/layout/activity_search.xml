@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -20,6 +20,8 @@
             style="@style/InputEditTextWithIconBeforeStyle"
             android:hint="@string/search"
             android:drawableStart="@drawable/ic_search"
+            android:imeOptions="actionDone"
+            android:singleLine="true"
             />
 
         <ImageView
@@ -35,6 +37,56 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="16dp"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        />
+
+    <ImageView
+        android:id="@+id/placeholderImage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="100dp"
+        tools:src="@drawable/track_not_found"
+        android:visibility="gone"
+        />
+
+    <TextView
+        android:id="@+id/placeholderMessage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="16dp"
+        tools:text="Text"
+        android:textAlignment="center"
+        android:textSize="@dimen/title_text_size"
+        android:textColor="?attr/colorOnPrimary"
+        android:visibility="gone"
+        />
+
+    <TextView
+        android:id="@+id/placeholderAdditionalMessage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="22dp"
+        tools:text="Text"
+        android:textAlignment="center"
+        android:textSize="@dimen/title_text_size"
+        android:textColor="?attr/colorOnPrimary"
+        android:visibility="gone"
+        />
+
+    <Button
+        android:id="@+id/placeholderButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="24dp"
+        android:backgroundTint="?attr/colorOnPrimary"
+        tools:text="Text"
+        android:textColor="?attr/colorPrimary"
+        app:cornerRadius="54dp"
+        android:visibility="gone"
+        />
 
 </LinearLayout>
