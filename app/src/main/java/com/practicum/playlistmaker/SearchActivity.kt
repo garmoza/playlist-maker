@@ -28,12 +28,13 @@ class SearchActivity : AppCompatActivity() {
         .addConverterFactory(GsonConverterFactory.create())
         .build()
     private val iTunseService = retrofit.create(ITunseApi::class.java)
+
     private val tracks = ArrayList<Track>()
-    private val trackAdapter = TrackAdapter(tracks)
 
     private var searchedValue = DEFAULT_SEARCHED_VALUE
 
     private lateinit var binding: ActivitySearchBinding
+    private lateinit var trackAdapter: TrackAdapter
 
     private val iTunseTracksResponseHandler = object : Callback<ITunseTracksResponse> {
         override fun onResponse(
@@ -72,6 +73,10 @@ class SearchActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivitySearchBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        val sharedPreferences = getSharedPreferences(PLAYLIST_MAKER_PREFERENCES, MODE_PRIVATE)
+        val searchHistory = SearchHistory(sharedPreferences)
+        trackAdapter = TrackAdapter(tracks, searchHistory)
 
         binding.toolbarSearch.setOnClickListener {
             finish()
