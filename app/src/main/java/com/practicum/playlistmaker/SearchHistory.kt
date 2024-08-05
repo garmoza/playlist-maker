@@ -29,6 +29,14 @@ class SearchHistory(
         updateSharedPreferences()
     }
 
+    fun getTrack(position: Int): Track {
+        return historyTracks[position]
+    }
+
+    fun getSize(): Int {
+        return historyTracks.size
+    }
+
     private fun updateSharedPreferences() {
         sharedPreferences.edit()
             .putString(HISTORY_TRACKS_KEY, createJsonFromTracksList(historyTracks.toTypedArray()))
@@ -41,9 +49,5 @@ class SearchHistory(
 
     private fun createJsonFromTracksList(tracks: Array<Track>): String {
         return Gson().toJson(tracks)
-    }
-
-    companion object {
-        private const val HISTORY_TRACKS_KEY = "history_tracks_key"
     }
 }

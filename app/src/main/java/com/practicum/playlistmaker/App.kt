@@ -15,7 +15,7 @@ class App : Application() {
     override fun onCreate() {
         super.onCreate()
 
-        sharedPrefs = getSharedPreferences(APP_PREFERENCES, MODE_PRIVATE)
+        sharedPrefs = getSharedPreferences(PLAYLIST_MAKER_PREFERENCES, MODE_PRIVATE)
 
         darkTheme = sharedPrefs.getBoolean(DARK_THEME_KEY, isUiModeNight())
         switchTheme(darkTheme)
@@ -36,10 +36,5 @@ class App : Application() {
         sharedPrefs.edit()
             .putBoolean(DARK_THEME_KEY, darkTheme)
             .apply()
-    }
-
-    companion object {
-        const val APP_PREFERENCES = "app_preference"
-        const val DARK_THEME_KEY = "dark_theme_key"
     }
 }
