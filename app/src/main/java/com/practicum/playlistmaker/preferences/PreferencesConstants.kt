@@ -1,4 +1,4 @@
-package com.practicum.playlistmaker
+package com.practicum.playlistmaker.preferences
 
 const val PLAYLIST_MAKER_PREFERENCES = "playlist_maker_preferences"
 

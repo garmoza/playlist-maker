@@ -1,4 +1,4 @@
-package com.practicum.playlistmaker
+package com.practicum.playlistmaker.activity
 
 import android.content.Context
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener
@@ -11,7 +11,14 @@ import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
-import com.practicum.playlistmaker.response.ITunseTracksResponse
+import com.practicum.playlistmaker.preferences.HISTORY_TRACKS_KEY
+import com.practicum.playlistmaker.recycler.HistoryTrackAdapter
+import com.practicum.playlistmaker.preferences.PLAYLIST_MAKER_PREFERENCES
+import com.practicum.playlistmaker.R
+import com.practicum.playlistmaker.preferences.SearchHistory
+import com.practicum.playlistmaker.recycler.TrackAdapter
+import com.practicum.playlistmaker.client.ITunseApi
+import com.practicum.playlistmaker.client.ITunseTracksResponse
 import com.practicum.playlistmaker.databinding.ActivitySearchBinding
 import com.practicum.playlistmaker.model.Track
 import retrofit2.Call

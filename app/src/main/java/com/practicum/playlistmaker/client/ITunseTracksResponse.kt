@@ -1,4 +1,4 @@
-package com.practicum.playlistmaker.response
+package com.practicum.playlistmaker.client
 
 import com.practicum.playlistmaker.model.Track
 

@@ -1,4 +1,4 @@
-package com.practicum.playlistmaker
+package com.practicum.playlistmaker.activity
 
 import android.content.Intent
 import android.net.Uri
@@ -7,6 +7,8 @@ import android.os.Bundle
 import android.widget.TextView
 import android.widget.Toolbar
 import com.google.android.material.switchmaterial.SwitchMaterial
+import com.practicum.playlistmaker.preferences.App
+import com.practicum.playlistmaker.R
 
 class SettingsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
