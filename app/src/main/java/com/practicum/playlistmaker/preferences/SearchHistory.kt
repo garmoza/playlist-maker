@@ -37,6 +37,12 @@ class SearchHistory(
         return historyTracks.size
     }
 
+    fun clear() {
+        historyTracks.clear()
+
+        updateSharedPreferences()
+    }
+
     private fun updateSharedPreferences() {
         sharedPreferences.edit()
             .putString(HISTORY_TRACKS_KEY, createJsonFromTracksList(historyTracks.toTypedArray()))

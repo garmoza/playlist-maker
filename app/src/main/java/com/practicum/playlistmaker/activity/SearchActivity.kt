@@ -143,7 +143,7 @@ class SearchActivity : AppCompatActivity() {
         }
 
         binding.editTextSearch.setOnFocusChangeListener { v, hasFocus ->
-            if (binding.editTextSearch.hasFocus() && binding.editTextSearch.text.isEmpty()) {
+            if (binding.editTextSearch.hasFocus() && binding.editTextSearch.text.isEmpty() && searchHistory.getSize() > 0) {
                 binding.setState(SearchActivityState.HISTORY)
             } else {
                 binding.setState(SearchActivityState.TRACK_LIST)
@@ -155,7 +155,7 @@ class SearchActivity : AppCompatActivity() {
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                if (binding.editTextSearch.hasFocus() && binding.editTextSearch.text.isEmpty()) {
+                if (binding.editTextSearch.hasFocus() && binding.editTextSearch.text.isEmpty() && searchHistory.getSize() > 0) {
                     binding.setState(SearchActivityState.HISTORY)
                 } else {
                     binding.setState(SearchActivityState.TRACK_LIST)
@@ -165,6 +165,11 @@ class SearchActivity : AppCompatActivity() {
             override fun afterTextChanged(s: Editable?) {
             }
         })
+
+        binding.clearHistoryButton.setOnClickListener {
+            searchHistory.clear()
+            binding.setState(SearchActivityState.EMPTY)
+        }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
