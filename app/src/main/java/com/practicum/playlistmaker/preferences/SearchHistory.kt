@@ -22,7 +22,7 @@ class SearchHistory(
             historyTracks.remove(track)
         }
         historyTracks.add(0, track)
-        if (historyTracks.size > 10) {
+        if (historyTracks.size > HISTORY_LIST_SIZE) {
             historyTracks.removeLast()
         }
 
@@ -45,15 +45,19 @@ class SearchHistory(
 
     private fun updateSharedPreferences() {
         sharedPreferences.edit()
-            .putString(HISTORY_TRACKS_KEY, createJsonFromTracksList(historyTracks.toTypedArray()))
+            .putString(HISTORY_TRACKS_KEY, createJsonFromTracksList(historyTracks))
             .apply()
     }
 
-    private fun createTracksListFromJson(json: String): Array<Track> {
-        return Gson().fromJson(json, Array<Track>::class.java)
+    private fun createTracksListFromJson(json: String): List<Track> {
+        return Gson().fromJson(json, Array<Track>::class.java).toList()
     }
 
-    private fun createJsonFromTracksList(tracks: Array<Track>): String {
+    private fun createJsonFromTracksList(tracks: List<Track>): String {
         return Gson().toJson(tracks)
+    }
+
+    companion object {
+        private const val HISTORY_LIST_SIZE = 10
     }
 }
