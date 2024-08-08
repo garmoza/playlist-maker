@@ -1,11 +1,9 @@
 package com.practicum.playlistmaker.recycler
 
 import android.content.Intent
-import android.util.Log
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.practicum.playlistmaker.activity.PlayerActivity
-import com.practicum.playlistmaker.activity.SearchActivity
 import com.practicum.playlistmaker.model.Track
 import com.practicum.playlistmaker.preferences.SearchHistory
 

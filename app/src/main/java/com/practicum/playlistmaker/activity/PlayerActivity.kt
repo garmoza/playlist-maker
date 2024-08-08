@@ -1,7 +1,6 @@
 package com.practicum.playlistmaker.activity
 
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toolbar
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
@@ -9,7 +8,6 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.databinding.ActivityPlayerBinding
 import com.practicum.playlistmaker.dpToPx
-import com.practicum.playlistmaker.model.Track
 
 class PlayerActivity : AppCompatActivity() {
 
@@ -31,7 +29,6 @@ class PlayerActivity : AppCompatActivity() {
                 .load(it)
                 .placeholder(R.drawable.placeholder_track_label)
                 .transform(RoundedCorners(dpToPx(8F, this)))
-                .placeholder(R.drawable.placeholder_track_label)
                 .into(binding.trackLabel)
         }
 

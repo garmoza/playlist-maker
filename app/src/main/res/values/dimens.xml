@@ -23,6 +23,7 @@
 
     <!-- Player activity -->
     <dimen name="play_button_size">100dp</dimen>
+    <dimen name="play_side_button_size">52dp</dimen>
 
     <!-- Input -->
     <dimen name="input_text_size">16sp</dimen>

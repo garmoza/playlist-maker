@@ -82,8 +82,8 @@
     
     <ImageButton
         android:id="@+id/addTrackButton"
-        android:layout_width="51dp"
-        android:layout_height="51dp"
+        android:layout_width="@dimen/play_side_button_size"
+        android:layout_height="@dimen/play_side_button_size"
         android:src="@drawable/ic_add_track"
         android:background="@drawable/bg_round_button"
         app:layout_constraintStart_toEndOf="@id/startGuideline"
@@ -93,8 +93,8 @@
 
     <ImageButton
         android:id="@+id/likeTrackButton"
-        android:layout_width="51dp"
-        android:layout_height="51dp"
+        android:layout_width="@dimen/play_side_button_size"
+        android:layout_height="@dimen/play_side_button_size"
         android:src="@drawable/ic_like_track"
         android:background="@drawable/bg_round_button"
         app:layout_constraintEnd_toStartOf="@id/endGuideline"
