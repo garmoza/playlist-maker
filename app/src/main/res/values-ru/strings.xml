@@ -17,4 +17,10 @@
     <string name="placeholder_aditional_message_network_problems">Загрузка не удалась. Проверьте подключение к интернету</string>
     <string name="search_history">История поиска</string>
     <string name="clear_history">Очистить историю</string>
+    <string name="track_label">Обложка трека</string>
+    <string name="duration">Длительность</string>
+    <string name="album">Альбом</string>
+    <string name="year">Год</string>
+    <string name="genre">Жанр</string>
+    <string name="country">Страна</string>
 </resources>

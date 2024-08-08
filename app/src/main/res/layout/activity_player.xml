@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="?attr/colorPrimary">
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/startGuideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="24dp"
+        />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/endGuideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_end="24dp"
+        />
+
+    <Toolbar
+        android:id="@+id/toolbar"
+        style="@style/ToolbarWithNavigationIconStyle"
+        android:title=""
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        />
+
+    <ImageView
+        android:id="@+id/trackLabel"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="26dp"
+        app:srcCompat="@drawable/placeholder_track_label"
+        app:layout_constraintTop_toBottomOf="@id/toolbar"
+        app:layout_constraintStart_toEndOf="@id/startGuideline"
+        app:layout_constraintEnd_toStartOf="@id/endGuideline"
+        app:layout_constraintDimensionRatio="1:1"
+        android:contentDescription="@string/track_label"
+        />
+
+    <TextView
+        android:id="@+id/trackName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        tools:text="Track Name"
+        android:textSize="22sp"
+        android:textColor="?attr/colorOnPrimary"
+        app:layout_constraintTop_toBottomOf="@id/trackLabel"
+        app:layout_constraintStart_toEndOf="@id/startGuideline"
+        />
+
+    <TextView
+        android:id="@+id/artistName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        tools:text="Artist Name"
+        android:textSize="14sp"
+        android:textColor="?attr/colorOnPrimary"
+        app:layout_constraintTop_toBottomOf="@id/trackName"
+        app:layout_constraintStart_toEndOf="@id/startGuideline"
+        />
+
+    <ImageButton
+        android:id="@+id/playButton"
+        android:layout_width="@dimen/play_button_size"
+        android:layout_height="@dimen/play_button_size"
+        android:layout_marginTop="30dp"
+        android:src="@drawable/ic_play_track"
+        android:background="@null"
+        app:layout_constraintTop_toBottomOf="@id/artistName"
+        app:layout_constraintStart_toEndOf="@id/startGuideline"
+        app:layout_constraintEnd_toStartOf="@id/endGuideline"
+        />
+    
+    <ImageButton
+        android:id="@+id/addTrackButton"
+        android:layout_width="51dp"
+        android:layout_height="51dp"
+        android:src="@drawable/ic_add_track"
+        android:background="@drawable/bg_round_button"
+        app:layout_constraintStart_toEndOf="@id/startGuideline"
+        app:layout_constraintTop_toTopOf="@id/playButton"
+        app:layout_constraintBottom_toBottomOf="@id/playButton"
+        />
+
+    <ImageButton
+        android:id="@+id/likeTrackButton"
+        android:layout_width="51dp"
+        android:layout_height="51dp"
+        android:src="@drawable/ic_like_track"
+        android:background="@drawable/bg_round_button"
+        app:layout_constraintEnd_toStartOf="@id/endGuideline"
+        app:layout_constraintTop_toTopOf="@id/playButton"
+        app:layout_constraintBottom_toBottomOf="@id/playButton"
+        />
+
+    <TextView
+        android:id="@+id/playtime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        tools:text="0:30"
+        android:textSize="14sp"
+        android:textColor="?attr/colorOnPrimary"
+        app:layout_constraintTop_toBottomOf="@id/playButton"
+        app:layout_constraintStart_toStartOf="@id/playButton"
+        app:layout_constraintEnd_toEndOf="@id/playButton"
+        />
+
+    <TextView
+        android:id="@+id/durationLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:paddingVertical="8dp"
+        android:text="@string/duration"
+        android:textSize="13sp"
+        android:textColor="?attr/colorOnPrimaryTransparent25"
+        app:layout_constraintStart_toEndOf="@id/startGuideline"
+        app:layout_constraintTop_toBottomOf="@id/playButton"
+        />
+
+    <TextView
+        android:id="@+id/durationValue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:paddingVertical="8dp"
+        tools:text="5:53"
+        android:textSize="13sp"
+        android:textColor="?attr/colorOnPrimary"
+        app:layout_constraintEnd_toStartOf="@id/endGuideline"
+        app:layout_constraintTop_toBottomOf="@id/playButton"
+        />
+
+    <TextView
+        android:id="@+id/albumLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingVertical="8dp"
+        android:text="@string/album"
+        android:textSize="13sp"
+        android:textColor="?attr/colorOnPrimaryTransparent25"
+        app:layout_constraintStart_toEndOf="@id/startGuideline"
+        app:layout_constraintTop_toBottomOf="@id/durationLabel"
+        app:layout_constraintBottom_toBottomOf="parent"
+        />
+
+    <TextView
+        android:id="@+id/albumValue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingVertical="8dp"
+        tools:text="Yesterday (Remastered 2009)"
+        android:textSize="13sp"
+        android:textColor="?attr/colorOnPrimary"
+        app:layout_constraintEnd_toStartOf="@id/endGuideline"
+        app:layout_constraintTop_toBottomOf="@id/durationLabel"
+        app:layout_constraintBottom_toBottomOf="parent"
+        />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -21,6 +21,9 @@
     <!-- Search activity -->
     <dimen name="label_image_size">45dp</dimen>
 
+    <!-- Player activity -->
+    <dimen name="play_button_size">100dp</dimen>
+
     <!-- Input -->
     <dimen name="input_text_size">16sp</dimen>
 </resources>

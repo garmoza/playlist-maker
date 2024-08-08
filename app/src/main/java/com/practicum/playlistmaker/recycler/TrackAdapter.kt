@@ -1,7 +1,11 @@
 package com.practicum.playlistmaker.recycler
 
+import android.content.Intent
+import android.util.Log
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.practicum.playlistmaker.activity.PlayerActivity
+import com.practicum.playlistmaker.activity.SearchActivity
 import com.practicum.playlistmaker.model.Track
 import com.practicum.playlistmaker.preferences.SearchHistory
 
@@ -20,6 +24,15 @@ class TrackAdapter(
 
         holder.itemView.setOnClickListener {
             searchHistory.addTrack(track)
+
+            val context = holder.itemView.context
+            val displayIntent = Intent(context, PlayerActivity::class.java)
+            displayIntent.putExtra("trackName", track.trackName)
+            displayIntent.putExtra("artistName", track.artistName)
+            displayIntent.putExtra("collectionName", track.collectionName)
+            displayIntent.putExtra("releaseDate", track.releaseDate)
+            displayIntent.putExtra("primaryGenreName", track.primaryGenreName)
+            context.startActivity(displayIntent)
         }
     }
 
