@@ -15,4 +15,6 @@
     <string name="placeholder_message_not_found">Ничего не нашлось</string>
     <string name="placeholder_message_network_problem">Проблемы со связью</string>
     <string name="placeholder_aditional_message_network_problems">Загрузка не удалась. Проверьте подключение к интернету</string>
+    <string name="search_history">История поиска</string>
+    <string name="clear_history">Очистить историю</string>
 </resources>

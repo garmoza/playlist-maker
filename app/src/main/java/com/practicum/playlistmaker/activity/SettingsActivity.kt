@@ -1,4 +1,4 @@
-package com.practicum.playlistmaker
+package com.practicum.playlistmaker.activity
 
 import android.content.Intent
 import android.net.Uri
@@ -6,6 +6,9 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.TextView
 import android.widget.Toolbar
+import com.google.android.material.switchmaterial.SwitchMaterial
+import com.practicum.playlistmaker.preferences.App
+import com.practicum.playlistmaker.R
 
 class SettingsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -17,10 +20,16 @@ class SettingsActivity : AppCompatActivity() {
             finish()
         }
 
+        val themeSwitcher = findViewById<SwitchMaterial>(R.id.themeSwitcher)
+        themeSwitcher.isChecked = (applicationContext as App).darkTheme
+        themeSwitcher.setOnCheckedChangeListener { _, isChecked ->
+            (applicationContext as App).switchTheme(isChecked)
+        }
+
         val textViewShareApp = findViewById<TextView>(R.id.textViewShareApp)
         textViewShareApp.setOnClickListener {
             val shareIntent = Intent(Intent.ACTION_SEND)
-            shareIntent.setType("text/plain");
+            shareIntent.setType("text/plain")
             shareIntent.putExtra(
                 Intent.EXTRA_TEXT,
                 getString(R.string.ya_practicum_android_course_url)
