@@ -27,11 +27,14 @@ class TrackAdapter(
 
             val context = holder.itemView.context
             val displayIntent = Intent(context, PlayerActivity::class.java)
+            displayIntent.putExtra("artworkUrl512", track.artworkUrl512)
             displayIntent.putExtra("trackName", track.trackName)
             displayIntent.putExtra("artistName", track.artistName)
             displayIntent.putExtra("collectionName", track.collectionName)
-            displayIntent.putExtra("releaseDate", track.releaseDate)
+            displayIntent.putExtra("releaseYear", track.releaseYear)
             displayIntent.putExtra("primaryGenreName", track.primaryGenreName)
+            displayIntent.putExtra("country", track.country)
+            displayIntent.putExtra("trackTime", track.trackTime)
             context.startActivity(displayIntent)
         }
     }

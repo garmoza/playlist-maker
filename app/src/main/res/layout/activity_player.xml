@@ -39,6 +39,7 @@
         app:layout_constraintTop_toBottomOf="@id/toolbar"
         app:layout_constraintStart_toEndOf="@id/startGuideline"
         app:layout_constraintEnd_toStartOf="@id/endGuideline"
+        app:layout_constraintBottom_toTopOf="@id/trackName"
         app:layout_constraintDimensionRatio="1:1"
         android:contentDescription="@string/track_label"
         />
@@ -106,65 +107,111 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
-        tools:text="0:30"
+        android:text="00:00"
         android:textSize="14sp"
         android:textColor="?attr/colorOnPrimary"
         app:layout_constraintTop_toBottomOf="@id/playButton"
         app:layout_constraintStart_toStartOf="@id/playButton"
         app:layout_constraintEnd_toEndOf="@id/playButton"
         />
+    
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/descriptionBarrier"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:constraint_referenced_tags="durationLabelTag, albumLabelTag, yearLabelTag, genreLabelTag, countryLabelTag"
+        app:barrierDirection="end"
+        />
 
     <TextView
         android:id="@+id/durationLabel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        app:layout_constraintTag="durationLabelTag"
+        style="@style/PlayerDescriptionLabel"
         android:layout_marginTop="50dp"
-        android:paddingVertical="8dp"
         android:text="@string/duration"
-        android:textSize="13sp"
-        android:textColor="?attr/colorOnPrimaryTransparent25"
         app:layout_constraintStart_toEndOf="@id/startGuideline"
         app:layout_constraintTop_toBottomOf="@id/playButton"
         />
 
     <TextView
         android:id="@+id/durationValue"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        style="@style/PlayerDescriptionValue"
         android:layout_marginTop="50dp"
-        android:paddingVertical="8dp"
         tools:text="5:53"
-        android:textSize="13sp"
-        android:textColor="?attr/colorOnPrimary"
         app:layout_constraintEnd_toStartOf="@id/endGuideline"
         app:layout_constraintTop_toBottomOf="@id/playButton"
         />
 
     <TextView
         android:id="@+id/albumLabel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingVertical="8dp"
+        app:layout_constraintTag="albumLabelTag"
+        style="@style/PlayerDescriptionLabel"
         android:text="@string/album"
-        android:textSize="13sp"
-        android:textColor="?attr/colorOnPrimaryTransparent25"
         app:layout_constraintStart_toEndOf="@id/startGuideline"
         app:layout_constraintTop_toBottomOf="@id/durationLabel"
-        app:layout_constraintBottom_toBottomOf="parent"
         />
 
     <TextView
         android:id="@+id/albumValue"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingVertical="8dp"
+        style="@style/PlayerDescriptionValue"
         tools:text="Yesterday (Remastered 2009)"
-        android:textSize="13sp"
-        android:textColor="?attr/colorOnPrimary"
         app:layout_constraintEnd_toStartOf="@id/endGuideline"
         app:layout_constraintTop_toBottomOf="@id/durationLabel"
+        />
+
+    <TextView
+        android:id="@+id/yearLabel"
+        app:layout_constraintTag="yearLabelTag"
+        style="@style/PlayerDescriptionLabel"
+        android:text="@string/year"
+        app:layout_constraintStart_toEndOf="@id/startGuideline"
+        app:layout_constraintTop_toBottomOf="@id/albumLabel"
+        />
+
+    <TextView
+        android:id="@+id/yearValue"
+        style="@style/PlayerDescriptionValue"
+        tools:text="1965"
+        app:layout_constraintEnd_toStartOf="@id/endGuideline"
+        app:layout_constraintTop_toBottomOf="@id/albumLabel"
+        />
+
+    <TextView
+        android:id="@+id/genreLabel"
+        app:layout_constraintTag="genreLabelTag"
+        style="@style/PlayerDescriptionLabel"
+        android:text="@string/genre"
+        app:layout_constraintStart_toEndOf="@id/startGuideline"
+        app:layout_constraintTop_toBottomOf="@id/yearLabel"
+        />
+
+    <TextView
+        android:id="@+id/genreValue"
+        style="@style/PlayerDescriptionValue"
+        tools:text="Rock"
+        app:layout_constraintEnd_toStartOf="@id/endGuideline"
+        app:layout_constraintTop_toBottomOf="@id/yearLabel"
+        />
+
+    <TextView
+        android:id="@+id/countryLabel"
+        app:layout_constraintTag="countryLabelTag"
+        style="@style/PlayerDescriptionLabel"
+        android:layout_marginBottom="20dp"
+        android:text="@string/country"
+        app:layout_constraintStart_toEndOf="@id/startGuideline"
+        app:layout_constraintTop_toBottomOf="@id/genreLabel"
         app:layout_constraintBottom_toBottomOf="parent"
         />
 
+    <TextView
+        android:id="@+id/countryValue"
+        style="@style/PlayerDescriptionValue"
+        android:layout_marginBottom="20dp"
+        tools:text="Great Britain Long long long long long long long long long long long long long long long long long"
+        app:layout_constraintEnd_toStartOf="@id/endGuideline"
+        app:layout_constraintTop_toBottomOf="@id/genreLabel"
+        app:layout_constraintBottom_toBottomOf="parent"
+        />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
