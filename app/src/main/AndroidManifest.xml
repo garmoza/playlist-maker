@@ -33,6 +33,9 @@
         <activity
             android:name=".activity.SettingsActivity"
             android:exported="false" />
+        <activity
+            android:name=".activity.PlayerActivity"
+            android:exported="false" />
     </application>
 
 </manifest>

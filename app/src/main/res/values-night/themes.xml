@@ -6,6 +6,7 @@
         <item name="colorOnPrimary">@color/app_white</item>
         <item name="colorOnPrimaryVariant">@color/app_white</item>
         <item name="colorInputHint">@color/yp_black</item>
+        <item name="colorOnPrimaryTransparent25">@color/yp_white_transparent25</item>
 
         <item name="android:fontFamily">@font/ys_display_regular</item>
     </style>

@@ -1,6 +1,7 @@
 package com.practicum.playlistmaker.activity
 
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -84,8 +85,24 @@ class SearchActivity : AppCompatActivity() {
 
         val sharedPreferences = getSharedPreferences(PLAYLIST_MAKER_PREFERENCES, MODE_PRIVATE)
         val searchHistory = SearchHistory(sharedPreferences)
-        trackAdapter = TrackAdapter(tracks, searchHistory)
-        historyTrackAdapter = HistoryTrackAdapter(searchHistory)
+
+        val onTrackClick = {track: Track ->
+            searchHistory.addTrack(track)
+
+            val displayIntent = Intent(this@SearchActivity, PlayerActivity::class.java)
+            displayIntent.putExtra(ARTWORK_URL_512_EXTRA, track.artworkUrl512)
+            displayIntent.putExtra(TRACK_NAME_EXTRA, track.trackName)
+            displayIntent.putExtra(ARTIST_NAME_EXTRA, track.artistName)
+            displayIntent.putExtra(COLLECTION_NAME_EXTRA, track.collectionName)
+            displayIntent.putExtra(RELEASE_YEAR_EXTRA, track.releaseYear)
+            displayIntent.putExtra(PRIMARY_GENRE_NAME_EXTRA, track.primaryGenreName)
+            displayIntent.putExtra(COUNTRY_EXTRA, track.country)
+            displayIntent.putExtra(TRACK_TIME_EXTRA, track.trackTime)
+            startActivity(displayIntent)
+        }
+
+        trackAdapter = TrackAdapter(tracks, onTrackClick)
+        historyTrackAdapter = HistoryTrackAdapter(searchHistory, onTrackClick)
 
         binding.recyclerViewTrack.adapter = trackAdapter
         binding.recyclerViewHistoryTrack.adapter = historyTrackAdapter
