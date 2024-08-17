@@ -5,6 +5,7 @@ import android.content.Intent
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
@@ -12,6 +13,8 @@ import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
+import com.practicum.playlistmaker.ClickDebounce
+import com.practicum.playlistmaker.SearchDebounce
 import com.practicum.playlistmaker.preferences.HISTORY_TRACKS_KEY
 import com.practicum.playlistmaker.recycler.HistoryTrackAdapter
 import com.practicum.playlistmaker.preferences.PLAYLIST_MAKER_PREFERENCES
@@ -101,8 +104,23 @@ class SearchActivity : AppCompatActivity() {
             startActivity(displayIntent)
         }
 
-        trackAdapter = TrackAdapter(tracks, onTrackClick)
-        historyTrackAdapter = HistoryTrackAdapter(searchHistory, onTrackClick)
+        val clickDebounce = ClickDebounce(Looper.getMainLooper())
+
+        val onSearchedTrackDebounceClick = {track: Track ->
+            clickDebounce.execute(
+                { onTrackClick(track) },
+                binding.recyclerViewTrack
+            )
+        }
+        val onHistoryTrackDebounceClick = {track: Track ->
+            clickDebounce.execute(
+                { onTrackClick(track) },
+                binding.recyclerViewHistoryTrack
+            )
+        }
+
+        trackAdapter = TrackAdapter(tracks, onSearchedTrackDebounceClick)
+        historyTrackAdapter = HistoryTrackAdapter(searchHistory, onHistoryTrackDebounceClick)
 
         binding.recyclerViewTrack.adapter = trackAdapter
         binding.recyclerViewHistoryTrack.adapter = historyTrackAdapter
@@ -128,6 +146,14 @@ class SearchActivity : AppCompatActivity() {
             binding.setState(SearchActivityState.EMPTY)
         }
 
+        val searchDebounce = SearchDebounce(Looper.getMainLooper())
+
+        val searchTask = Runnable {
+            binding.setState(SearchActivityState.SEARCHING)
+            iTunseService.search(binding.editTextSearch.text.toString())
+                .enqueue(iTunseTracksResponseHandler)
+        }
+
         val searchTextWatcher = object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
                 // empty
@@ -135,7 +161,13 @@ class SearchActivity : AppCompatActivity() {
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 searchedValue = s.toString()
-                binding.imageViewClear.visibility = if (s.isNullOrEmpty()) View.GONE else View.VISIBLE
+                binding.imageViewClear.visibility = if (s.isNullOrEmpty()) {
+                    searchDebounce.remove(searchTask)
+                    View.GONE
+                } else {
+                    searchDebounce.execute(searchTask)
+                    View.VISIBLE
+                }
             }
 
             override fun afterTextChanged(s: Editable?) {
@@ -147,16 +179,14 @@ class SearchActivity : AppCompatActivity() {
         binding.editTextSearch.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 Log.i(TAG, "search action editor click")
-                iTunseService.search(binding.editTextSearch.text.toString())
-                    .enqueue(iTunseTracksResponseHandler)
+                searchDebounce.execute(searchTask)
             }
             false
         }
 
         binding.placeholderButton.setOnClickListener {
             Log.i(TAG, "search action button click")
-            iTunseService.search(binding.editTextSearch.text.toString())
-                .enqueue(iTunseTracksResponseHandler)
+            searchDebounce.execute(searchTask)
         }
 
         binding.editTextSearch.setOnFocusChangeListener { v, hasFocus ->
@@ -231,6 +261,10 @@ class SearchActivity : AppCompatActivity() {
                 placeholderButton.visibility = View.VISIBLE
                 placeholderButton.setText(R.string.update)
             }
+            SearchActivityState.SEARCHING -> {
+                hideViews()
+                progressBar.visibility = View.VISIBLE
+            }
         }
     }
 
@@ -241,6 +275,7 @@ class SearchActivity : AppCompatActivity() {
         placeholderAdditionalMessage.visibility = View.GONE
         placeholderButton.visibility = View.GONE
         historyViewGroup.visibility = View.GONE
+        progressBar.visibility = View.GONE
     }
 
     companion object {

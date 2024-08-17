@@ -5,5 +5,6 @@ enum class SearchActivityState {
     TRACK_LIST,
     HISTORY,
     TRACK_NOT_FOUND,
-    NETWORK_PROBLEM
+    NETWORK_PROBLEM,
+    SEARCHING
 }
