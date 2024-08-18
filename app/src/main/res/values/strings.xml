@@ -30,4 +30,5 @@
     <string name="year">Year</string>
     <string name="genre">Genre</string>
     <string name="country">Country</string>
+    <string name="track_not_available">The track is not available</string>
 </resources>

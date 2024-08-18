@@ -101,6 +101,7 @@ class SearchActivity : AppCompatActivity() {
             displayIntent.putExtra(PRIMARY_GENRE_NAME_EXTRA, track.primaryGenreName)
             displayIntent.putExtra(COUNTRY_EXTRA, track.country)
             displayIntent.putExtra(TRACK_TIME_EXTRA, track.trackTime)
+            displayIntent.putExtra(PREVIEW_URL_EXTRA, track.previewUrl)
             startActivity(displayIntent)
         }
 
