@@ -1,7 +1,6 @@
 package com.practicum.playlistmaker.activity
 
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
 import android.widget.Toolbar
 import androidx.appcompat.app.AppCompatActivity
@@ -56,7 +55,6 @@ class PlayerActivity : AppCompatActivity() {
         }
 
         val previewUrl = intent.getStringExtra(PREVIEW_URL_EXTRA)
-        Log.i("PlayerActivityDebug", "previewUrl is $previewUrl")
         previewUrl?.let {
             player = PlayerImpl(binding.playButton, binding.playtime)
             player?.prepare(it)
