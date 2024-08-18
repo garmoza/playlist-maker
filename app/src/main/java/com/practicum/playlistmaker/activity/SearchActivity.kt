@@ -13,8 +13,8 @@ import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
-import com.practicum.playlistmaker.ClickDebounce
-import com.practicum.playlistmaker.SearchDebounce
+import com.practicum.playlistmaker.debounce.ClickDebounce
+import com.practicum.playlistmaker.debounce.SearchDebounce
 import com.practicum.playlistmaker.preferences.HISTORY_TRACKS_KEY
 import com.practicum.playlistmaker.recycler.HistoryTrackAdapter
 import com.practicum.playlistmaker.preferences.PLAYLIST_MAKER_PREFERENCES
