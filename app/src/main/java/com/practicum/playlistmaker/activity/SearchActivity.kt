@@ -47,6 +47,9 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var trackAdapter: TrackAdapter
     private lateinit var historyTrackAdapter: HistoryTrackAdapter
     private lateinit var listener: OnSharedPreferenceChangeListener
+    private lateinit var clickDebounce: ClickDebounce
+    private lateinit var searchDebounce: SearchDebounce
+    private lateinit var searchTask: Runnable
 
     private val iTunseTracksResponseHandler = object : Callback<ITunseTracksResponse> {
         override fun onResponse(
@@ -105,18 +108,18 @@ class SearchActivity : AppCompatActivity() {
             startActivity(displayIntent)
         }
 
-        val clickDebounce = ClickDebounce(Looper.getMainLooper())
+        clickDebounce = ClickDebounce(Looper.getMainLooper())
 
         val onSearchedTrackDebounceClick = {track: Track ->
             clickDebounce.execute(
                 { onTrackClick(track) },
-                binding.recyclerViewTrack
+                binding.recyclerViewTrack.id
             )
         }
         val onHistoryTrackDebounceClick = {track: Track ->
             clickDebounce.execute(
                 { onTrackClick(track) },
-                binding.recyclerViewHistoryTrack
+                binding.recyclerViewHistoryTrack.id
             )
         }
 
@@ -147,9 +150,9 @@ class SearchActivity : AppCompatActivity() {
             binding.setState(SearchActivityState.EMPTY)
         }
 
-        val searchDebounce = SearchDebounce(Looper.getMainLooper())
+        searchDebounce = SearchDebounce(Looper.getMainLooper())
 
-        val searchTask = Runnable {
+        searchTask = Runnable {
             binding.setState(SearchActivityState.SEARCHING)
             iTunseService.search(binding.editTextSearch.text.toString())
                 .enqueue(iTunseTracksResponseHandler)
@@ -218,6 +221,11 @@ class SearchActivity : AppCompatActivity() {
             searchHistory.clear()
             binding.setState(SearchActivityState.EMPTY)
         }
+    }
+
+    override fun onDestroy() {
+        searchDebounce.remove(searchTask)
+        super.onDestroy()
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

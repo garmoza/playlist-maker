@@ -2,17 +2,16 @@ package com.practicum.playlistmaker.debounce
 
 import android.os.Handler
 import android.os.Looper
-import android.view.View
 
 class ClickDebounce(looper: Looper) {
 
     private val handler = Handler(looper)
-    private val clicked = mutableSetOf<View>()
+    private val clicked = mutableSetOf<Int>()
 
-    fun execute(task: Runnable, view: View) {
-        if (!clicked.contains(view)) {
-            clicked.add(view)
-            handler.postDelayed({ clicked.remove(view) }, DEFAULT_DELAY)
+    fun execute(task: Runnable, viewId: Int) {
+        if (!clicked.contains(viewId)) {
+            clicked.add(viewId)
+            handler.postDelayed({ clicked.remove(viewId) }, DEFAULT_DELAY)
             task.run()
         }
     }

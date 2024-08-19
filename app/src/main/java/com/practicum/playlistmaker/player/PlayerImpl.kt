@@ -17,12 +17,13 @@ class PlayerImpl(
     private val mainThreadHandler = Handler(Looper.getMainLooper())
     private val mediaPlayer = MediaPlayer()
 
+    private val dateFormat by lazy { SimpleDateFormat("mm:ss", Locale.getDefault()) }
+
     private var playerState = STATE_DEFAULT
 
     private var updatePlaytimeTask = object : Runnable {
         override fun run() {
-            playtimeTextView.text = SimpleDateFormat("mm:ss", Locale.getDefault())
-                .format(mediaPlayer.currentPosition)
+            playtimeTextView.text = dateFormat.format(mediaPlayer.currentPosition)
             mainThreadHandler.postDelayed(this, DELAY)
         }
     }
