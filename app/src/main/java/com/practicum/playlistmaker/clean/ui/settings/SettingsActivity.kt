@@ -1,4 +1,4 @@
-package com.practicum.playlistmaker.activity
+package com.practicum.playlistmaker.clean.ui.settings
 
 import android.content.Intent
 import android.net.Uri

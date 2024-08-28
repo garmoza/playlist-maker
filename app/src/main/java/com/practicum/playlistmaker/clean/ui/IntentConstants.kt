@@ -1,4 +1,4 @@
-package com.practicum.playlistmaker.activity
+package com.practicum.playlistmaker.clean.ui
 
 const val ARTWORK_URL_512_EXTRA = "ARTWORK_URL_512_EXTRA"
 const val TRACK_NAME_EXTRA = "TRACK_NAME_EXTRA"

@@ -1,4 +1,4 @@
-package com.practicum.playlistmaker.activity
+package com.practicum.playlistmaker.clean.ui.player
 
 import android.os.Bundle
 import android.widget.Toast
@@ -9,6 +9,15 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.practicum.playlistmaker.player.Player
 import com.practicum.playlistmaker.player.PlayerImpl
 import com.practicum.playlistmaker.R
+import com.practicum.playlistmaker.clean.ui.ARTIST_NAME_EXTRA
+import com.practicum.playlistmaker.clean.ui.ARTWORK_URL_512_EXTRA
+import com.practicum.playlistmaker.clean.ui.COLLECTION_NAME_EXTRA
+import com.practicum.playlistmaker.clean.ui.COUNTRY_EXTRA
+import com.practicum.playlistmaker.clean.ui.PREVIEW_URL_EXTRA
+import com.practicum.playlistmaker.clean.ui.PRIMARY_GENRE_NAME_EXTRA
+import com.practicum.playlistmaker.clean.ui.RELEASE_YEAR_EXTRA
+import com.practicum.playlistmaker.clean.ui.TRACK_NAME_EXTRA
+import com.practicum.playlistmaker.clean.ui.TRACK_TIME_EXTRA
 import com.practicum.playlistmaker.databinding.ActivityPlayerBinding
 import com.practicum.playlistmaker.dpToPx
 

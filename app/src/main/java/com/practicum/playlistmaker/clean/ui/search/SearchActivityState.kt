@@ -1,4 +1,4 @@
-package com.practicum.playlistmaker.activity
+package com.practicum.playlistmaker.clean.ui.search
 
 enum class SearchActivityState {
     EMPTY,

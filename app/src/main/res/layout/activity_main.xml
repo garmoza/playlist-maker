@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     style="@style/LinerLayoutMainActivityStyle"
-    tools:context=".activity.MainActivity">
+    tools:context=".clean.ui.main.MainActivity">
 
     <Toolbar
         style="@style/ToolbarStyle"

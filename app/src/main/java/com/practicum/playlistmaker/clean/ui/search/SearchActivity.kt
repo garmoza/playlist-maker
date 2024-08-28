@@ -1,4 +1,4 @@
-package com.practicum.playlistmaker.activity
+package com.practicum.playlistmaker.clean.ui.search
 
 import android.content.Context
 import android.content.Intent
@@ -16,15 +16,23 @@ import android.widget.EditText
 import com.practicum.playlistmaker.debounce.ClickDebounce
 import com.practicum.playlistmaker.debounce.SearchDebounce
 import com.practicum.playlistmaker.preferences.HISTORY_TRACKS_KEY
-import com.practicum.playlistmaker.recycler.HistoryTrackAdapter
 import com.practicum.playlistmaker.preferences.PLAYLIST_MAKER_PREFERENCES
 import com.practicum.playlistmaker.R
+import com.practicum.playlistmaker.clean.ui.ARTIST_NAME_EXTRA
+import com.practicum.playlistmaker.clean.ui.ARTWORK_URL_512_EXTRA
+import com.practicum.playlistmaker.clean.ui.COLLECTION_NAME_EXTRA
+import com.practicum.playlistmaker.clean.ui.COUNTRY_EXTRA
+import com.practicum.playlistmaker.clean.ui.PREVIEW_URL_EXTRA
+import com.practicum.playlistmaker.clean.ui.PRIMARY_GENRE_NAME_EXTRA
+import com.practicum.playlistmaker.clean.ui.player.PlayerActivity
+import com.practicum.playlistmaker.clean.ui.RELEASE_YEAR_EXTRA
+import com.practicum.playlistmaker.clean.ui.TRACK_NAME_EXTRA
+import com.practicum.playlistmaker.clean.ui.TRACK_TIME_EXTRA
 import com.practicum.playlistmaker.preferences.SearchHistory
-import com.practicum.playlistmaker.recycler.TrackAdapter
-import com.practicum.playlistmaker.client.ITunseApi
-import com.practicum.playlistmaker.client.ITunseTracksResponse
+import com.practicum.playlistmaker.clean.data.network.ITunseApiService
+import com.practicum.playlistmaker.clean.data.dto.ITunseTracksResponse
 import com.practicum.playlistmaker.databinding.ActivitySearchBinding
-import com.practicum.playlistmaker.model.Track
+import com.practicum.playlistmaker.clean.domain.models.Track
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -37,7 +45,7 @@ class SearchActivity : AppCompatActivity() {
         .baseUrl(ITUNSE_BASE_URL)
         .addConverterFactory(GsonConverterFactory.create())
         .build()
-    private val iTunseService = retrofit.create(ITunseApi::class.java)
+    private val iTunseService = retrofit.create(ITunseApiService::class.java)
 
     private val tracks = ArrayList<Track>()
 
