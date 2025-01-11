@@ -70,7 +70,18 @@ class SearchActivity : AppCompatActivity() {
                 200 -> {
                     Log.i(TAG, "search response is 200")
                     if (response.body()?.results?.isNotEmpty() == true) {
-                        tracks.addAll(response.body()?.results!!)
+                        tracks.addAll(response.body()?.results!!.map { Track(
+                            trackId = it.trackId,
+                            trackName = it.trackName,
+                            artistName = it.artistName,
+                            trackTimeMillis = it.trackTimeMillis,
+                            artworkUrl100 = it.artworkUrl100,
+                            collectionName = it.collectionName,
+                            releaseDate = it.releaseDate,
+                            primaryGenreName = it.primaryGenreName,
+                            country = it.country,
+                            previewUrl = it.previewUrl
+                        ) })
                         binding.setState(SearchActivityState.TRACK_LIST)
                     } else {
                         Log.i(TAG, "search empty response")
