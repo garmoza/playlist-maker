@@ -5,6 +5,7 @@ import android.content.Intent
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
 import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
@@ -18,6 +19,7 @@ import com.practicum.playlistmaker.debounce.SearchDebounce
 import com.practicum.playlistmaker.preferences.HISTORY_TRACKS_KEY
 import com.practicum.playlistmaker.preferences.PLAYLIST_MAKER_PREFERENCES
 import com.practicum.playlistmaker.R
+import com.practicum.playlistmaker.clean.Creator
 import com.practicum.playlistmaker.clean.ui.ARTIST_NAME_EXTRA
 import com.practicum.playlistmaker.clean.ui.ARTWORK_URL_512_EXTRA
 import com.practicum.playlistmaker.clean.ui.COLLECTION_NAME_EXTRA
@@ -29,77 +31,43 @@ import com.practicum.playlistmaker.clean.ui.RELEASE_YEAR_EXTRA
 import com.practicum.playlistmaker.clean.ui.TRACK_NAME_EXTRA
 import com.practicum.playlistmaker.clean.ui.TRACK_TIME_EXTRA
 import com.practicum.playlistmaker.preferences.SearchHistory
-import com.practicum.playlistmaker.clean.data.network.ITunseApiService
-import com.practicum.playlistmaker.clean.data.dto.ITunseTracksResponse
+import com.practicum.playlistmaker.clean.data.network.BadResponseException
+import com.practicum.playlistmaker.clean.domain.api.TracksInteractor
 import com.practicum.playlistmaker.databinding.ActivitySearchBinding
 import com.practicum.playlistmaker.clean.domain.models.Track
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 
 class SearchActivity : AppCompatActivity() {
-
-    private val retrofit = Retrofit.Builder()
-        .baseUrl(ITUNSE_BASE_URL)
-        .addConverterFactory(GsonConverterFactory.create())
-        .build()
-    private val iTunseService = retrofit.create(ITunseApiService::class.java)
 
     private val tracks = ArrayList<Track>()
 
     private var searchedValue = DEFAULT_SEARCHED_VALUE
 
+    private lateinit var tracksInteractor: TracksInteractor
+
     private lateinit var binding: ActivitySearchBinding
     private lateinit var trackAdapter: TrackAdapter
     private lateinit var historyTrackAdapter: HistoryTrackAdapter
     private lateinit var listener: OnSharedPreferenceChangeListener
+    private lateinit var handler: Handler
     private lateinit var clickDebounce: ClickDebounce
     private lateinit var searchDebounce: SearchDebounce
     private lateinit var searchTask: Runnable
 
-    private val iTunseTracksResponseHandler = object : Callback<ITunseTracksResponse> {
-        override fun onResponse(
-            call: Call<ITunseTracksResponse>,
-            response: Response<ITunseTracksResponse>
-        ) {
-            Log.i(TAG, "search onResponse start")
-            tracks.clear()
-            when (response.code()) {
-                200 -> {
-                    Log.i(TAG, "search response is 200")
-                    if (response.body()?.results?.isNotEmpty() == true) {
-                        tracks.addAll(response.body()?.results!!.map { Track(
-                            trackId = it.trackId,
-                            trackName = it.trackName,
-                            artistName = it.artistName,
-                            trackTimeMillis = it.trackTimeMillis,
-                            artworkUrl100 = it.artworkUrl100,
-                            collectionName = it.collectionName,
-                            releaseDate = it.releaseDate,
-                            primaryGenreName = it.primaryGenreName,
-                            country = it.country,
-                            previewUrl = it.previewUrl
-                        ) })
-                        binding.setState(SearchActivityState.TRACK_LIST)
-                    } else {
-                        Log.i(TAG, "search empty response")
-                        binding.setState(SearchActivityState.TRACK_NOT_FOUND)
-                    }
+    private val tracksResponseHandler = object : TracksInteractor.TracksConsumer {
+        override fun consume(foundTracks: List<Track>) {
+            Log.i(TAG, "search start handle result")
+            handler.post {
+                tracks.clear()
+                if (foundTracks.isNotEmpty()) {
+                    Log.i(TAG, "search success result")
+                    tracks.addAll(foundTracks)
+                    binding.setState(SearchActivityState.TRACK_LIST)
+                } else {
+                    Log.i(TAG, "search empty result")
+                    binding.setState(SearchActivityState.TRACK_NOT_FOUND)
                 }
-                else -> {
-                    Log.i(TAG, "search bad response")
-                    binding.setState(SearchActivityState.NETWORK_PROBLEM)
-                }
+                trackAdapter.notifyDataSetChanged()
             }
-            trackAdapter.notifyDataSetChanged()
-            Log.i(TAG, "search onResponse end")
-        }
-
-        override fun onFailure(call: Call<ITunseTracksResponse>, t: Throwable) {
-            Log.i(TAG, "search onFailure")
-            binding.setState(SearchActivityState.NETWORK_PROBLEM)
         }
     }
 
@@ -107,6 +75,8 @@ class SearchActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivitySearchBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        tracksInteractor = Creator.provideTracksInteractor()
 
         val sharedPreferences = getSharedPreferences(PLAYLIST_MAKER_PREFERENCES, MODE_PRIVATE)
         val searchHistory = SearchHistory(sharedPreferences)
@@ -126,6 +96,8 @@ class SearchActivity : AppCompatActivity() {
             displayIntent.putExtra(PREVIEW_URL_EXTRA, track.previewUrl)
             startActivity(displayIntent)
         }
+
+        handler = Handler(Looper.getMainLooper())
 
         clickDebounce = ClickDebounce(Looper.getMainLooper())
 
@@ -173,8 +145,15 @@ class SearchActivity : AppCompatActivity() {
 
         searchTask = Runnable {
             binding.setState(SearchActivityState.SEARCHING)
-            iTunseService.search(binding.editTextSearch.text.toString())
-                .enqueue(iTunseTracksResponseHandler)
+            try {
+                tracksInteractor.searchTracks(
+                    binding.editTextSearch.text.toString(),
+                    tracksResponseHandler
+                )
+            } catch (ex: BadResponseException) {
+                Log.i(TAG, "search bad response")
+                binding.setState(SearchActivityState.NETWORK_PROBLEM)
+            }
         }
 
         val searchTextWatcher = object : TextWatcher {
@@ -309,7 +288,6 @@ class SearchActivity : AppCompatActivity() {
     companion object {
         const val SEARCHED_VALUE_KEY = "SEARCH_VALUE"
         const val DEFAULT_SEARCHED_VALUE = ""
-        const val ITUNSE_BASE_URL = "https://itunes.apple.com"
         const val TAG = "SearchActivity"
     }
 }
