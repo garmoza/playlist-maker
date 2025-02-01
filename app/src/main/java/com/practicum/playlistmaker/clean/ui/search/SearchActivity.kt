@@ -38,8 +38,6 @@ import com.practicum.playlistmaker.clean.domain.models.Track
 
 class SearchActivity : AppCompatActivity() {
 
-    private val tracks = ArrayList<Track>()
-
     private var searchedValue = DEFAULT_SEARCHED_VALUE
 
     private lateinit var tracksInteractor: TracksInteractor
@@ -57,16 +55,14 @@ class SearchActivity : AppCompatActivity() {
         override fun consume(foundTracks: List<Track>) {
             Log.i(TAG, "search start handle result")
             handler.post {
-                tracks.clear()
+                trackAdapter.setItems(foundTracks)
                 if (foundTracks.isNotEmpty()) {
                     Log.i(TAG, "search success result")
-                    tracks.addAll(foundTracks)
                     binding.setState(SearchActivityState.TRACK_LIST)
                 } else {
                     Log.i(TAG, "search empty result")
                     binding.setState(SearchActivityState.TRACK_NOT_FOUND)
                 }
-                trackAdapter.notifyDataSetChanged()
             }
         }
     }
@@ -114,7 +110,7 @@ class SearchActivity : AppCompatActivity() {
             )
         }
 
-        trackAdapter = TrackAdapter(tracks, onSearchedTrackDebounceClick)
+        trackAdapter = TrackAdapter(onSearchedTrackDebounceClick)
         historyTrackAdapter = HistoryTrackAdapter(searchHistory, onHistoryTrackDebounceClick)
 
         binding.recyclerViewTrack.adapter = trackAdapter
@@ -132,8 +128,7 @@ class SearchActivity : AppCompatActivity() {
         }
 
         binding.imageViewClear.setOnClickListener {
-            tracks.clear()
-            trackAdapter.notifyDataSetChanged()
+            trackAdapter.setItems(emptyList())
             binding.editTextSearch.setText("")
             binding.editTextSearch.clearFocus()
             val manager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
