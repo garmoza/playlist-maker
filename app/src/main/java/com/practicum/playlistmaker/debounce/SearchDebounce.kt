@@ -17,6 +17,7 @@ class SearchDebounce(looper: Looper) {
     }
 
     companion object {
-        private const val DEFAULT_DELAY = 2000L
+        const val DEFAULT_DELAY = 2000L
+        const val NONE_DELAY = 0L
     }
 }

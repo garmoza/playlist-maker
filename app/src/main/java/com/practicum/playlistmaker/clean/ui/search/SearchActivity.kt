@@ -2,6 +2,7 @@ package com.practicum.playlistmaker.clean.ui.search
 
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -35,6 +36,7 @@ import com.practicum.playlistmaker.clean.domain.api.TracksInteractor
 import com.practicum.playlistmaker.clean.domain.api.TracksSearchHistoryInteractor
 import com.practicum.playlistmaker.databinding.ActivitySearchBinding
 import com.practicum.playlistmaker.clean.domain.models.Track
+import com.practicum.playlistmaker.debounce.SearchDebounce.Companion.NONE_DELAY
 
 class SearchActivity : AppCompatActivity() {
 
@@ -73,10 +75,9 @@ class SearchActivity : AppCompatActivity() {
         binding = ActivitySearchBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        tracksInteractor = Creator.provideTracksInteractor()
-
         val sharedPreferences = getSharedPreferences(PLAYLIST_MAKER_PREFERENCES, MODE_PRIVATE)
-        tracksSearchHistoryInteractor = Creator.provideTracksSearchHistoryInteractor(sharedPreferences)
+
+        initInteractors(sharedPreferences)
 
         val onTrackClick = {track: Track ->
             tracksSearchHistoryInteractor.addTrack(track)
@@ -182,14 +183,14 @@ class SearchActivity : AppCompatActivity() {
         binding.editTextSearch.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 Log.i(TAG, "search action editor click")
-                searchDebounce.execute(searchTask)
+                searchDebounce.execute(searchTask, NONE_DELAY)
             }
             false
         }
 
         binding.placeholderButton.setOnClickListener {
             Log.i(TAG, "search action button click")
-            searchDebounce.execute(searchTask)
+            searchDebounce.execute(searchTask, NONE_DELAY)
         }
 
         binding.editTextSearch.setOnFocusChangeListener { v, hasFocus ->
@@ -223,6 +224,11 @@ class SearchActivity : AppCompatActivity() {
         }
     }
 
+    private fun initInteractors(sharedPreferences: SharedPreferences) {
+        tracksInteractor = Creator.provideTracksInteractor()
+        tracksSearchHistoryInteractor = Creator.provideTracksSearchHistoryInteractor(sharedPreferences)
+    }
+
     override fun onDestroy() {
         searchDebounce.remove(searchTask)
         super.onDestroy()
@@ -243,14 +249,17 @@ class SearchActivity : AppCompatActivity() {
         when (state) {
             SearchActivityState.EMPTY -> {
                 hideViews()
+                Log.i(TAG, "Activity State is EMPTY")
             }
             SearchActivityState.TRACK_LIST -> {
                 hideViews()
                 recyclerViewTrack.visibility = View.VISIBLE
+                Log.i(TAG, "Activity State is TRACK_LIST")
             }
             SearchActivityState.HISTORY -> {
                 hideViews()
                 historyViewGroup.visibility = View.VISIBLE
+                Log.i(TAG, "Activity State is HISTORY")
             }
             SearchActivityState.TRACK_NOT_FOUND -> {
                 hideViews()
@@ -258,6 +267,7 @@ class SearchActivity : AppCompatActivity() {
                 placeholderImage.setImageResource(R.drawable.track_not_found)
                 placeholderMessage.visibility = View.VISIBLE
                 placeholderMessage.setText(R.string.placeholder_message_not_found)
+                Log.i(TAG, "Activity State is TRACK_NOT_FOUND")
             }
             SearchActivityState.NETWORK_PROBLEM -> {
                 hideViews()
@@ -269,10 +279,12 @@ class SearchActivity : AppCompatActivity() {
                 placeholderAdditionalMessage.setText(R.string.placeholder_aditional_message_network_problems)
                 placeholderButton.visibility = View.VISIBLE
                 placeholderButton.setText(R.string.update)
+                Log.i(TAG, "Activity State is NETWORK_PROBLEM")
             }
             SearchActivityState.SEARCHING -> {
                 hideViews()
                 progressBar.visibility = View.VISIBLE
+                Log.i(TAG, "Activity State is SEARCHING")
             }
         }
     }
