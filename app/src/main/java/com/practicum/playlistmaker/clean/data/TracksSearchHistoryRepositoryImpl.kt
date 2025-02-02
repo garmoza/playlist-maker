@@ -1,14 +1,17 @@
-package com.practicum.playlistmaker.preferences
+package com.practicum.playlistmaker.clean.data
 
 import android.content.SharedPreferences
 import com.google.gson.Gson
+import com.practicum.playlistmaker.clean.domain.api.TracksSearchHistoryRepository
 import com.practicum.playlistmaker.clean.domain.models.Track
+import com.practicum.playlistmaker.preferences.HISTORY_TRACKS_KEY
+import java.util.Collections
 
-class SearchHistory(
+class TracksSearchHistoryRepositoryImpl(
     private val sharedPreferences: SharedPreferences
-) {
+): TracksSearchHistoryRepository {
 
-    private val historyTracks: ArrayList<Track> = ArrayList()
+    private val historyTracks: MutableList<Track> = ArrayList()
 
     init {
         val historyTracksJson = sharedPreferences.getString(HISTORY_TRACKS_KEY, null)
@@ -17,7 +20,7 @@ class SearchHistory(
         }
     }
 
-    fun addTrack(track: Track) {
+    override fun addTrack(track: Track) {
         if (historyTracks.contains(track)) {
             historyTracks.remove(track)
         }
@@ -29,19 +32,18 @@ class SearchHistory(
         updateSharedPreferences()
     }
 
-    fun getTrack(position: Int): Track {
-        return historyTracks[position]
-    }
-
-    fun getSize(): Int {
+    override fun getSize(): Int {
         return historyTracks.size
     }
 
-    fun clear() {
+    override fun clear() {
         historyTracks.clear()
 
         updateSharedPreferences()
     }
+
+    override fun getTracks(): List<Track> =
+        Collections.unmodifiableList(historyTracks)
 
     private fun updateSharedPreferences() {
         sharedPreferences.edit()

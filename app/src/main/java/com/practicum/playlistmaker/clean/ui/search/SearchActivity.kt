@@ -30,9 +30,9 @@ import com.practicum.playlistmaker.clean.ui.player.PlayerActivity
 import com.practicum.playlistmaker.clean.ui.RELEASE_YEAR_EXTRA
 import com.practicum.playlistmaker.clean.ui.TRACK_NAME_EXTRA
 import com.practicum.playlistmaker.clean.ui.TRACK_TIME_EXTRA
-import com.practicum.playlistmaker.preferences.SearchHistory
 import com.practicum.playlistmaker.clean.data.network.BadResponseException
 import com.practicum.playlistmaker.clean.domain.api.TracksInteractor
+import com.practicum.playlistmaker.clean.domain.api.TracksSearchHistoryInteractor
 import com.practicum.playlistmaker.databinding.ActivitySearchBinding
 import com.practicum.playlistmaker.clean.domain.models.Track
 
@@ -41,10 +41,11 @@ class SearchActivity : AppCompatActivity() {
     private var searchedValue = DEFAULT_SEARCHED_VALUE
 
     private lateinit var tracksInteractor: TracksInteractor
+    private lateinit var tracksSearchHistoryInteractor: TracksSearchHistoryInteractor
 
     private lateinit var binding: ActivitySearchBinding
     private lateinit var trackAdapter: TrackAdapter
-    private lateinit var historyTrackAdapter: HistoryTrackAdapter
+    private lateinit var trackHistoryAdapter: TrackAdapter
     private lateinit var listener: OnSharedPreferenceChangeListener
     private lateinit var handler: Handler
     private lateinit var clickDebounce: ClickDebounce
@@ -75,10 +76,10 @@ class SearchActivity : AppCompatActivity() {
         tracksInteractor = Creator.provideTracksInteractor()
 
         val sharedPreferences = getSharedPreferences(PLAYLIST_MAKER_PREFERENCES, MODE_PRIVATE)
-        val searchHistory = SearchHistory(sharedPreferences)
+        tracksSearchHistoryInteractor = Creator.provideTracksSearchHistoryInteractor(sharedPreferences)
 
         val onTrackClick = {track: Track ->
-            searchHistory.addTrack(track)
+            tracksSearchHistoryInteractor.addTrack(track)
 
             val displayIntent = Intent(this@SearchActivity, PlayerActivity::class.java)
             displayIntent.putExtra(ARTWORK_URL_512_EXTRA, track.artworkUrl512)
@@ -111,14 +112,19 @@ class SearchActivity : AppCompatActivity() {
         }
 
         trackAdapter = TrackAdapter(onSearchedTrackDebounceClick)
-        historyTrackAdapter = HistoryTrackAdapter(searchHistory, onHistoryTrackDebounceClick)
+        trackHistoryAdapter = TrackAdapter(onHistoryTrackDebounceClick)
+        trackHistoryAdapter.setItems(
+            tracksSearchHistoryInteractor.getTracks()
+        )
 
         binding.recyclerViewTrack.adapter = trackAdapter
-        binding.recyclerViewHistoryTrack.adapter = historyTrackAdapter
+        binding.recyclerViewHistoryTrack.adapter = trackHistoryAdapter
 
-        listener = OnSharedPreferenceChangeListener { sharedPreferences, key ->
+        listener = OnSharedPreferenceChangeListener { _, key ->
             if (key == HISTORY_TRACKS_KEY) {
-                historyTrackAdapter.notifyDataSetChanged()
+                trackHistoryAdapter.setItems(
+                    tracksSearchHistoryInteractor.getTracks()
+                )
             }
         }
         sharedPreferences.registerOnSharedPreferenceChangeListener(listener)
@@ -187,7 +193,7 @@ class SearchActivity : AppCompatActivity() {
         }
 
         binding.editTextSearch.setOnFocusChangeListener { v, hasFocus ->
-            if (binding.editTextSearch.hasFocus() && binding.editTextSearch.text.isEmpty() && searchHistory.getSize() > 0) {
+            if (binding.editTextSearch.hasFocus() && binding.editTextSearch.text.isEmpty() && trackHistoryAdapter.itemCount > 0) {
                 binding.setState(SearchActivityState.HISTORY)
             } else {
                 binding.setState(SearchActivityState.TRACK_LIST)
@@ -199,7 +205,7 @@ class SearchActivity : AppCompatActivity() {
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                if (binding.editTextSearch.hasFocus() && binding.editTextSearch.text.isEmpty() && searchHistory.getSize() > 0) {
+                if (binding.editTextSearch.hasFocus() && binding.editTextSearch.text.isEmpty() && trackHistoryAdapter.itemCount > 0) {
                     binding.setState(SearchActivityState.HISTORY)
                 } else {
                     binding.setState(SearchActivityState.TRACK_LIST)
@@ -211,7 +217,8 @@ class SearchActivity : AppCompatActivity() {
         })
 
         binding.clearHistoryButton.setOnClickListener {
-            searchHistory.clear()
+            tracksSearchHistoryInteractor.clear()
+            trackHistoryAdapter.setItems(emptyList())
             binding.setState(SearchActivityState.EMPTY)
         }
     }
