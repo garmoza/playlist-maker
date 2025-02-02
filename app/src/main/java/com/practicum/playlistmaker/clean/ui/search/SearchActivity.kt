@@ -99,27 +99,8 @@ class SearchActivity : AppCompatActivity() {
 
         clickDebounce = ClickDebounce(Looper.getMainLooper())
 
-        val onSearchedTrackDebounceClick = {track: Track ->
-            clickDebounce.execute(
-                { onTrackClick(track) },
-                binding.recyclerViewTrack.id
-            )
-        }
-        val onHistoryTrackDebounceClick = {track: Track ->
-            clickDebounce.execute(
-                { onTrackClick(track) },
-                binding.recyclerViewHistoryTrack.id
-            )
-        }
-
-        trackAdapter = TrackAdapter(onSearchedTrackDebounceClick)
-        trackHistoryAdapter = TrackAdapter(onHistoryTrackDebounceClick)
-        trackHistoryAdapter.setItems(
-            tracksSearchHistoryInteractor.getTracks()
-        )
-
-        binding.recyclerViewTrack.adapter = trackAdapter
-        binding.recyclerViewHistoryTrack.adapter = trackHistoryAdapter
+        initTrackAdapter(onTrackClick)
+        initTrackHistoryAdapter(onTrackClick)
 
         listener = OnSharedPreferenceChangeListener { _, key ->
             if (key == HISTORY_TRACKS_KEY) {
@@ -227,6 +208,31 @@ class SearchActivity : AppCompatActivity() {
     private fun initInteractors(sharedPreferences: SharedPreferences) {
         tracksInteractor = Creator.provideTracksInteractor()
         tracksSearchHistoryInteractor = Creator.provideTracksSearchHistoryInteractor(sharedPreferences)
+    }
+
+    private fun initTrackAdapter(onTrackClick: (Track) -> Unit) {
+        val onSearchedTrackDebounceClick = {track: Track ->
+            clickDebounce.execute(
+                { onTrackClick(track) },
+                binding.recyclerViewTrack.id
+            )
+        }
+        trackAdapter = TrackAdapter(onSearchedTrackDebounceClick)
+        binding.recyclerViewTrack.adapter = trackAdapter
+    }
+
+    private fun initTrackHistoryAdapter(onTrackClick: (Track) -> Unit) {
+        val onHistoryTrackDebounceClick = {track: Track ->
+            clickDebounce.execute(
+                { onTrackClick(track) },
+                binding.recyclerViewHistoryTrack.id
+            )
+        }
+        trackHistoryAdapter = TrackAdapter(onHistoryTrackDebounceClick)
+        trackHistoryAdapter.setItems(
+            tracksSearchHistoryInteractor.getTracks()
+        )
+        binding.recyclerViewHistoryTrack.adapter = trackHistoryAdapter
     }
 
     override fun onDestroy() {
