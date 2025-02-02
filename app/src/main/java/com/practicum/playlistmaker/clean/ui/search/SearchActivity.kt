@@ -35,6 +35,7 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var tracksInteractor: TracksInteractor
     private lateinit var tracksSearchHistoryInteractor: TracksSearchHistoryInteractor
 
+    private lateinit var sharedPreferences: SharedPreferences
     private lateinit var binding: ActivitySearchBinding
     private lateinit var trackAdapter: TrackAdapter
     private lateinit var trackHistoryAdapter: TrackAdapter
@@ -65,25 +66,17 @@ class SearchActivity : AppCompatActivity() {
         binding = ActivitySearchBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val sharedPreferences = getSharedPreferences(PLAYLIST_MAKER_PREFERENCES, MODE_PRIVATE)
-
-        initInteractors(sharedPreferences)
-
+        sharedPreferences = getSharedPreferences(PLAYLIST_MAKER_PREFERENCES, MODE_PRIVATE)
         handler = Handler(Looper.getMainLooper())
-
         clickDebounce = ClickDebounce(Looper.getMainLooper())
+        searchDebounce = SearchDebounce(Looper.getMainLooper())
+
+        initInteractors()
 
         initTrackAdapter(this::onTrackClick)
         initTrackHistoryAdapter(this::onTrackClick)
 
-        listener = OnSharedPreferenceChangeListener { _, key ->
-            if (key == HISTORY_TRACKS_KEY) {
-                trackHistoryAdapter.setItems(
-                    tracksSearchHistoryInteractor.getTracks()
-                )
-            }
-        }
-        sharedPreferences.registerOnSharedPreferenceChangeListener(listener)
+        initSharedPreferenceChangeListener()
 
         binding.toolbarSearch.setOnClickListener {
             finish()
@@ -97,8 +90,6 @@ class SearchActivity : AppCompatActivity() {
             manager.hideSoftInputFromWindow(binding.editTextSearch.windowToken, 0)
             binding.setState(SearchActivityState.EMPTY)
         }
-
-        searchDebounce = SearchDebounce(Looper.getMainLooper())
 
         searchTask = Runnable {
             binding.setState(SearchActivityState.SEARCHING)
@@ -179,7 +170,7 @@ class SearchActivity : AppCompatActivity() {
         }
     }
 
-    private fun initInteractors(sharedPreferences: SharedPreferences) {
+    private fun initInteractors() {
         tracksInteractor = Creator.provideTracksInteractor()
         tracksSearchHistoryInteractor = Creator.provideTracksSearchHistoryInteractor(sharedPreferences)
     }
@@ -212,6 +203,17 @@ class SearchActivity : AppCompatActivity() {
             tracksSearchHistoryInteractor.getTracks()
         )
         binding.recyclerViewHistoryTrack.adapter = trackHistoryAdapter
+    }
+
+    private fun initSharedPreferenceChangeListener() {
+        listener = OnSharedPreferenceChangeListener { _, key ->
+            if (key == HISTORY_TRACKS_KEY) {
+                trackHistoryAdapter.setItems(
+                    tracksSearchHistoryInteractor.getTracks()
+                )
+            }
+        }
+        sharedPreferences.registerOnSharedPreferenceChangeListener(listener)
     }
 
     override fun onDestroy() {
