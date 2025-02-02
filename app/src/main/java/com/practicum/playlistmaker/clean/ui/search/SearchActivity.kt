@@ -1,7 +1,6 @@
 package com.practicum.playlistmaker.clean.ui.search
 
 import android.content.Context
-import android.content.Intent
 import android.content.SharedPreferences
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener
 import androidx.appcompat.app.AppCompatActivity
@@ -21,16 +20,7 @@ import com.practicum.playlistmaker.preferences.HISTORY_TRACKS_KEY
 import com.practicum.playlistmaker.preferences.PLAYLIST_MAKER_PREFERENCES
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.clean.Creator
-import com.practicum.playlistmaker.clean.ui.ARTIST_NAME_EXTRA
-import com.practicum.playlistmaker.clean.ui.ARTWORK_URL_512_EXTRA
-import com.practicum.playlistmaker.clean.ui.COLLECTION_NAME_EXTRA
-import com.practicum.playlistmaker.clean.ui.COUNTRY_EXTRA
-import com.practicum.playlistmaker.clean.ui.PREVIEW_URL_EXTRA
-import com.practicum.playlistmaker.clean.ui.PRIMARY_GENRE_NAME_EXTRA
 import com.practicum.playlistmaker.clean.ui.player.PlayerActivity
-import com.practicum.playlistmaker.clean.ui.RELEASE_YEAR_EXTRA
-import com.practicum.playlistmaker.clean.ui.TRACK_NAME_EXTRA
-import com.practicum.playlistmaker.clean.ui.TRACK_TIME_EXTRA
 import com.practicum.playlistmaker.clean.data.network.BadResponseException
 import com.practicum.playlistmaker.clean.domain.api.TracksInteractor
 import com.practicum.playlistmaker.clean.domain.api.TracksSearchHistoryInteractor
@@ -79,28 +69,12 @@ class SearchActivity : AppCompatActivity() {
 
         initInteractors(sharedPreferences)
 
-        val onTrackClick = {track: Track ->
-            tracksSearchHistoryInteractor.addTrack(track)
-
-            val displayIntent = Intent(this@SearchActivity, PlayerActivity::class.java)
-            displayIntent.putExtra(ARTWORK_URL_512_EXTRA, track.artworkUrl512)
-            displayIntent.putExtra(TRACK_NAME_EXTRA, track.trackName)
-            displayIntent.putExtra(ARTIST_NAME_EXTRA, track.artistName)
-            displayIntent.putExtra(COLLECTION_NAME_EXTRA, track.collectionName)
-            displayIntent.putExtra(RELEASE_YEAR_EXTRA, track.releaseYear)
-            displayIntent.putExtra(PRIMARY_GENRE_NAME_EXTRA, track.primaryGenreName)
-            displayIntent.putExtra(COUNTRY_EXTRA, track.country)
-            displayIntent.putExtra(TRACK_TIME_EXTRA, track.trackTime)
-            displayIntent.putExtra(PREVIEW_URL_EXTRA, track.previewUrl)
-            startActivity(displayIntent)
-        }
-
         handler = Handler(Looper.getMainLooper())
 
         clickDebounce = ClickDebounce(Looper.getMainLooper())
 
-        initTrackAdapter(onTrackClick)
-        initTrackHistoryAdapter(onTrackClick)
+        initTrackAdapter(this::onTrackClick)
+        initTrackHistoryAdapter(this::onTrackClick)
 
         listener = OnSharedPreferenceChangeListener { _, key ->
             if (key == HISTORY_TRACKS_KEY) {
@@ -208,6 +182,11 @@ class SearchActivity : AppCompatActivity() {
     private fun initInteractors(sharedPreferences: SharedPreferences) {
         tracksInteractor = Creator.provideTracksInteractor()
         tracksSearchHistoryInteractor = Creator.provideTracksSearchHistoryInteractor(sharedPreferences)
+    }
+
+    private fun onTrackClick(track: Track) {
+        tracksSearchHistoryInteractor.addTrack(track)
+        PlayerActivity.show(this@SearchActivity, track)
     }
 
     private fun initTrackAdapter(onTrackClick: (Track) -> Unit) {

@@ -1,5 +1,7 @@
 package com.practicum.playlistmaker.clean.ui.player
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import android.widget.Toolbar
@@ -9,6 +11,7 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.practicum.playlistmaker.player.Player
 import com.practicum.playlistmaker.player.PlayerImpl
 import com.practicum.playlistmaker.R
+import com.practicum.playlistmaker.clean.domain.models.Track
 import com.practicum.playlistmaker.clean.ui.ARTIST_NAME_EXTRA
 import com.practicum.playlistmaker.clean.ui.ARTWORK_URL_512_EXTRA
 import com.practicum.playlistmaker.clean.ui.COLLECTION_NAME_EXTRA
@@ -92,5 +95,20 @@ class PlayerActivity : AppCompatActivity() {
         const val UNKNOWN_TRACK_NAME = "Track Unknown"
         const val UNKNOWN_ARTIST_NAME = "Artist Unknown"
         const val UNKNOWN_VALUE = "-"
+
+        fun show(context: Context, track: Track) {
+            val intent = Intent(context, PlayerActivity::class.java)
+            intent.putExtra(ARTWORK_URL_512_EXTRA, track.artworkUrl512)
+            intent.putExtra(TRACK_NAME_EXTRA, track.trackName)
+            intent.putExtra(ARTIST_NAME_EXTRA, track.artistName)
+            intent.putExtra(COLLECTION_NAME_EXTRA, track.collectionName)
+            intent.putExtra(RELEASE_YEAR_EXTRA, track.releaseYear)
+            intent.putExtra(PRIMARY_GENRE_NAME_EXTRA, track.primaryGenreName)
+            intent.putExtra(COUNTRY_EXTRA, track.country)
+            intent.putExtra(TRACK_TIME_EXTRA, track.trackTime)
+            intent.putExtra(PREVIEW_URL_EXTRA, track.previewUrl)
+
+            context.startActivity(intent)
+        }
     }
 }
