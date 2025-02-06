@@ -43,7 +43,6 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var handler: Handler
     private lateinit var clickDebounce: ClickDebounce
     private lateinit var searchDebounce: SearchDebounce
-    private lateinit var searchTask: Runnable
 
     private val tracksResponseHandler = object : TracksInteractor.TracksConsumer {
         override fun consume(foundTracks: List<Track>) {
@@ -58,6 +57,19 @@ class SearchActivity : AppCompatActivity() {
                     binding.setState(SearchActivityState.TRACK_NOT_FOUND)
                 }
             }
+        }
+    }
+
+    private val searchTask = Runnable {
+        binding.setState(SearchActivityState.SEARCHING)
+        try {
+            tracksInteractor.searchTracks(
+                binding.editTextSearch.text.toString(),
+                tracksResponseHandler
+            )
+        } catch (ex: BadResponseException) {
+            Log.i(TAG, "search bad response")
+            binding.setState(SearchActivityState.NETWORK_PROBLEM)
         }
     }
 
@@ -89,19 +101,6 @@ class SearchActivity : AppCompatActivity() {
             val manager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
             manager.hideSoftInputFromWindow(binding.editTextSearch.windowToken, 0)
             binding.setState(SearchActivityState.EMPTY)
-        }
-
-        searchTask = Runnable {
-            binding.setState(SearchActivityState.SEARCHING)
-            try {
-                tracksInteractor.searchTracks(
-                    binding.editTextSearch.text.toString(),
-                    tracksResponseHandler
-                )
-            } catch (ex: BadResponseException) {
-                Log.i(TAG, "search bad response")
-                binding.setState(SearchActivityState.NETWORK_PROBLEM)
-            }
         }
 
         val searchTextWatcher = object : TextWatcher {
