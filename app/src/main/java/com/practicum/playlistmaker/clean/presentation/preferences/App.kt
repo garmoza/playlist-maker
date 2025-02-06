@@ -1,4 +1,4 @@
-package com.practicum.playlistmaker.preferences
+package com.practicum.playlistmaker.clean.presentation.preferences
 
 import android.app.Application
 import android.content.SharedPreferences

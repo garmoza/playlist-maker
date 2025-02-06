@@ -4,7 +4,7 @@ import android.content.SharedPreferences
 import com.google.gson.Gson
 import com.practicum.playlistmaker.clean.domain.api.TracksSearchHistoryRepository
 import com.practicum.playlistmaker.clean.domain.models.Track
-import com.practicum.playlistmaker.preferences.HISTORY_TRACKS_KEY
+import com.practicum.playlistmaker.clean.presentation.preferences.HISTORY_TRACKS_KEY
 import java.util.Collections
 
 class TracksSearchHistoryRepositoryImpl(

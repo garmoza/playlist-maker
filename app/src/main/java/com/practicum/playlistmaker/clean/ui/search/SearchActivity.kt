@@ -14,10 +14,10 @@ import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
-import com.practicum.playlistmaker.debounce.ClickDebounce
-import com.practicum.playlistmaker.debounce.SearchDebounce
-import com.practicum.playlistmaker.preferences.HISTORY_TRACKS_KEY
-import com.practicum.playlistmaker.preferences.PLAYLIST_MAKER_PREFERENCES
+import com.practicum.playlistmaker.clean.presentation.debounce.ClickDebounce
+import com.practicum.playlistmaker.clean.presentation.debounce.SearchDebounce
+import com.practicum.playlistmaker.clean.presentation.preferences.HISTORY_TRACKS_KEY
+import com.practicum.playlistmaker.clean.presentation.preferences.PLAYLIST_MAKER_PREFERENCES
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.clean.Creator
 import com.practicum.playlistmaker.clean.ui.player.PlayerActivity
@@ -26,7 +26,7 @@ import com.practicum.playlistmaker.clean.domain.api.TracksInteractor
 import com.practicum.playlistmaker.clean.domain.api.TracksSearchHistoryInteractor
 import com.practicum.playlistmaker.databinding.ActivitySearchBinding
 import com.practicum.playlistmaker.clean.domain.models.Track
-import com.practicum.playlistmaker.debounce.SearchDebounce.Companion.NONE_DELAY
+import com.practicum.playlistmaker.clean.presentation.debounce.SearchDebounce.Companion.NONE_DELAY
 
 class SearchActivity : AppCompatActivity() {
 
