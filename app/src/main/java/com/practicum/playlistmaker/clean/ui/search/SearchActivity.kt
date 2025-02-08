@@ -171,7 +171,7 @@ class SearchActivity : AppCompatActivity() {
 
     private fun initInteractors() {
         tracksInteractor = Creator.provideTracksInteractor()
-        tracksSearchHistoryInteractor = Creator.provideTracksSearchHistoryInteractor(sharedPreferences)
+        tracksSearchHistoryInteractor = Creator.provideTracksSearchHistoryInteractor()
     }
 
     private fun onTrackClick(track: Track) {

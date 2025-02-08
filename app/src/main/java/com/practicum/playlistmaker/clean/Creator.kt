@@ -1,16 +1,21 @@
 package com.practicum.playlistmaker.clean
 
 import android.app.Application
+import android.content.ContextWrapper
 import android.content.SharedPreferences
 import android.widget.ImageButton
 import android.widget.TextView
+import com.practicum.playlistmaker.clean.data.ThemeRepositoryImpl
 import com.practicum.playlistmaker.clean.data.TracksRepositoryImpl
 import com.practicum.playlistmaker.clean.data.TracksSearchHistoryRepositoryImpl
 import com.practicum.playlistmaker.clean.data.network.ITunseRetrofitNetworkClient
+import com.practicum.playlistmaker.clean.domain.api.ThemeInteractor
+import com.practicum.playlistmaker.clean.domain.api.ThemeRepository
 import com.practicum.playlistmaker.clean.domain.api.TracksInteractor
 import com.practicum.playlistmaker.clean.domain.api.TracksRepository
 import com.practicum.playlistmaker.clean.domain.api.TracksSearchHistoryInteractor
 import com.practicum.playlistmaker.clean.domain.api.TracksSearchHistoryRepository
+import com.practicum.playlistmaker.clean.domain.impl.ThemeInteractorImpl
 import com.practicum.playlistmaker.clean.domain.impl.TracksInteractorImpl
 import com.practicum.playlistmaker.clean.domain.impl.TracksSearchHistoryInteractorImpl
 import com.practicum.playlistmaker.clean.presentation.player.Player
@@ -36,11 +41,11 @@ object Creator {
         return TracksRepositoryImpl(ITunseRetrofitNetworkClient())
     }
 
-    fun provideTracksSearchHistoryInteractor(sharedPreferences: SharedPreferences): TracksSearchHistoryInteractor =
-        TracksSearchHistoryInteractorImpl(getSearchHistoryRepository(sharedPreferences))
+    fun provideTracksSearchHistoryInteractor(): TracksSearchHistoryInteractor =
+        TracksSearchHistoryInteractorImpl(getSearchHistoryRepository())
 
-    private fun getSearchHistoryRepository(sharedPreferences: SharedPreferences): TracksSearchHistoryRepository =
-        TracksSearchHistoryRepositoryImpl(sharedPreferences)
+    private fun getSearchHistoryRepository(): TracksSearchHistoryRepository =
+        TracksSearchHistoryRepositoryImpl(getSharedPreferences())
 
     fun providePlayer(playButton: ImageButton, playtimeTextView: TextView): Player =
         PlayerImpl(playButton, playtimeTextView)
