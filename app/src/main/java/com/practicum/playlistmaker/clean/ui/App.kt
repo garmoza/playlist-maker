@@ -19,7 +19,7 @@ class App : Application() {
 
         val darkThemeEnabled = themeInteractor.darkThemeEnabled(isUiModeNight())
 
-        switchTheme(darkThemeEnabled)
+        renderTheme(darkThemeEnabled)
     }
 
     private fun isUiModeNight() =

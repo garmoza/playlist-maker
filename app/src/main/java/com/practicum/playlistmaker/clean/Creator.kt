@@ -19,7 +19,7 @@ import com.practicum.playlistmaker.clean.domain.impl.TracksInteractorImpl
 import com.practicum.playlistmaker.clean.domain.impl.TracksSearchHistoryInteractorImpl
 import com.practicum.playlistmaker.clean.presentation.player.Player
 import com.practicum.playlistmaker.clean.presentation.player.PlayerImpl
-import com.practicum.playlistmaker.clean.data.PLAYLIST_MAKER_PREFERENCES
+import com.practicum.playlistmaker.clean.data.preferences.PLAYLIST_MAKER_PREFERENCES
 
 object Creator {
 

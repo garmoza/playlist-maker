@@ -2,6 +2,7 @@ package com.practicum.playlistmaker.clean.data
 
 import android.content.SharedPreferences
 import com.google.gson.Gson
+import com.practicum.playlistmaker.clean.data.preferences.HISTORY_TRACKS_KEY
 import com.practicum.playlistmaker.clean.domain.api.TracksSearchHistoryRepository
 import com.practicum.playlistmaker.clean.domain.models.Track
 import java.util.Collections
