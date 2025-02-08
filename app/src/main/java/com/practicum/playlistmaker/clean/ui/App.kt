@@ -1,9 +1,11 @@
-package com.practicum.playlistmaker.clean.presentation.preferences
+package com.practicum.playlistmaker.clean.ui
 
 import android.app.Application
 import android.content.SharedPreferences
 import android.content.res.Configuration
 import androidx.appcompat.app.AppCompatDelegate
+import com.practicum.playlistmaker.clean.Creator
+import com.practicum.playlistmaker.clean.presentation.preferences.DARK_THEME_KEY
 
 class App : Application() {
 
@@ -15,7 +17,9 @@ class App : Application() {
     override fun onCreate() {
         super.onCreate()
 
-        sharedPrefs = getSharedPreferences(PLAYLIST_MAKER_PREFERENCES, MODE_PRIVATE)
+        Creator.initApplication(this)
+
+        sharedPrefs = Creator.getSharedPreferences()
 
         darkTheme = sharedPrefs.getBoolean(DARK_THEME_KEY, isUiModeNight())
         switchTheme(darkTheme)
