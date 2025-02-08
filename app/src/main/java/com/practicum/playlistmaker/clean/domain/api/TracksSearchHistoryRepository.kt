@@ -10,4 +10,6 @@ interface TracksSearchHistoryRepository {
     fun clear()
 
     fun getTracks(): List<Track>
+
+    fun registerOnTrackSearchHistoryChangeListener(consumer: () -> Unit)
 }

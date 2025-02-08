@@ -58,6 +58,15 @@ class TracksSearchHistoryRepositoryImpl(
         return Gson().toJson(tracks)
     }
 
+    override fun registerOnTrackSearchHistoryChangeListener(consumer: () -> Unit) {
+        val listener = SharedPreferences.OnSharedPreferenceChangeListener { _, key ->
+            if (key == HISTORY_TRACKS_KEY) {
+                consumer.invoke()
+            }
+        }
+        sharedPreferences.registerOnSharedPreferenceChangeListener(listener)
+    }
+
     companion object {
         private const val HISTORY_LIST_SIZE = 10
     }

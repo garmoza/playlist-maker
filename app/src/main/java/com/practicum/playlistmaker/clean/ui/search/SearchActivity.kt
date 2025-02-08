@@ -1,8 +1,6 @@
 package com.practicum.playlistmaker.clean.ui.search
 
 import android.content.Context
-import android.content.SharedPreferences
-import android.content.SharedPreferences.OnSharedPreferenceChangeListener
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
@@ -16,8 +14,6 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import com.practicum.playlistmaker.clean.presentation.debounce.ClickDebounce
 import com.practicum.playlistmaker.clean.presentation.debounce.SearchDebounce
-import com.practicum.playlistmaker.clean.data.HISTORY_TRACKS_KEY
-import com.practicum.playlistmaker.clean.data.PLAYLIST_MAKER_PREFERENCES
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.clean.Creator
 import com.practicum.playlistmaker.clean.ui.player.PlayerActivity
@@ -35,11 +31,9 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var tracksInteractor: TracksInteractor
     private lateinit var tracksSearchHistoryInteractor: TracksSearchHistoryInteractor
 
-    private lateinit var sharedPreferences: SharedPreferences
     private lateinit var binding: ActivitySearchBinding
     private lateinit var trackAdapter: TrackAdapter
     private lateinit var trackHistoryAdapter: TrackAdapter
-    private lateinit var listener: OnSharedPreferenceChangeListener
     private lateinit var handler: Handler
     private lateinit var clickDebounce: ClickDebounce
     private lateinit var searchDebounce: SearchDebounce
@@ -78,7 +72,6 @@ class SearchActivity : AppCompatActivity() {
         binding = ActivitySearchBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        sharedPreferences = getSharedPreferences(PLAYLIST_MAKER_PREFERENCES, MODE_PRIVATE)
         handler = Handler(Looper.getMainLooper())
         clickDebounce = ClickDebounce(Looper.getMainLooper())
         searchDebounce = SearchDebounce(Looper.getMainLooper())
@@ -88,7 +81,11 @@ class SearchActivity : AppCompatActivity() {
         initTrackAdapter(this::onTrackClick)
         initTrackHistoryAdapter(this::onTrackClick)
 
-        initSharedPreferenceChangeListener()
+        tracksSearchHistoryInteractor.registerOnTrackSearchHistoryChangeListener {
+            trackHistoryAdapter.setItems(
+                tracksSearchHistoryInteractor.getTracks()
+            )
+        }
 
         binding.toolbarSearch.setOnClickListener {
             finish()
@@ -202,17 +199,6 @@ class SearchActivity : AppCompatActivity() {
             tracksSearchHistoryInteractor.getTracks()
         )
         binding.recyclerViewHistoryTrack.adapter = trackHistoryAdapter
-    }
-
-    private fun initSharedPreferenceChangeListener() {
-        listener = OnSharedPreferenceChangeListener { _, key ->
-            if (key == HISTORY_TRACKS_KEY) {
-                trackHistoryAdapter.setItems(
-                    tracksSearchHistoryInteractor.getTracks()
-                )
-            }
-        }
-        sharedPreferences.registerOnSharedPreferenceChangeListener(listener)
     }
 
     override fun onDestroy() {

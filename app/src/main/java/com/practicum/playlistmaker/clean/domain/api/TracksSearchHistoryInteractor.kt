@@ -8,4 +8,6 @@ interface TracksSearchHistoryInteractor {
     fun getTracks(): List<Track>
 
     fun clear()
+
+    fun registerOnTrackSearchHistoryChangeListener(consumer: () -> Unit)
 }

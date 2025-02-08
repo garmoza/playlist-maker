@@ -29,7 +29,7 @@ object Creator {
         this.application = application
     }
 
-    fun getSharedPreferences(): SharedPreferences =
+    private fun getSharedPreferences(): SharedPreferences =
         application.getSharedPreferences(PLAYLIST_MAKER_PREFERENCES, Application.MODE_PRIVATE)
 
     fun provideTracksInteractor(): TracksInteractor =
