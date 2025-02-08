@@ -2,7 +2,7 @@ package com.practicum.playlistmaker.clean.data
 
 import com.practicum.playlistmaker.clean.data.dto.ITunseSearchRequest
 import com.practicum.playlistmaker.clean.data.dto.ITunseTracksResponse
-import com.practicum.playlistmaker.clean.data.network.BadResponseException
+import com.practicum.playlistmaker.clean.domain.exceptions.BadResponseException
 import com.practicum.playlistmaker.clean.domain.api.TracksRepository
 import com.practicum.playlistmaker.clean.domain.models.Track
 

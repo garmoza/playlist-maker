@@ -21,7 +21,7 @@ import com.practicum.playlistmaker.clean.presentation.preferences.PLAYLIST_MAKER
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.clean.Creator
 import com.practicum.playlistmaker.clean.ui.player.PlayerActivity
-import com.practicum.playlistmaker.clean.data.network.BadResponseException
+import com.practicum.playlistmaker.clean.domain.exceptions.BadResponseException
 import com.practicum.playlistmaker.clean.domain.api.TracksInteractor
 import com.practicum.playlistmaker.clean.domain.api.TracksSearchHistoryInteractor
 import com.practicum.playlistmaker.databinding.ActivitySearchBinding
