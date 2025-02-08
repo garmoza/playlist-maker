@@ -8,9 +8,9 @@ import android.widget.Toolbar
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
-import com.practicum.playlistmaker.player.Player
-import com.practicum.playlistmaker.player.PlayerImpl
+import com.practicum.playlistmaker.clean.presentation.player.Player
 import com.practicum.playlistmaker.R
+import com.practicum.playlistmaker.clean.Creator
 import com.practicum.playlistmaker.clean.domain.models.Track
 import com.practicum.playlistmaker.clean.ui.ARTIST_NAME_EXTRA
 import com.practicum.playlistmaker.clean.ui.ARTWORK_URL_512_EXTRA
@@ -68,7 +68,7 @@ class PlayerActivity : AppCompatActivity() {
 
         val previewUrl = intent.getStringExtra(PREVIEW_URL_EXTRA)
         previewUrl?.let {
-            player = PlayerImpl(binding.playButton, binding.playtime)
+            player = Creator.providePlayer(binding.playButton, binding.playtime)
             player?.prepare(it)
         }
 
