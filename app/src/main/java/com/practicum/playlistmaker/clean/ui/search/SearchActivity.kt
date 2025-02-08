@@ -17,7 +17,6 @@ import com.practicum.playlistmaker.clean.presentation.debounce.SearchDebounce
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.clean.Creator
 import com.practicum.playlistmaker.clean.ui.player.PlayerActivity
-import com.practicum.playlistmaker.clean.domain.exceptions.BadResponseException
 import com.practicum.playlistmaker.clean.domain.api.TracksInteractor
 import com.practicum.playlistmaker.clean.domain.api.TracksSearchHistoryInteractor
 import com.practicum.playlistmaker.databinding.ActivitySearchBinding
@@ -39,7 +38,7 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var searchDebounce: SearchDebounce
 
     private val tracksResponseHandler = object : TracksInteractor.TracksConsumer {
-        override fun consume(foundTracks: List<Track>) {
+        override fun onSuccess(foundTracks: List<Track>) {
             Log.i(TAG, "search start handle result")
             handler.post {
                 trackAdapter.setItems(foundTracks)
@@ -52,19 +51,21 @@ class SearchActivity : AppCompatActivity() {
                 }
             }
         }
+
+        override fun onFailure() {
+            Log.i(TAG, "search bad response")
+            handler.post {
+                binding.setState(SearchActivityState.NETWORK_PROBLEM)
+            }
+        }
     }
 
     private val searchTask = Runnable {
         binding.setState(SearchActivityState.SEARCHING)
-        try {
-            tracksInteractor.searchTracks(
-                binding.editTextSearch.text.toString(),
-                tracksResponseHandler
-            )
-        } catch (ex: BadResponseException) {
-            Log.i(TAG, "search bad response")
-            binding.setState(SearchActivityState.NETWORK_PROBLEM)
-        }
+        tracksInteractor.searchTracks(
+            binding.editTextSearch.text.toString(),
+            tracksResponseHandler
+        )
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

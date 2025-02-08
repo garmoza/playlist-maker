@@ -12,7 +12,13 @@ class TracksInteractorImpl(
 
     override fun searchTracks(expression: String, consumer: TracksInteractor.TracksConsumer) {
         executor.execute {
-            consumer.consume(repository.searchTracks(expression))
+            try {
+                consumer.onSuccess(
+                    repository.searchTracks(expression)
+                )
+            } catch (e: Exception) {
+                consumer.onFailure()
+            }
         }
     }
 }

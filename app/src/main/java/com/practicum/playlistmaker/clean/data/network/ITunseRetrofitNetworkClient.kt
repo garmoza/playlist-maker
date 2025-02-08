@@ -15,15 +15,20 @@ class ITunseRetrofitNetworkClient : NetworkClient {
     private val iTunseService = retrofit.create(ITunseApiService::class.java)
 
     override fun doRequest(dto: Any): Response =
-        if (dto is ITunseSearchRequest) {
-            val resp = iTunseService.search(dto.expression).execute()
+        try {
+            if (dto is ITunseSearchRequest) {
+                val resp = iTunseService.search(dto.expression).execute()
 
-            val body = resp.body() ?: Response()
+                val body = resp.body() ?: Response()
 
-            body.apply { resultCode = resp.code() }
-        } else {
+                body.apply { resultCode = resp.code() }
+            } else {
+                Response().apply { resultCode = 400 }
+            }
+        } catch (e: Exception) {
             Response().apply { resultCode = 400 }
         }
+
 
     companion object {
         private const val ITUNSE_BASE_URL = "https://itunes.apple.com"
