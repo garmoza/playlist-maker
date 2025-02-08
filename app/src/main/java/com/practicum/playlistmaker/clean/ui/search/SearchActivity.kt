@@ -16,8 +16,8 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import com.practicum.playlistmaker.clean.presentation.debounce.ClickDebounce
 import com.practicum.playlistmaker.clean.presentation.debounce.SearchDebounce
-import com.practicum.playlistmaker.clean.presentation.preferences.HISTORY_TRACKS_KEY
-import com.practicum.playlistmaker.clean.presentation.preferences.PLAYLIST_MAKER_PREFERENCES
+import com.practicum.playlistmaker.clean.data.HISTORY_TRACKS_KEY
+import com.practicum.playlistmaker.clean.data.PLAYLIST_MAKER_PREFERENCES
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.clean.Creator
 import com.practicum.playlistmaker.clean.ui.player.PlayerActivity

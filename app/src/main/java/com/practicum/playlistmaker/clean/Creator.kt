@@ -1,7 +1,6 @@
 package com.practicum.playlistmaker.clean
 
 import android.app.Application
-import android.content.ContextWrapper
 import android.content.SharedPreferences
 import android.widget.ImageButton
 import android.widget.TextView
@@ -20,7 +19,7 @@ import com.practicum.playlistmaker.clean.domain.impl.TracksInteractorImpl
 import com.practicum.playlistmaker.clean.domain.impl.TracksSearchHistoryInteractorImpl
 import com.practicum.playlistmaker.clean.presentation.player.Player
 import com.practicum.playlistmaker.clean.presentation.player.PlayerImpl
-import com.practicum.playlistmaker.clean.presentation.preferences.PLAYLIST_MAKER_PREFERENCES
+import com.practicum.playlistmaker.clean.data.PLAYLIST_MAKER_PREFERENCES
 
 object Creator {
 
@@ -33,19 +32,23 @@ object Creator {
     fun getSharedPreferences(): SharedPreferences =
         application.getSharedPreferences(PLAYLIST_MAKER_PREFERENCES, Application.MODE_PRIVATE)
 
-    fun provideTracksInteractor(): TracksInteractor {
-        return TracksInteractorImpl(getTracksRepository())
-    }
+    fun provideTracksInteractor(): TracksInteractor =
+        TracksInteractorImpl(getTracksRepository())
 
-    private fun getTracksRepository(): TracksRepository {
-        return TracksRepositoryImpl(ITunseRetrofitNetworkClient())
-    }
+    private fun getTracksRepository(): TracksRepository =
+        TracksRepositoryImpl(ITunseRetrofitNetworkClient())
 
     fun provideTracksSearchHistoryInteractor(): TracksSearchHistoryInteractor =
         TracksSearchHistoryInteractorImpl(getSearchHistoryRepository())
 
     private fun getSearchHistoryRepository(): TracksSearchHistoryRepository =
         TracksSearchHistoryRepositoryImpl(getSharedPreferences())
+
+    fun provideThemeInteractor(): ThemeInteractor =
+        ThemeInteractorImpl(getThemeRepository())
+
+    private fun getThemeRepository(): ThemeRepository =
+        ThemeRepositoryImpl(getSharedPreferences())
 
     fun providePlayer(playButton: ImageButton, playtimeTextView: TextView): Player =
         PlayerImpl(playButton, playtimeTextView)

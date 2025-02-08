@@ -1,35 +1,31 @@
 package com.practicum.playlistmaker.clean.ui
 
 import android.app.Application
-import android.content.SharedPreferences
 import android.content.res.Configuration
 import androidx.appcompat.app.AppCompatDelegate
 import com.practicum.playlistmaker.clean.Creator
-import com.practicum.playlistmaker.clean.presentation.preferences.DARK_THEME_KEY
+import com.practicum.playlistmaker.clean.domain.api.ThemeInteractor
 
 class App : Application() {
 
-    var darkTheme: Boolean = false
-        private set
-
-    private lateinit var sharedPrefs: SharedPreferences
+    private lateinit var themeInteractor: ThemeInteractor
 
     override fun onCreate() {
         super.onCreate()
 
         Creator.initApplication(this)
 
-        sharedPrefs = Creator.getSharedPreferences()
+        themeInteractor = Creator.provideThemeInteractor()
 
-        darkTheme = sharedPrefs.getBoolean(DARK_THEME_KEY, isUiModeNight())
-        switchTheme(darkTheme)
+        val darkThemeEnabled = themeInteractor.darkThemeEnabled(isUiModeNight())
+
+        switchTheme(darkThemeEnabled)
     }
 
     private fun isUiModeNight() =
         resources.configuration.uiMode.and(Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES
 
-    fun switchTheme(darkThemeEnabled: Boolean) {
-        darkTheme = darkThemeEnabled
+    private fun renderTheme(darkThemeEnabled: Boolean) {
         AppCompatDelegate.setDefaultNightMode(
             if (darkThemeEnabled) {
                 AppCompatDelegate.MODE_NIGHT_YES
@@ -37,8 +33,14 @@ class App : Application() {
                 AppCompatDelegate.MODE_NIGHT_NO
             }
         )
-        sharedPrefs.edit()
-            .putBoolean(DARK_THEME_KEY, darkTheme)
-            .apply()
+    }
+
+    fun switchTheme(darkThemeEnabled: Boolean) {
+        when (darkThemeEnabled) {
+            true -> themeInteractor.setDarkTheme()
+            false ->themeInteractor.setLightTheme()
+        }
+
+        renderTheme(darkThemeEnabled)
     }
 }

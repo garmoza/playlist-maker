@@ -9,11 +9,17 @@ import android.widget.Toolbar
 import com.google.android.material.switchmaterial.SwitchMaterial
 import com.practicum.playlistmaker.clean.ui.App
 import com.practicum.playlistmaker.R
+import com.practicum.playlistmaker.clean.Creator
+import com.practicum.playlistmaker.clean.domain.api.ThemeInteractor
 
 class SettingsActivity : AppCompatActivity() {
+
+    private lateinit var themeInteractor: ThemeInteractor
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
+
+        themeInteractor = Creator.provideThemeInteractor()
 
         val toolbarSettings = findViewById<Toolbar>(R.id.toolbarSettings)
         toolbarSettings.setOnClickListener {
@@ -21,7 +27,7 @@ class SettingsActivity : AppCompatActivity() {
         }
 
         val themeSwitcher = findViewById<SwitchMaterial>(R.id.themeSwitcher)
-        themeSwitcher.isChecked = (applicationContext as App).darkTheme
+        themeSwitcher.isChecked = themeInteractor.darkThemeEnabled()
         themeSwitcher.setOnCheckedChangeListener { _, isChecked ->
             (applicationContext as App).switchTheme(isChecked)
         }
