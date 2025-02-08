@@ -22,7 +22,7 @@ import com.practicum.playlistmaker.clean.ui.RELEASE_YEAR_EXTRA
 import com.practicum.playlistmaker.clean.ui.TRACK_NAME_EXTRA
 import com.practicum.playlistmaker.clean.ui.TRACK_TIME_EXTRA
 import com.practicum.playlistmaker.databinding.ActivityPlayerBinding
-import com.practicum.playlistmaker.dpToPx
+import com.practicum.playlistmaker.clean.presentation.dpToPx
 
 class PlayerActivity : AppCompatActivity() {
 

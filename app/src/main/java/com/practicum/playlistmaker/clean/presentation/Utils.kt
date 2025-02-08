@@ -1,4 +1,4 @@
-package com.practicum.playlistmaker
+package com.practicum.playlistmaker.clean.presentation
 
 import android.content.Context
 import android.util.TypedValue
