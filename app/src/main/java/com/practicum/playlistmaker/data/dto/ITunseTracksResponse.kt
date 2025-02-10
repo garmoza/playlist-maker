@@ -1,3 +1,3 @@
 package com.practicum.playlistmaker.data.dto
 
-class ITunseTracksResponse(val results: ArrayList<ITunseTrackDto>) : Response()
+class ITunseTracksResponse(val results: List<ITunseTrackDto>) : Response()

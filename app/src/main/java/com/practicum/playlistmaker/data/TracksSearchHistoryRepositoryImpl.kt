@@ -5,13 +5,12 @@ import com.google.gson.Gson
 import com.practicum.playlistmaker.data.preferences.HISTORY_TRACKS_KEY
 import com.practicum.playlistmaker.domain.api.TracksSearchHistoryRepository
 import com.practicum.playlistmaker.domain.models.Track
-import java.util.Collections
 
 class TracksSearchHistoryRepositoryImpl(
     private val sharedPreferences: SharedPreferences
 ): TracksSearchHistoryRepository {
 
-    private val historyTracks: MutableList<Track> = ArrayList()
+    private val historyTracks: MutableList<Track> = mutableListOf()
 
     init {
         val historyTracksJson = sharedPreferences.getString(HISTORY_TRACKS_KEY, null)
@@ -43,7 +42,7 @@ class TracksSearchHistoryRepositoryImpl(
     }
 
     override fun getTracks(): List<Track> =
-        Collections.unmodifiableList(historyTracks)
+        historyTracks.toList()
 
     private fun updateSharedPreferences() {
         sharedPreferences.edit()
