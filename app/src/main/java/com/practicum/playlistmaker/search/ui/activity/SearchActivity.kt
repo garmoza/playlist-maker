@@ -12,8 +12,8 @@ import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
-import com.practicum.playlistmaker.common.ui.ClickDebounce
-import com.practicum.playlistmaker.common.ui.SearchDebounce
+import com.practicum.playlistmaker.common.ui.debounce.ClickDebounce
+import com.practicum.playlistmaker.common.ui.debounce.SearchDebounce
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.creator.Creator
 import com.practicum.playlistmaker.palyer.ui.activity.PlayerActivity
@@ -21,7 +21,7 @@ import com.practicum.playlistmaker.search.domain.api.TracksInteractor
 import com.practicum.playlistmaker.search.domain.api.TracksSearchHistoryInteractor
 import com.practicum.playlistmaker.databinding.ActivitySearchBinding
 import com.practicum.playlistmaker.common.domain.models.Track
-import com.practicum.playlistmaker.common.ui.SearchDebounce.Companion.NONE_DELAY
+import com.practicum.playlistmaker.common.ui.debounce.SearchDebounce.Companion.NONE_DELAY
 
 class SearchActivity : AppCompatActivity() {
 
@@ -39,21 +39,21 @@ class SearchActivity : AppCompatActivity() {
 
     private val tracksResponseHandler = object : TracksInteractor.TracksConsumer {
         override fun onSuccess(foundTracks: List<Track>) {
-            Log.i(TAG, "search start handle result")
+            Log.i(TAG, "Search start handle result")
             handler.post {
                 trackAdapter.setItems(foundTracks)
                 if (foundTracks.isNotEmpty()) {
-                    Log.i(TAG, "search success result")
+                    Log.i(TAG, "Search success result")
                     binding.setState(SearchActivityState.TRACK_LIST)
                 } else {
-                    Log.i(TAG, "search empty result")
+                    Log.i(TAG, "Search empty result")
                     binding.setState(SearchActivityState.TRACK_NOT_FOUND)
                 }
             }
         }
 
         override fun onFailure() {
-            Log.i(TAG, "search bad response")
+            Log.i(TAG, "Search bad response")
             handler.post {
                 binding.setState(SearchActivityState.NETWORK_PROBLEM)
             }
@@ -125,14 +125,14 @@ class SearchActivity : AppCompatActivity() {
 
         binding.editTextSearch.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
-                Log.i(TAG, "search action editor click")
+                Log.i(TAG, "Search action editor click")
                 searchDebounce.execute(searchTask, NONE_DELAY)
             }
             false
         }
 
         binding.placeholderButton.setOnClickListener {
-            Log.i(TAG, "search action button click")
+            Log.i(TAG, "Search action button click")
             searchDebounce.execute(searchTask, NONE_DELAY)
         }
 
@@ -222,17 +222,17 @@ class SearchActivity : AppCompatActivity() {
         when (state) {
             SearchActivityState.EMPTY -> {
                 hideViews()
-                Log.i(TAG, "activity state is EMPTY")
+                Log.i(TAG, "Activity state is EMPTY")
             }
             SearchActivityState.TRACK_LIST -> {
                 hideViews()
                 recyclerViewTrack.visibility = View.VISIBLE
-                Log.i(TAG, "activity state is TRACK_LIST")
+                Log.i(TAG, "Activity state is TRACK_LIST")
             }
             SearchActivityState.HISTORY -> {
                 hideViews()
                 historyViewGroup.visibility = View.VISIBLE
-                Log.i(TAG, "activity state is HISTORY")
+                Log.i(TAG, "Activity state is HISTORY")
             }
             SearchActivityState.TRACK_NOT_FOUND -> {
                 hideViews()
@@ -240,7 +240,7 @@ class SearchActivity : AppCompatActivity() {
                 placeholderImage.setImageResource(R.drawable.track_not_found)
                 placeholderMessage.visibility = View.VISIBLE
                 placeholderMessage.setText(R.string.placeholder_message_not_found)
-                Log.i(TAG, "activity state is TRACK_NOT_FOUND")
+                Log.i(TAG, "Activity state is TRACK_NOT_FOUND")
             }
             SearchActivityState.NETWORK_PROBLEM -> {
                 hideViews()
@@ -252,12 +252,12 @@ class SearchActivity : AppCompatActivity() {
                 placeholderAdditionalMessage.setText(R.string.placeholder_aditional_message_network_problems)
                 placeholderButton.visibility = View.VISIBLE
                 placeholderButton.setText(R.string.update)
-                Log.i(TAG, "activity state is NETWORK_PROBLEM")
+                Log.i(TAG, "Activity state is NETWORK_PROBLEM")
             }
             SearchActivityState.SEARCHING -> {
                 hideViews()
                 progressBar.visibility = View.VISIBLE
-                Log.i(TAG, "activity state is SEARCHING")
+                Log.i(TAG, "Activity state is SEARCHING")
             }
         }
     }

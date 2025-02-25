@@ -17,7 +17,7 @@ abstract class AbstractNetworkClient(
                 capabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET) -> return true
             }
         }
-        Log.i(TAG, "no internet access")
+        Log.i(TAG, "No internet access")
         return false
     }
 

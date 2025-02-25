@@ -1,4 +1,4 @@
-package com.practicum.playlistmaker.common.ui
+package com.practicum.playlistmaker.common.ui.debounce
 
 import android.os.Handler
 import android.os.Looper
