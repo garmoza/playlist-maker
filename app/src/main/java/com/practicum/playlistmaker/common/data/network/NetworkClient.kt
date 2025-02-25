@@ -1,4 +1,4 @@
-package com.practicum.playlistmaker.common.data
+package com.practicum.playlistmaker.common.data.network
 
 import com.practicum.playlistmaker.common.data.dto.Response
 

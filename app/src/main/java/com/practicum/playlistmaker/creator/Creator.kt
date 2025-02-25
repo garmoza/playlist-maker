@@ -1,7 +1,9 @@
 package com.practicum.playlistmaker.creator
 
 import android.app.Application
+import android.content.Context
 import android.content.SharedPreferences
+import android.net.ConnectivityManager
 import android.widget.ImageButton
 import android.widget.TextView
 import com.practicum.playlistmaker.settings.data.ThemeRepositoryImpl
@@ -35,8 +37,13 @@ object Creator {
     fun provideTracksInteractor(): TracksInteractor =
         TracksInteractorImpl(getTracksRepository())
 
-    private fun getTracksRepository(): TracksRepository =
-        TracksRepositoryImpl(ITunseRetrofitNetworkClient())
+    private fun getTracksRepository(): TracksRepository {
+        val connectivityManager = application.getSystemService(
+            Context.CONNECTIVITY_SERVICE
+        ) as ConnectivityManager
+        return TracksRepositoryImpl(ITunseRetrofitNetworkClient(connectivityManager))
+    }
+
 
     fun provideTracksSearchHistoryInteractor(): TracksSearchHistoryInteractor =
         TracksSearchHistoryInteractorImpl(getSearchHistoryRepository())

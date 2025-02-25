@@ -222,17 +222,17 @@ class SearchActivity : AppCompatActivity() {
         when (state) {
             SearchActivityState.EMPTY -> {
                 hideViews()
-                Log.i(TAG, "Activity State is EMPTY")
+                Log.i(TAG, "activity state is EMPTY")
             }
             SearchActivityState.TRACK_LIST -> {
                 hideViews()
                 recyclerViewTrack.visibility = View.VISIBLE
-                Log.i(TAG, "Activity State is TRACK_LIST")
+                Log.i(TAG, "activity state is TRACK_LIST")
             }
             SearchActivityState.HISTORY -> {
                 hideViews()
                 historyViewGroup.visibility = View.VISIBLE
-                Log.i(TAG, "Activity State is HISTORY")
+                Log.i(TAG, "activity state is HISTORY")
             }
             SearchActivityState.TRACK_NOT_FOUND -> {
                 hideViews()
@@ -240,7 +240,7 @@ class SearchActivity : AppCompatActivity() {
                 placeholderImage.setImageResource(R.drawable.track_not_found)
                 placeholderMessage.visibility = View.VISIBLE
                 placeholderMessage.setText(R.string.placeholder_message_not_found)
-                Log.i(TAG, "Activity State is TRACK_NOT_FOUND")
+                Log.i(TAG, "activity state is TRACK_NOT_FOUND")
             }
             SearchActivityState.NETWORK_PROBLEM -> {
                 hideViews()
@@ -252,12 +252,12 @@ class SearchActivity : AppCompatActivity() {
                 placeholderAdditionalMessage.setText(R.string.placeholder_aditional_message_network_problems)
                 placeholderButton.visibility = View.VISIBLE
                 placeholderButton.setText(R.string.update)
-                Log.i(TAG, "Activity State is NETWORK_PROBLEM")
+                Log.i(TAG, "activity state is NETWORK_PROBLEM")
             }
             SearchActivityState.SEARCHING -> {
                 hideViews()
                 progressBar.visibility = View.VISIBLE
-                Log.i(TAG, "Activity State is SEARCHING")
+                Log.i(TAG, "activity state is SEARCHING")
             }
         }
     }
@@ -273,8 +273,8 @@ class SearchActivity : AppCompatActivity() {
     }
 
     companion object {
-        const val SEARCHED_VALUE_KEY = "SEARCH_VALUE"
-        const val DEFAULT_SEARCHED_VALUE = ""
-        const val TAG = "SearchActivity"
+        private const val SEARCHED_VALUE_KEY = "SEARCH_VALUE"
+        private const val DEFAULT_SEARCHED_VALUE = ""
+        private val TAG = SearchActivity::class.simpleName
     }
 }
