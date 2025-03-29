@@ -1,7 +1,7 @@
 package com.practicum.playlistmaker.settings.domain.impl
 
-import com.practicum.playlistmaker.settings.domain.api.ThemeInteractor
-import com.practicum.playlistmaker.settings.domain.api.ThemeRepository
+import com.practicum.playlistmaker.settings.domain.ThemeInteractor
+import com.practicum.playlistmaker.settings.domain.ThemeRepository
 
 class ThemeInteractorImpl(
     private val themeRepository: ThemeRepository

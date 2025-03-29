@@ -4,7 +4,7 @@ import android.app.Application
 import android.content.res.Configuration
 import androidx.appcompat.app.AppCompatDelegate
 import com.practicum.playlistmaker.creator.Creator
-import com.practicum.playlistmaker.settings.domain.api.ThemeInteractor
+import com.practicum.playlistmaker.settings.domain.ThemeInteractor
 
 class App : Application() {
 

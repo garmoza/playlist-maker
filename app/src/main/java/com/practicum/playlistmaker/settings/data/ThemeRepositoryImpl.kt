@@ -2,7 +2,7 @@ package com.practicum.playlistmaker.settings.data
 
 import android.content.SharedPreferences
 import com.practicum.playlistmaker.common.data.preferences.DARK_THEME_KEY
-import com.practicum.playlistmaker.settings.domain.api.ThemeRepository
+import com.practicum.playlistmaker.settings.domain.ThemeRepository
 
 class ThemeRepositoryImpl(
     private val sharedPreferences: SharedPreferences

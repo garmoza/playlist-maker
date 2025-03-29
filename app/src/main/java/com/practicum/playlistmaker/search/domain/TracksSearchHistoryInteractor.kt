@@ -1,15 +1,13 @@
-package com.practicum.playlistmaker.search.domain.api
+package com.practicum.playlistmaker.search.domain
 
 import com.practicum.playlistmaker.common.domain.models.Track
 
-interface TracksSearchHistoryRepository {
+interface TracksSearchHistoryInteractor {
     fun addTrack(track: Track)
 
-    fun getSize(): Int
+    fun getTracks(): List<Track>
 
     fun clear()
-
-    fun getTracks(): List<Track>
 
     fun registerOnTrackSearchHistoryChangeListener(consumer: () -> Unit)
 }

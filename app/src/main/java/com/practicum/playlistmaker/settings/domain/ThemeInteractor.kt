@@ -1,4 +1,4 @@
-package com.practicum.playlistmaker.settings.domain.api
+package com.practicum.playlistmaker.settings.domain
 
 interface ThemeInteractor {
     fun darkThemeEnabled(defValue: Boolean = false): Boolean

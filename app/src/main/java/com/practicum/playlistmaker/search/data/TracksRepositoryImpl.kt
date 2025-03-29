@@ -5,7 +5,7 @@ import com.practicum.playlistmaker.common.data.network.NetworkClient
 import com.practicum.playlistmaker.search.data.dto.ITunseSearchRequest
 import com.practicum.playlistmaker.search.data.dto.ITunseTracksResponse
 import com.practicum.playlistmaker.search.data.mapper.TrackMapper
-import com.practicum.playlistmaker.search.domain.api.TracksRepository
+import com.practicum.playlistmaker.search.domain.TracksRepository
 import com.practicum.playlistmaker.common.domain.models.Track
 
 class TracksRepositoryImpl(

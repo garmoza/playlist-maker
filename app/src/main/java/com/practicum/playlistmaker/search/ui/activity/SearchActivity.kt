@@ -17,8 +17,8 @@ import com.practicum.playlistmaker.common.ui.debounce.SearchDebounce
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.creator.Creator
 import com.practicum.playlistmaker.palyer.ui.activity.PlayerActivity
-import com.practicum.playlistmaker.search.domain.api.TracksInteractor
-import com.practicum.playlistmaker.search.domain.api.TracksSearchHistoryInteractor
+import com.practicum.playlistmaker.search.domain.TracksInteractor
+import com.practicum.playlistmaker.search.domain.TracksSearchHistoryInteractor
 import com.practicum.playlistmaker.databinding.ActivitySearchBinding
 import com.practicum.playlistmaker.common.domain.models.Track
 import com.practicum.playlistmaker.common.ui.debounce.SearchDebounce.Companion.NONE_DELAY

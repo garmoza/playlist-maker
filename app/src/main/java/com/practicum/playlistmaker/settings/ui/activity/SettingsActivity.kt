@@ -8,7 +8,7 @@ import androidx.activity.viewModels
 import com.google.android.material.switchmaterial.SwitchMaterial
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.creator.Creator
-import com.practicum.playlistmaker.settings.domain.api.ThemeInteractor
+import com.practicum.playlistmaker.settings.domain.ThemeInteractor
 import com.practicum.playlistmaker.settings.ui.view_model.SettingsViewModel
 import com.practicum.playlistmaker.sharing.domain.model.EmailData
 

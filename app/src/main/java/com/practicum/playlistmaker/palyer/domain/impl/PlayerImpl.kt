@@ -1,4 +1,4 @@
-package com.practicum.playlistmaker.palyer.domain
+package com.practicum.playlistmaker.palyer.domain.impl
 
 import android.media.MediaPlayer
 import android.os.Handler
@@ -6,6 +6,7 @@ import android.os.Looper
 import android.widget.ImageButton
 import android.widget.TextView
 import com.practicum.playlistmaker.R
+import com.practicum.playlistmaker.palyer.domain.Player
 import java.text.SimpleDateFormat
 import java.util.Locale
 
