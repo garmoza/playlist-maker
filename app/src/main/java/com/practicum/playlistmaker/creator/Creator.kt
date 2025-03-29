@@ -22,6 +22,10 @@ import com.practicum.playlistmaker.search.domain.impl.TracksSearchHistoryInterac
 import com.practicum.playlistmaker.palyer.domain.Player
 import com.practicum.playlistmaker.palyer.domain.PlayerImpl
 import com.practicum.playlistmaker.common.data.preferences.PLAYLIST_MAKER_PREFERENCES
+import com.practicum.playlistmaker.sharing.data.ExternalNavigatorImpl
+import com.practicum.playlistmaker.sharing.domain.ExternalNavigator
+import com.practicum.playlistmaker.sharing.domain.SharingInteractor
+import com.practicum.playlistmaker.sharing.domain.impl.SharingInteractorImpl
 
 object Creator {
 
@@ -59,4 +63,10 @@ object Creator {
 
     fun providePlayer(playButton: ImageButton, playtimeTextView: TextView): Player =
         PlayerImpl(playButton, playtimeTextView)
+
+    fun provideSharingInteractor(): SharingInteractor =
+        SharingInteractorImpl(getExternalNavigator())
+
+    private fun getExternalNavigator(): ExternalNavigator =
+        ExternalNavigatorImpl(application.applicationContext)
 }
