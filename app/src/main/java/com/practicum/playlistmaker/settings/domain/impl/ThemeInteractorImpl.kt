@@ -6,8 +6,8 @@ import com.practicum.playlistmaker.settings.domain.ThemeRepository
 class ThemeInteractorImpl(
     private val themeRepository: ThemeRepository
 ) : ThemeInteractor {
-    override fun darkThemeEnabled(defValue: Boolean): Boolean =
-        themeRepository.darkThemeEnabled(defValue)
+    override fun darkThemeEnabled(): Boolean =
+        themeRepository.darkThemeEnabled()
 
     override fun setDarkTheme() {
         themeRepository.setDarkThemeEnabled(true)

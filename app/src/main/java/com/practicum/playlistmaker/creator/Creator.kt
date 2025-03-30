@@ -59,7 +59,7 @@ object Creator {
         ThemeInteractorImpl(getThemeRepository())
 
     private fun getThemeRepository(): ThemeRepository =
-        ThemeRepositoryImpl(getSharedPreferences())
+        ThemeRepositoryImpl(getSharedPreferences(), application.resources)
 
     fun providePlayer(playButton: ImageButton, playtimeTextView: TextView): Player =
         PlayerImpl(playButton, playtimeTextView)
