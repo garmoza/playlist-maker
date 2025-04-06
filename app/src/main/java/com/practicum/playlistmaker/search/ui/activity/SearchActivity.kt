@@ -11,7 +11,6 @@ import android.util.Log
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
-import android.widget.EditText
 import androidx.activity.viewModels
 import com.practicum.playlistmaker.common.ui.debounce.ClickDebounce
 import com.practicum.playlistmaker.common.ui.debounce.SearchDebounce
@@ -198,7 +197,7 @@ class SearchActivity : AppCompatActivity() {
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
         super.onRestoreInstanceState(savedInstanceState)
         searchedValue = savedInstanceState.getString(SEARCHED_VALUE_KEY, DEFAULT_SEARCHED_VALUE)
-        findViewById<EditText>(R.id.editTextSearch).setText(searchedValue)
+        binding.editTextSearch.setText(searchedValue)
     }
 
     private fun ActivitySearchBinding.setState(state: SearchActivityState) {
