@@ -1,56 +1,47 @@
-package com.practicum.playlistmaker.palyer.domain.impl
+package com.practicum.playlistmaker.palyer.data
 
 import android.media.MediaPlayer
 import android.os.Handler
 import android.os.Looper
-import android.widget.ImageButton
-import android.widget.TextView
-import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.palyer.domain.Player
-import java.text.SimpleDateFormat
-import java.util.Locale
 
-class PlayerImpl(
-    private val playButton: ImageButton,
-    private val playtimeTextView: TextView
-) : Player {
+class PlayerImpl : Player {
+
+    private lateinit var statusObserver: Player.StatusObserver
 
     private val mainThreadHandler = Handler(Looper.getMainLooper())
     private val mediaPlayer = MediaPlayer()
-
-    private val dateFormat by lazy { SimpleDateFormat("mm:ss", Locale.getDefault()) }
 
     private var playerState = STATE_DEFAULT
 
     private var updatePlaytimeTask = object : Runnable {
         override fun run() {
-            playtimeTextView.text = dateFormat.format(mediaPlayer.currentPosition)
+            statusObserver.onProgress(mediaPlayer.currentPosition)
             mainThreadHandler.postDelayed(this, DELAY)
         }
     }
 
-    override fun prepare(url: String) {
+    override fun prepare(url: String, statusObserver: Player.StatusObserver) {
+        this.statusObserver = statusObserver
         mediaPlayer.setDataSource(url)
         mediaPlayer.prepareAsync()
         mediaPlayer.setOnPreparedListener {
-            playButton.setImageResource(R.drawable.ic_play_track)
-            playtimeTextView.text = DEFAULT_PLAYTIME
+            statusObserver.onPrepared()
             playerState = STATE_PREPARED
         }
         mediaPlayer.setOnCompletionListener {
             mainThreadHandler.removeCallbacks(updatePlaytimeTask)
 
-            playButton.setImageResource(R.drawable.ic_play_track)
-            playtimeTextView.text = DEFAULT_PLAYTIME
+            statusObserver.onPrepared()
             playerState = STATE_PREPARED
         }
     }
 
     override fun play() {
+        statusObserver.onPlay()
         mainThreadHandler.post(updatePlaytimeTask)
 
         mediaPlayer.start()
-        playButton.setImageResource(R.drawable.ic_pause_track)
         playerState = STATE_PLAYING
     }
 
@@ -58,8 +49,8 @@ class PlayerImpl(
         mainThreadHandler.removeCallbacks(updatePlaytimeTask)
 
         mediaPlayer.pause()
-        playButton.setImageResource(R.drawable.ic_play_track)
         playerState = STATE_PAUSED
+        statusObserver.onPause()
     }
 
     override fun release() {
@@ -85,7 +76,5 @@ class PlayerImpl(
         private const val STATE_PAUSED = 3
 
         private const val DELAY = 300L
-
-        private const val DEFAULT_PLAYTIME = "00:00"
     }
 }

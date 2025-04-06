@@ -16,7 +16,7 @@ import com.practicum.playlistmaker.search.domain.model.SearchScreenState
 class SearchViewModel(
     private val tracksInteractor: TracksInteractor,
     private val tracksSearchHistoryIneractor: TracksSearchHistoryInteractor
-) :ViewModel() {
+) : ViewModel() {
 
     companion object {
         fun getViewModelFactory(): ViewModelProvider.Factory = viewModelFactory {

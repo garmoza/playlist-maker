@@ -4,13 +4,11 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
-import android.widget.Toolbar
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
-import com.practicum.playlistmaker.palyer.domain.Player
 import com.practicum.playlistmaker.R
-import com.practicum.playlistmaker.creator.Creator
 import com.practicum.playlistmaker.common.domain.models.Track
 import com.practicum.playlistmaker.common.ui.ARTIST_NAME_EXTRA
 import com.practicum.playlistmaker.common.ui.ARTWORK_URL_512_EXTRA
@@ -23,20 +21,26 @@ import com.practicum.playlistmaker.common.ui.TRACK_NAME_EXTRA
 import com.practicum.playlistmaker.common.ui.TRACK_TIME_EXTRA
 import com.practicum.playlistmaker.databinding.ActivityPlayerBinding
 import com.practicum.playlistmaker.common.ui.dpToPx
+import com.practicum.playlistmaker.palyer.domain.model.PlayerStatus
+import com.practicum.playlistmaker.palyer.domain.model.TrackNotAvailableToastState
+import com.practicum.playlistmaker.palyer.ui.view_model.PlayerViewModel
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 class PlayerActivity : AppCompatActivity() {
 
-    private var player: Player? = null
+    private lateinit var viewModel: PlayerViewModel
 
     private lateinit var binding: ActivityPlayerBinding
+
+    private val dateFormat by lazy { SimpleDateFormat("mm:ss", Locale.getDefault()) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityPlayerBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val toolbarSettings = findViewById<Toolbar>(R.id.toolbar)
-        toolbarSettings.setOnClickListener {
+        binding.toolbar.setOnClickListener {
             finish()
         }
 
@@ -67,34 +71,44 @@ class PlayerActivity : AppCompatActivity() {
         }
 
         val previewUrl = intent.getStringExtra(PREVIEW_URL_EXTRA)
-        previewUrl?.let {
-            player = Creator.providePlayer(binding.playButton, binding.playtime)
-            player?.prepare(it)
+        viewModel = ViewModelProvider(this, PlayerViewModel.getViewModelFactory(previewUrl))[PlayerViewModel::class.java]
+        viewModel.getPlayerStatusLiveData().observe(this) { status ->
+            renderPlayerStatus(status)
+        }
+        viewModel.getToastState().observe(this) { status ->
+            when (status) {
+                is TrackNotAvailableToastState.Show -> {
+                    Toast.makeText(this, getString(R.string.track_not_available), Toast.LENGTH_SHORT).show()
+                    viewModel.toastWasShow()
+                }
+                is TrackNotAvailableToastState.None -> Unit
+            }
         }
 
         binding.playButton.setOnClickListener {
-            if (previewUrl == null) {
-                Toast.makeText(this, getString(R.string.track_not_available), Toast.LENGTH_SHORT).show()
-            } else {
-                player?.switchBetweenPlayAndPause()
-            }
+            viewModel.switchBetweenPlayAndPause()
         }
     }
 
+    private fun renderPlayerStatus(status: PlayerStatus) {
+        if (status.isPlaying) {
+            binding.playButton.setImageResource(R.drawable.ic_pause_track)
+        } else {
+            binding.playButton.setImageResource(R.drawable.ic_play_track)
+        }
+
+        binding.playtime.text = dateFormat.format(status.progress)
+    }
+
     override fun onPause() {
-        player?.pause()
+        viewModel.pause()
         super.onPause()
     }
 
-    override fun onDestroy() {
-        player?.release()
-        super.onDestroy()
-    }
-
     companion object {
-        const val UNKNOWN_TRACK_NAME = "Track Unknown"
-        const val UNKNOWN_ARTIST_NAME = "Artist Unknown"
-        const val UNKNOWN_VALUE = "-"
+        private const val UNKNOWN_TRACK_NAME = "Track Unknown"
+        private const val UNKNOWN_ARTIST_NAME = "Artist Unknown"
+        private const val UNKNOWN_VALUE = "-"
 
         fun show(context: Context, track: Track) {
             val intent = Intent(context, PlayerActivity::class.java)
