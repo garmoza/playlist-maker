@@ -50,7 +50,7 @@ class SearchActivity : AppCompatActivity() {
         clickDebounce = ClickDebounce(Looper.getMainLooper())
         searchDebounce = SearchDebounce(Looper.getMainLooper())
 
-        viewModel.getScreenState().observe(this) { state ->
+        viewModel.getSearchScreenLiveData().observe(this) { state ->
             when (state) {
                 is SearchScreenState.Content -> {
                     if (state.tracks.isEmpty()) {

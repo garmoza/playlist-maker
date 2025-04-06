@@ -29,14 +29,14 @@ class SearchViewModel(
         }
     }
 
-    private val screenStateLiveData = MutableLiveData<SearchScreenState>(
+    private val searchScreenLiveData = MutableLiveData<SearchScreenState>(
         SearchScreenState.Content(emptyList())
     )
 
-    fun getScreenState(): LiveData<SearchScreenState> = screenStateLiveData
+    fun getSearchScreenLiveData(): LiveData<SearchScreenState> = searchScreenLiveData
 
     fun searchTracks(expression: String) {
-        screenStateLiveData.postValue(SearchScreenState.Loading)
+        searchScreenLiveData.postValue(SearchScreenState.Loading)
         tracksInteractor.searchTracks(
             expression = expression,
             consumer = object : TracksInteractor.TracksConsumer {
@@ -46,25 +46,25 @@ class SearchViewModel(
                     } else {
                         SearchScreenState.Error(ErrorType.TRACK_NOT_FOUND)
                     }
-                    screenStateLiveData.postValue(state)
+                    searchScreenLiveData.postValue(state)
                 }
 
                 override fun onFailure() {
-                    screenStateLiveData.postValue(SearchScreenState.Error(ErrorType.NETWORK_PROBLEM))
+                    searchScreenLiveData.postValue(SearchScreenState.Error(ErrorType.NETWORK_PROBLEM))
                 }
             }
         )
     }
 
     fun displayHistory() {
-        screenStateLiveData.value = SearchScreenState.History(
+        searchScreenLiveData.value = SearchScreenState.History(
             tracksSearchHistoryIneractor.getTracks()
         )
     }
 
     fun clearHistory() {
         tracksSearchHistoryIneractor.clear()
-        screenStateLiveData.value = SearchScreenState.History(emptyList())
+        searchScreenLiveData.value = SearchScreenState.History(emptyList())
     }
 
     fun addTrackToHistory(track: Track) {

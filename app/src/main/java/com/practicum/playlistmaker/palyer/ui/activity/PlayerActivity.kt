@@ -21,7 +21,7 @@ import com.practicum.playlistmaker.common.ui.TRACK_NAME_EXTRA
 import com.practicum.playlistmaker.common.ui.TRACK_TIME_EXTRA
 import com.practicum.playlistmaker.databinding.ActivityPlayerBinding
 import com.practicum.playlistmaker.common.ui.dpToPx
-import com.practicum.playlistmaker.palyer.domain.model.PlayerStatus
+import com.practicum.playlistmaker.palyer.domain.model.PlayerState
 import com.practicum.playlistmaker.palyer.domain.model.TrackNotAvailableToastState
 import com.practicum.playlistmaker.palyer.ui.view_model.PlayerViewModel
 import java.text.SimpleDateFormat
@@ -72,10 +72,10 @@ class PlayerActivity : AppCompatActivity() {
 
         val previewUrl = intent.getStringExtra(PREVIEW_URL_EXTRA)
         viewModel = ViewModelProvider(this, PlayerViewModel.getViewModelFactory(previewUrl))[PlayerViewModel::class.java]
-        viewModel.getPlayerStatusLiveData().observe(this) { status ->
+        viewModel.getPlayerLiveData().observe(this) { status ->
             renderPlayerStatus(status)
         }
-        viewModel.getToastState().observe(this) { status ->
+        viewModel.getToastLiveData().observe(this) { status ->
             when (status) {
                 is TrackNotAvailableToastState.Show -> {
                     Toast.makeText(this, getString(R.string.track_not_available), Toast.LENGTH_SHORT).show()
@@ -90,7 +90,7 @@ class PlayerActivity : AppCompatActivity() {
         }
     }
 
-    private fun renderPlayerStatus(status: PlayerStatus) {
+    private fun renderPlayerStatus(status: PlayerState) {
         if (status.isPlaying) {
             binding.playButton.setImageResource(R.drawable.ic_pause_track)
         } else {

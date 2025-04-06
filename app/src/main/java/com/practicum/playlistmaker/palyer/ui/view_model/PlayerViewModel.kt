@@ -9,7 +9,7 @@ import androidx.lifecycle.viewmodel.viewModelFactory
 import com.practicum.playlistmaker.palyer.domain.model.TrackNotAvailableToastState
 import com.practicum.playlistmaker.creator.Creator
 import com.practicum.playlistmaker.palyer.domain.Player
-import com.practicum.playlistmaker.palyer.domain.model.PlayerStatus
+import com.practicum.playlistmaker.palyer.domain.model.PlayerState
 
 class PlayerViewModel(
     trackUrl: String?,
@@ -25,15 +25,15 @@ class PlayerViewModel(
                 )
             }
         }
-        private val DEFAULT_PLAYER_STATUS = PlayerStatus(
+        private val DEFAULT_PLAYER_STATE = PlayerState(
             isTrackAvailable = false,
             isPlaying = false,
             progress = 0
         )
     }
 
-    private val playerStatusLiveData = MutableLiveData<PlayerStatus>()
-    private val trackNotAvailableToastState = MutableLiveData<TrackNotAvailableToastState>(
+    private val playerLiveData = MutableLiveData<PlayerState>()
+    private val trackNotAvailableToastLiveData = MutableLiveData<TrackNotAvailableToastState>(
         TrackNotAvailableToastState.None
     )
 
@@ -41,40 +41,40 @@ class PlayerViewModel(
         trackUrl?.let {
             player.prepare(it, object : Player.StatusObserver {
                 override fun onPrepared() {
-                    playerStatusLiveData.value = DEFAULT_PLAYER_STATUS.copy(isTrackAvailable = true)
+                    playerLiveData.value = DEFAULT_PLAYER_STATE.copy(isTrackAvailable = true)
                 }
 
                 override fun onPlay() {
-                    playerStatusLiveData.value = playerStatusLiveData.value?.copy(isPlaying = true)
+                    playerLiveData.value = playerLiveData.value?.copy(isPlaying = true)
                 }
 
                 override fun onPause() {
-                    playerStatusLiveData.value = playerStatusLiveData.value?.copy(isPlaying = false)
+                    playerLiveData.value = playerLiveData.value?.copy(isPlaying = false)
                 }
 
                 override fun onProgress(progress: Int) {
-                    playerStatusLiveData.value = playerStatusLiveData.value?.copy(progress = progress)
+                    playerLiveData.value = playerLiveData.value?.copy(progress = progress)
                 }
             })
         }
     }
 
-    fun getPlayerStatusLiveData(): LiveData<PlayerStatus> = playerStatusLiveData
-    fun getToastState(): LiveData<TrackNotAvailableToastState> = trackNotAvailableToastState
+    fun getPlayerLiveData(): LiveData<PlayerState> = playerLiveData
+    fun getToastLiveData(): LiveData<TrackNotAvailableToastState> = trackNotAvailableToastLiveData
 
     fun switchBetweenPlayAndPause() {
-        if (playerStatusLiveData.value?.isTrackAvailable == true) {
+        if (playerLiveData.value?.isTrackAvailable == true) {
             player.switchBetweenPlayAndPause()
         } else {
-            trackNotAvailableToastState.value = TrackNotAvailableToastState.Show
+            trackNotAvailableToastLiveData.value = TrackNotAvailableToastState.Show
         }
     }
 
     fun pause() {
-        if (playerStatusLiveData.value?.isTrackAvailable == true) {
+        if (playerLiveData.value?.isTrackAvailable == true) {
             player.pause()
         } else {
-            trackNotAvailableToastState.value = TrackNotAvailableToastState.Show
+            trackNotAvailableToastLiveData.value = TrackNotAvailableToastState.Show
         }
     }
 
@@ -83,6 +83,6 @@ class PlayerViewModel(
     }
 
     fun toastWasShow() {
-        trackNotAvailableToastState.value = TrackNotAvailableToastState.None
+        trackNotAvailableToastLiveData.value = TrackNotAvailableToastState.None
     }
 }
