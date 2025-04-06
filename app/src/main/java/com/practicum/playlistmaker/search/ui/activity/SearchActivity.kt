@@ -12,23 +12,23 @@ import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
+import androidx.activity.viewModels
 import com.practicum.playlistmaker.common.ui.debounce.ClickDebounce
 import com.practicum.playlistmaker.common.ui.debounce.SearchDebounce
 import com.practicum.playlistmaker.R
-import com.practicum.playlistmaker.creator.Creator
 import com.practicum.playlistmaker.palyer.ui.activity.PlayerActivity
-import com.practicum.playlistmaker.search.domain.TracksInteractor
-import com.practicum.playlistmaker.search.domain.TracksSearchHistoryInteractor
 import com.practicum.playlistmaker.databinding.ActivitySearchBinding
 import com.practicum.playlistmaker.common.domain.models.Track
 import com.practicum.playlistmaker.common.ui.debounce.SearchDebounce.Companion.NONE_DELAY
+import com.practicum.playlistmaker.search.domain.model.ErrorType
+import com.practicum.playlistmaker.search.domain.model.SearchScreenState
+import com.practicum.playlistmaker.search.ui.view_model.SearchViewModel
 
 class SearchActivity : AppCompatActivity() {
 
-    private var searchedValue = DEFAULT_SEARCHED_VALUE
+    private val viewModel by viewModels<SearchViewModel> { SearchViewModel.getViewModelFactory() }
 
-    private lateinit var tracksInteractor: TracksInteractor
-    private lateinit var tracksSearchHistoryInteractor: TracksSearchHistoryInteractor
+    private var searchedValue = DEFAULT_SEARCHED_VALUE
 
     private lateinit var binding: ActivitySearchBinding
     private lateinit var trackAdapter: TrackAdapter
@@ -37,35 +37,8 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var clickDebounce: ClickDebounce
     private lateinit var searchDebounce: SearchDebounce
 
-    private val tracksResponseHandler = object : TracksInteractor.TracksConsumer {
-        override fun onSuccess(foundTracks: List<Track>) {
-            Log.i(TAG, "Search start handle result")
-            handler.post {
-                trackAdapter.setItems(foundTracks)
-                if (foundTracks.isNotEmpty()) {
-                    Log.i(TAG, "Search success result")
-                    binding.setState(SearchActivityState.TRACK_LIST)
-                } else {
-                    Log.i(TAG, "Search empty result")
-                    binding.setState(SearchActivityState.TRACK_NOT_FOUND)
-                }
-            }
-        }
-
-        override fun onFailure() {
-            Log.i(TAG, "Search bad response")
-            handler.post {
-                binding.setState(SearchActivityState.NETWORK_PROBLEM)
-            }
-        }
-    }
-
     private val searchTask = Runnable {
-        binding.setState(SearchActivityState.SEARCHING)
-        tracksInteractor.searchTracks(
-            binding.editTextSearch.text.toString(),
-            tracksResponseHandler
-        )
+        viewModel.searchTracks(binding.editTextSearch.text.toString())
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -77,16 +50,36 @@ class SearchActivity : AppCompatActivity() {
         clickDebounce = ClickDebounce(Looper.getMainLooper())
         searchDebounce = SearchDebounce(Looper.getMainLooper())
 
-        initInteractors()
+        viewModel.getScreenState().observe(this) { state ->
+            when (state) {
+                is SearchScreenState.Content -> {
+                    if (state.tracks.isEmpty()) {
+                        binding.setState(SearchActivityState.EMPTY)
+                    } else {
+                        trackAdapter.setItems(state.tracks)
+                        binding.setState(SearchActivityState.TRACK_LIST)
+                    }
+                }
+                is SearchScreenState.History -> {
+                    if (state.tracks.isEmpty()) {
+                        binding.setState(SearchActivityState.EMPTY)
+                    } else {
+                        trackHistoryAdapter.setItems(state.tracks)
+                        binding.setState(SearchActivityState.HISTORY)
+                    }
+                }
+                is SearchScreenState.Loading -> binding.setState(SearchActivityState.SEARCHING)
+                is SearchScreenState.Error -> {
+                    when (state.type) {
+                        ErrorType.TRACK_NOT_FOUND -> binding.setState(SearchActivityState.TRACK_NOT_FOUND)
+                        ErrorType.NETWORK_PROBLEM -> binding.setState(SearchActivityState.NETWORK_PROBLEM)
+                    }
+                }
+            }
+        }
 
         initTrackAdapter(this::onTrackClick)
         initTrackHistoryAdapter(this::onTrackClick)
-
-        tracksSearchHistoryInteractor.registerOnTrackSearchHistoryChangeListener {
-            trackHistoryAdapter.setItems(
-                tracksSearchHistoryInteractor.getTracks()
-            )
-        }
 
         binding.toolbarSearch.setOnClickListener {
             finish()
@@ -137,8 +130,8 @@ class SearchActivity : AppCompatActivity() {
         }
 
         binding.editTextSearch.setOnFocusChangeListener { v, hasFocus ->
-            if (binding.editTextSearch.hasFocus() && binding.editTextSearch.text.isEmpty() && trackHistoryAdapter.itemCount > 0) {
-                binding.setState(SearchActivityState.HISTORY)
+            if (binding.editTextSearch.hasFocus() && binding.editTextSearch.text.isEmpty()) {
+                viewModel.displayHistory()
             } else {
                 binding.setState(SearchActivityState.TRACK_LIST)
             }
@@ -149,8 +142,8 @@ class SearchActivity : AppCompatActivity() {
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                if (binding.editTextSearch.hasFocus() && binding.editTextSearch.text.isEmpty() && trackHistoryAdapter.itemCount > 0) {
-                    binding.setState(SearchActivityState.HISTORY)
+                if (binding.editTextSearch.hasFocus() && binding.editTextSearch.text.isEmpty()) {
+                    viewModel.displayHistory()
                 } else {
                     binding.setState(SearchActivityState.TRACK_LIST)
                 }
@@ -161,19 +154,12 @@ class SearchActivity : AppCompatActivity() {
         })
 
         binding.clearHistoryButton.setOnClickListener {
-            tracksSearchHistoryInteractor.clear()
-            trackHistoryAdapter.setItems(emptyList())
-            binding.setState(SearchActivityState.EMPTY)
+            viewModel.clearHistory()
         }
     }
 
-    private fun initInteractors() {
-        tracksInteractor = Creator.provideTracksInteractor()
-        tracksSearchHistoryInteractor = Creator.provideTracksSearchHistoryInteractor()
-    }
-
     private fun onTrackClick(track: Track) {
-        tracksSearchHistoryInteractor.addTrack(track)
+        viewModel.addTrackToHistory(track)
         PlayerActivity.show(this@SearchActivity, track)
     }
 
@@ -196,9 +182,6 @@ class SearchActivity : AppCompatActivity() {
             )
         }
         trackHistoryAdapter = TrackAdapter(onHistoryTrackDebounceClick)
-        trackHistoryAdapter.setItems(
-            tracksSearchHistoryInteractor.getTracks()
-        )
         binding.recyclerViewHistoryTrack.adapter = trackHistoryAdapter
     }
 

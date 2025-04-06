@@ -17,8 +17,4 @@ class TracksSearchHistoryInteractorImpl(
     override fun clear() {
         repository.clear()
     }
-
-    override fun registerOnTrackSearchHistoryChangeListener(consumer: () -> Unit) {
-        repository.registerOnTrackSearchHistoryChangeListener(consumer)
-    }
 }
