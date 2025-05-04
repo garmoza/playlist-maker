@@ -9,17 +9,11 @@ import org.koin.dsl.module
 
 val viewModelModule = module {
     viewModel {
-        SettingsViewModel(
-            Creator.provideSharingInteractor(),
-            Creator.provideThemeInteractor()
-        )
+        SettingsViewModel(get(), get())
     }
 
     viewModel {
-        SearchViewModel(
-            Creator.provideTracksInteractor(),
-            Creator.provideTracksSearchHistoryInteractor()
-        )
+        SearchViewModel(get(), get())
     }
 
     viewModel { (trackUrl: String?) ->
