@@ -2,7 +2,10 @@ package com.practicum.playlistmaker.settings.ui.activity
 
 import android.app.Application
 import com.practicum.playlistmaker.creator.Creator
+import com.practicum.playlistmaker.di.viewModelModule
 import com.practicum.playlistmaker.settings.domain.ThemeInteractor
+import org.koin.android.ext.koin.androidContext
+import org.koin.core.context.startKoin
 
 class App : Application() {
 
@@ -10,6 +13,10 @@ class App : Application() {
 
     override fun onCreate() {
         super.onCreate()
+        startKoin {
+            androidContext(this@App)
+            modules(viewModelModule)
+        }
 
         Creator.initApplication(this)
 

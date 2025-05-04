@@ -3,11 +3,7 @@ package com.practicum.playlistmaker.palyer.ui.view_model
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
 import com.practicum.playlistmaker.palyer.domain.model.TrackNotAvailableToastState
-import com.practicum.playlistmaker.creator.Creator
 import com.practicum.playlistmaker.palyer.domain.Player
 import com.practicum.playlistmaker.palyer.domain.model.PlayerState
 
@@ -71,14 +67,6 @@ class PlayerViewModel(
     }
 
     companion object {
-        fun getViewModelFactory(trackUrl: String?): ViewModelProvider.Factory = viewModelFactory {
-            initializer {
-                PlayerViewModel(
-                    trackUrl,
-                    Creator.providePlayer()
-                )
-            }
-        }
         private val DEFAULT_PLAYER_STATE = PlayerState(
             isTrackAvailable = false,
             isPlaying = false,

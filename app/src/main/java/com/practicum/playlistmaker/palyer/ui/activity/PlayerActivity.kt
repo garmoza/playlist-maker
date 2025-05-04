@@ -5,7 +5,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.practicum.playlistmaker.R
@@ -24,6 +23,8 @@ import com.practicum.playlistmaker.common.ui.dpToPx
 import com.practicum.playlistmaker.palyer.domain.model.PlayerState
 import com.practicum.playlistmaker.palyer.domain.model.TrackNotAvailableToastState
 import com.practicum.playlistmaker.palyer.ui.view_model.PlayerViewModel
+import org.koin.android.ext.android.getKoin
+import org.koin.core.parameter.parametersOf
 import java.text.SimpleDateFormat
 import java.util.Locale
 
@@ -71,7 +72,9 @@ class PlayerActivity : AppCompatActivity() {
         }
 
         val previewUrl = intent.getStringExtra(PREVIEW_URL_EXTRA)
-        viewModel = ViewModelProvider(this, PlayerViewModel.getViewModelFactory(previewUrl))[PlayerViewModel::class.java]
+        viewModel = getKoin().get<PlayerViewModel> {
+            parametersOf(previewUrl)
+        }
         viewModel.getPlayerLiveData().observe(this) { status ->
             renderPlayerStatus(status)
         }
