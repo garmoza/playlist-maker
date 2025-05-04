@@ -1,6 +1,5 @@
 package com.practicum.playlistmaker.di
 
-import com.practicum.playlistmaker.creator.Creator
 import com.practicum.playlistmaker.palyer.ui.view_model.PlayerViewModel
 import com.practicum.playlistmaker.search.ui.view_model.SearchViewModel
 import com.practicum.playlistmaker.settings.ui.view_model.SettingsViewModel
@@ -17,6 +16,6 @@ val viewModelModule = module {
     }
 
     viewModel { (trackUrl: String?) ->
-        PlayerViewModel(trackUrl, Creator.providePlayer())
+        PlayerViewModel(trackUrl, get())
     }
 }
