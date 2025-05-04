@@ -18,17 +18,6 @@ class SettingsViewModel(
     private val themeInteractor: ThemeInteractor
 ) : ViewModel() {
 
-    companion object {
-        fun getViewModelFactory(): ViewModelProvider.Factory = viewModelFactory {
-            initializer {
-                SettingsViewModel(
-                    Creator.provideSharingInteractor(),
-                    Creator.provideThemeInteractor()
-                )
-            }
-        }
-    }
-
     private val themeSettingsLiveData = MutableLiveData<ThemeSettingsState>()
 
     init {
@@ -65,5 +54,16 @@ class SettingsViewModel(
 
     fun openSupport(emailData: EmailData) {
         sharingInteractor.openSupport(emailData)
+    }
+
+    companion object {
+        fun getViewModelFactory(): ViewModelProvider.Factory = viewModelFactory {
+            initializer {
+                SettingsViewModel(
+                    Creator.provideSharingInteractor(),
+                    Creator.provideThemeInteractor()
+                )
+            }
+        }
     }
 }

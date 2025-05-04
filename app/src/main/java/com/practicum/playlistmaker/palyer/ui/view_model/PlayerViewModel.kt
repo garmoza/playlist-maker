@@ -16,22 +16,6 @@ class PlayerViewModel(
     private val player: Player
 ) : ViewModel() {
 
-    companion object {
-        fun getViewModelFactory(trackUrl: String?): ViewModelProvider.Factory = viewModelFactory {
-            initializer {
-                PlayerViewModel(
-                    trackUrl,
-                    Creator.providePlayer()
-                )
-            }
-        }
-        private val DEFAULT_PLAYER_STATE = PlayerState(
-            isTrackAvailable = false,
-            isPlaying = false,
-            progress = 0
-        )
-    }
-
     private val playerLiveData = MutableLiveData<PlayerState>()
     private val trackNotAvailableToastLiveData = MutableLiveData<TrackNotAvailableToastState>(
         TrackNotAvailableToastState.None
@@ -84,5 +68,21 @@ class PlayerViewModel(
 
     fun toastWasShow() {
         trackNotAvailableToastLiveData.value = TrackNotAvailableToastState.None
+    }
+
+    companion object {
+        fun getViewModelFactory(trackUrl: String?): ViewModelProvider.Factory = viewModelFactory {
+            initializer {
+                PlayerViewModel(
+                    trackUrl,
+                    Creator.providePlayer()
+                )
+            }
+        }
+        private val DEFAULT_PLAYER_STATE = PlayerState(
+            isTrackAvailable = false,
+            isPlaying = false,
+            progress = 0
+        )
     }
 }

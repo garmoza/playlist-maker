@@ -24,11 +24,11 @@ class ITunseRetrofitNetworkClient(
 
         return try {
             if (dto is ITunseSearchRequest) {
-                val resp = iTunseService.search(dto.expression).execute()
+                val response = iTunseService.search(dto.expression).execute()
 
-                val body = resp.body() ?: Response()
+                val body = response.body() ?: Response()
 
-                body.apply { resultCode = resp.code() }
+                body.apply { resultCode = response.code() }
             } else {
                 Response().apply { resultCode = 400 }
             }

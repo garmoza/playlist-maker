@@ -8,10 +8,10 @@ import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
-import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import androidx.activity.viewModels
+import androidx.core.view.isVisible
 import com.practicum.playlistmaker.common.ui.debounce.ClickDebounce
 import com.practicum.playlistmaker.common.ui.debounce.SearchDebounce
 import com.practicum.playlistmaker.R
@@ -100,12 +100,12 @@ class SearchActivity : AppCompatActivity() {
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 searchedValue = s.toString()
-                binding.imageViewClear.visibility = if (s.isNullOrEmpty()) {
+                binding.imageViewClear.isVisible = if (s.isNullOrEmpty()) {
                     searchDebounce.remove(searchTask)
-                    View.GONE
+                    false
                 } else {
                     searchDebounce.execute(searchTask)
-                    View.VISIBLE
+                    true
                 }
             }
 
@@ -208,50 +208,50 @@ class SearchActivity : AppCompatActivity() {
             }
             SearchActivityState.TRACK_LIST -> {
                 hideViews()
-                recyclerViewTrack.visibility = View.VISIBLE
+                recyclerViewTrack.isVisible = true
                 Log.i(TAG, "Activity state is TRACK_LIST")
             }
             SearchActivityState.HISTORY -> {
                 hideViews()
-                historyViewGroup.visibility = View.VISIBLE
+                historyViewGroup.isVisible = true
                 Log.i(TAG, "Activity state is HISTORY")
             }
             SearchActivityState.TRACK_NOT_FOUND -> {
                 hideViews()
-                placeholderImage.visibility = View.VISIBLE
+                placeholderImage.isVisible = true
                 placeholderImage.setImageResource(R.drawable.track_not_found)
-                placeholderMessage.visibility = View.VISIBLE
+                placeholderMessage.isVisible = true
                 placeholderMessage.setText(R.string.placeholder_message_not_found)
                 Log.i(TAG, "Activity state is TRACK_NOT_FOUND")
             }
             SearchActivityState.NETWORK_PROBLEM -> {
                 hideViews()
-                placeholderImage.visibility = View.VISIBLE
+                placeholderImage.isVisible = true
                 placeholderImage.setImageResource(R.drawable.network_problem)
-                placeholderMessage.visibility = View.VISIBLE
+                placeholderMessage.isVisible = true
                 placeholderMessage.setText(R.string.placeholder_message_network_problem)
-                placeholderAdditionalMessage.visibility = View.VISIBLE
+                placeholderAdditionalMessage.isVisible = true
                 placeholderAdditionalMessage.setText(R.string.placeholder_aditional_message_network_problems)
-                placeholderButton.visibility = View.VISIBLE
+                placeholderButton.isVisible = true
                 placeholderButton.setText(R.string.update)
                 Log.i(TAG, "Activity state is NETWORK_PROBLEM")
             }
             SearchActivityState.SEARCHING -> {
                 hideViews()
-                progressBar.visibility = View.VISIBLE
+                progressBar.isVisible = true
                 Log.i(TAG, "Activity state is SEARCHING")
             }
         }
     }
 
     private fun ActivitySearchBinding.hideViews() {
-        recyclerViewTrack.visibility = View.GONE
-        placeholderImage.visibility = View.GONE
-        placeholderMessage.visibility = View.GONE
-        placeholderAdditionalMessage.visibility = View.GONE
-        placeholderButton.visibility = View.GONE
-        historyViewGroup.visibility = View.GONE
-        progressBar.visibility = View.GONE
+        recyclerViewTrack.isVisible = false
+        placeholderImage.isVisible = false
+        placeholderMessage.isVisible = false
+        placeholderAdditionalMessage.isVisible = false
+        placeholderButton.isVisible = false
+        historyViewGroup.isVisible = false
+        progressBar.isVisible = false
     }
 
     companion object {

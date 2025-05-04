@@ -18,17 +18,6 @@ class SearchViewModel(
     private val tracksSearchHistoryIneractor: TracksSearchHistoryInteractor
 ) : ViewModel() {
 
-    companion object {
-        fun getViewModelFactory(): ViewModelProvider.Factory = viewModelFactory {
-            initializer {
-                SearchViewModel(
-                    Creator.provideTracksInteractor(),
-                    Creator.provideTracksSearchHistoryInteractor()
-                )
-            }
-        }
-    }
-
     private val searchScreenLiveData = MutableLiveData<SearchScreenState>(
         SearchScreenState.Content(emptyList())
     )
@@ -69,5 +58,16 @@ class SearchViewModel(
 
     fun addTrackToHistory(track: Track) {
         tracksSearchHistoryIneractor.addTrack(track)
+    }
+
+    companion object {
+        fun getViewModelFactory(): ViewModelProvider.Factory = viewModelFactory {
+            initializer {
+                SearchViewModel(
+                    Creator.provideTracksInteractor(),
+                    Creator.provideTracksSearchHistoryInteractor()
+                )
+            }
+        }
     }
 }
