@@ -1,6 +1,7 @@
 package com.practicum.playlistmaker.di
 
 import com.practicum.playlistmaker.creator.Creator
+import com.practicum.playlistmaker.search.data.TracksRepositoryImpl
 import com.practicum.playlistmaker.search.data.TracksSearchHistoryRepositoryImpl
 import com.practicum.playlistmaker.search.domain.TracksRepository
 import com.practicum.playlistmaker.search.domain.TracksSearchHistoryRepository
@@ -9,7 +10,7 @@ import org.koin.dsl.module
 
 val repositoryModule = module {
     single<TracksRepository> {
-        Creator.getTracksRepository()
+        TracksRepositoryImpl(get())
     }
 
     single<TracksSearchHistoryRepository> {
