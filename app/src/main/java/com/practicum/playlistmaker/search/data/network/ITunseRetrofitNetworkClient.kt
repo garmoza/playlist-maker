@@ -4,18 +4,11 @@ import android.net.ConnectivityManager
 import com.practicum.playlistmaker.search.data.dto.ITunseSearchRequest
 import com.practicum.playlistmaker.common.data.dto.Response
 import com.practicum.playlistmaker.common.data.network.AbstractNetworkClient
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 
 class ITunseRetrofitNetworkClient(
-    connectivityManager: ConnectivityManager
+    connectivityManager: ConnectivityManager,
+    private val iTunseService: ITunseApiService
 ) : AbstractNetworkClient(connectivityManager) {
-
-    private val retrofit = Retrofit.Builder()
-        .baseUrl(ITUNSE_BASE_URL)
-        .addConverterFactory(GsonConverterFactory.create())
-        .build()
-    private val iTunseService = retrofit.create(ITunseApiService::class.java)
 
     override fun doRequest(dto: Any): Response {
         if (!isConnected()) {
@@ -35,10 +28,5 @@ class ITunseRetrofitNetworkClient(
         } catch (e: Exception) {
             Response().apply { resultCode = 400 }
         }
-    }
-
-
-    companion object {
-        private const val ITUNSE_BASE_URL = "https://itunes.apple.com"
     }
 }
