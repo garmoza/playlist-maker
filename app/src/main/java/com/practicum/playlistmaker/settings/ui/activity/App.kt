@@ -1,7 +1,6 @@
 package com.practicum.playlistmaker.settings.ui.activity
 
 import android.app.Application
-import com.practicum.playlistmaker.creator.Creator
 import com.practicum.playlistmaker.di.dataModule
 import com.practicum.playlistmaker.di.interactorModule
 import com.practicum.playlistmaker.di.repositoryModule
@@ -21,8 +20,6 @@ class App : Application() {
             androidContext(this@App)
             modules(dataModule, repositoryModule, interactorModule, viewModelModule)
         }
-
-        Creator.initApplication(this)
 
         themeInteractor = getKoin().get<ThemeInteractor>()
 

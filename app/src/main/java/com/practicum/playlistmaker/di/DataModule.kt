@@ -10,6 +10,8 @@ import com.practicum.playlistmaker.common.data.preferences.PLAYLIST_MAKER_PREFER
 import com.practicum.playlistmaker.palyer.data.PlayerImpl
 import com.practicum.playlistmaker.palyer.domain.Player
 import com.practicum.playlistmaker.search.data.network.ITunseRetrofitNetworkClient
+import com.practicum.playlistmaker.sharing.data.ExternalNavigatorImpl
+import com.practicum.playlistmaker.sharing.domain.ExternalNavigator
 import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
 
@@ -32,5 +34,9 @@ val dataModule = module {
 
     factory<Player> {
         PlayerImpl()
+    }
+
+    single<ExternalNavigator> {
+        ExternalNavigatorImpl(androidContext())
     }
 }

@@ -1,6 +1,5 @@
 package com.practicum.playlistmaker.di
 
-import com.practicum.playlistmaker.creator.Creator
 import com.practicum.playlistmaker.search.domain.TracksInteractor
 import com.practicum.playlistmaker.search.domain.TracksSearchHistoryInteractor
 import com.practicum.playlistmaker.search.domain.impl.TracksInteractorImpl
@@ -25,6 +24,6 @@ val interactorModule = module {
     }
 
     single<SharingInteractor> {
-        SharingInteractorImpl(Creator.getExternalNavigator())
+        SharingInteractorImpl(get())
     }
 }
