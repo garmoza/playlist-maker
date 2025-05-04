@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.content.res.Resources
 import android.net.ConnectivityManager
+import com.google.gson.Gson
 import com.practicum.playlistmaker.common.data.network.NetworkClient
 import com.practicum.playlistmaker.common.data.preferences.PLAYLIST_MAKER_PREFERENCES
 import com.practicum.playlistmaker.palyer.data.PlayerImpl
@@ -44,6 +45,8 @@ val dataModule = module {
         ) as ConnectivityManager
         ITunseRetrofitNetworkClient(connectivityManager, get())
     }
+
+    factory { Gson() }
 
     factory<Player> {
         PlayerImpl()

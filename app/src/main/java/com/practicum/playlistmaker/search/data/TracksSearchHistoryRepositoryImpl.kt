@@ -7,7 +7,8 @@ import com.practicum.playlistmaker.search.domain.TracksSearchHistoryRepository
 import com.practicum.playlistmaker.common.domain.models.Track
 
 class TracksSearchHistoryRepositoryImpl(
-    private val sharedPreferences: SharedPreferences
+    private val sharedPreferences: SharedPreferences,
+    private val gson: Gson
 ): TracksSearchHistoryRepository {
 
     private val historyTracks: MutableList<Track> = mutableListOf()
@@ -51,11 +52,11 @@ class TracksSearchHistoryRepositoryImpl(
     }
 
     private fun createTracksListFromJson(json: String): List<Track> {
-        return Gson().fromJson(json, Array<Track>::class.java).toList()
+        return gson.fromJson(json, Array<Track>::class.java).toList()
     }
 
     private fun createJsonFromTracksList(tracks: List<Track>): String {
-        return Gson().toJson(tracks)
+        return gson.toJson(tracks)
     }
 
     companion object {
