@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.databinding.FragmentPlaylistsBinding
 import com.practicum.playlistmaker.library.domain.model.PlaylistsScreenState
 import com.practicum.playlistmaker.library.ui.view_model.PlaylistsViewModel
@@ -47,8 +48,11 @@ class PlaylistsFragment : Fragment() {
             PlaylistsFragmentState.PLAYLISTS_NOT_FOUND -> {
                 hideViews()
                 placeholderButton.isVisible = true
+                placeholderButton.setText(R.string.new_playlist)
                 placeholderImage.isVisible = true
+                placeholderImage.setImageResource(R.drawable.track_not_found)
                 placeholderMessage.isVisible = true
+                placeholderMessage.setText(R.string.you_have_not_playlists)
             }
         }
     }

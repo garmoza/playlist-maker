@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.databinding.FragmentFavoritesTracksBinding
 import com.practicum.playlistmaker.library.domain.model.FavoritesTracksScreenState
 import com.practicum.playlistmaker.library.ui.view_model.FavoritesTracksViewModel
@@ -47,7 +48,9 @@ class FavoritesTracksFragment : Fragment() {
             FavoritesTracksFragmentState.TRACKS_NOT_FOUND -> {
                 hideViews()
                 placeholderImage.isVisible = true
+                placeholderImage.setImageResource(R.drawable.track_not_found)
                 placeholderMessage.isVisible = true
+                placeholderMessage.setText(R.string.your_library_is_empty)
             }
         }
     }
