@@ -31,4 +31,10 @@
     <string name="genre">Genre</string>
     <string name="country">Country</string>
     <string name="track_not_available">The track is not available</string>
+
+    <string name="favorites_tracks">Favorites tracks</string>
+    <string name="playlists">Playlists</string>
+    <string name="your_library_is_empty">Your library is empty</string>
+    <string name="you_have_not_playlists">You haven\'t created\nany playlists yet</string>
+    <string name="new_playlist">New playlist</string>
 </resources>
