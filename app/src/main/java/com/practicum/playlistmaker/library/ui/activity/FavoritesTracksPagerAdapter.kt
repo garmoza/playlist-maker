@@ -14,7 +14,7 @@ class FavoritesTracksPagerAdapter(
 
     override fun createFragment(position: Int): Fragment =
         when (position) {
-            0 -> FavoritesTracksFragment()
-            else -> PlaylistsFragment()
+            0 -> FavoritesTracksFragment.newInstance()
+            else -> PlaylistsFragment.newInstance()
         }
 }

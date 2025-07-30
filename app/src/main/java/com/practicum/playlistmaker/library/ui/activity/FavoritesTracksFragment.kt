@@ -59,4 +59,8 @@ class FavoritesTracksFragment : Fragment() {
         placeholderImage.isVisible = false
         placeholderMessage.isVisible = false
     }
+
+    companion object {
+        fun newInstance() = FavoritesTracksFragment()
+    }
 }
