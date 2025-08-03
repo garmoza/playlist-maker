@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="?attr/colorPrimary">
+
+    <Toolbar
+        android:id="@+id/toolbarSearch"
+        style="@style/ToolbarWithNavigationIconStyle"
+        android:title="@string/search" />
+
+    <FrameLayout
+        style="@style/InputFrameLayoutStyle">
+
+        <EditText
+            android:id="@+id/editTextSearch"
+            style="@style/InputEditTextWithIconBeforeStyle"
+            android:hint="@string/search"
+            android:drawableStart="@drawable/ic_search"
+            android:imeOptions="actionDone"
+            android:singleLine="true"
+            />
+
+        <ImageView
+            android:id="@+id/imageViewClear"
+            style="@style/InputCloseIconStyle"
+            android:contentDescription="@string/clear"
+            android:visibility="gone"/>
+
+    </FrameLayout>
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="@dimen/progress_bar_size"
+        android:layout_height="@dimen/progress_bar_size"
+        android:layout_gravity="center"
+        android:indeterminateTint="@color/app_blue"
+        android:layout_marginTop="140dp"
+        android:visibility="gone"
+        />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerViewTrack"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="16dp"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        android:visibility="gone"
+        />
+
+    <ImageView
+        android:id="@+id/placeholderImage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="100dp"
+        tools:src="@drawable/track_not_found"
+        android:visibility="gone"
+        />
+
+    <TextView
+        android:id="@+id/placeholderMessage"
+        style="@style/TextViewPlaceholder"
+        android:layout_gravity="center_horizontal"
+        tools:text="Text"
+        android:visibility="gone"
+        />
+
+    <TextView
+        android:id="@+id/placeholderAdditionalMessage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="22dp"
+        tools:text="Text"
+        android:textAlignment="center"
+        android:textSize="@dimen/title_text_size"
+        android:textColor="?attr/colorOnPrimary"
+        android:visibility="gone"
+        />
+
+    <Button
+        android:id="@+id/placeholderButton"
+        style="@style/ButtonPlaceholder"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="24dp"
+        tools:text="Text"
+        android:visibility="gone"
+        />
+
+    <LinearLayout
+        android:id="@+id/historyViewGroup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="gone"
+        >
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:paddingTop="18dp"
+            android:paddingBottom="12dp"
+            android:paddingHorizontal="16dp"
+            android:text="@string/search_history"
+            android:textAlignment="center"
+            android:textSize="19sp"
+            android:textColor="?attr/colorOnPrimary"
+            />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerViewHistoryTrack"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:layout_marginTop="8dp"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            />
+
+        <Button
+            android:id="@+id/clearHistoryButton"
+            style="@style/ButtonPlaceholder"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="8dp"
+            android:text="@string/clear_history"
+            />
+
+    </LinearLayout>
+
+</LinearLayout>
