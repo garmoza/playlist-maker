@@ -199,8 +199,8 @@ class SearchFragment : Fragment() {
     }
 
     override fun onDestroyView() {
-        super.onDestroyView()
         searchDebounce.remove(searchTask)
+        super.onDestroyView()
         _binding = null
     }
 
