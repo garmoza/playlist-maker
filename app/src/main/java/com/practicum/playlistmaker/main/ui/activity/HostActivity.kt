@@ -17,7 +17,7 @@ class HostActivity : AppCompatActivity() {
 
         supportFragmentManager.commit {
             add(R.id.fragment_container_view, MainFragment.newInstance())
-            addToBackStack(null)
+            addToBackStack("MainFragment")
         }
     }
 }

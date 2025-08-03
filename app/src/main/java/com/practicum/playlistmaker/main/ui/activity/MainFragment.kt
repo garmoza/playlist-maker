@@ -7,10 +7,12 @@ import android.view.View
 import android.view.View.OnClickListener
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.commit
+import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.databinding.FragmentMainBinding
 import com.practicum.playlistmaker.library.ui.activity.LibraryActivity
 import com.practicum.playlistmaker.search.ui.activity.SearchActivity
-import com.practicum.playlistmaker.settings.ui.activity.SettingsActivity
+import com.practicum.playlistmaker.settings.ui.activity.SettingsFragment
 
 class MainFragment : Fragment() {
 
@@ -43,8 +45,10 @@ class MainFragment : Fragment() {
         }
 
         binding.buttonSettings.setOnClickListener {
-            val displayIntent = Intent(context, SettingsActivity::class.java)
-            startActivity(displayIntent)
+            parentFragmentManager.commit {
+                replace(R.id.fragment_container_view, SettingsFragment.newInstance())
+                addToBackStack("SettingsFragment")
+            }
         }
     }
 
