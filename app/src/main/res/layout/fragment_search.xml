@@ -5,7 +5,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="?attr/colorPrimary">
+    android:background="?attr/colorPrimary"
+    tools:context=".search.ui.activity.SearchFragment"
+    >
 
     <Toolbar
         android:id="@+id/toolbarSearch"
