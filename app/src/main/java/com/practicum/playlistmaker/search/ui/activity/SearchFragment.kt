@@ -14,13 +14,14 @@ import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.commit
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.common.domain.models.Track
 import com.practicum.playlistmaker.common.ui.debounce.ClickDebounce
 import com.practicum.playlistmaker.common.ui.debounce.SearchDebounce
 import com.practicum.playlistmaker.common.ui.debounce.SearchDebounce.Companion.NONE_DELAY
 import com.practicum.playlistmaker.databinding.FragmentSearchBinding
-import com.practicum.playlistmaker.palyer.ui.activity.PlayerActivity
+import com.practicum.playlistmaker.palyer.ui.activity.PlayerFragment
 import com.practicum.playlistmaker.search.domain.model.ErrorType
 import com.practicum.playlistmaker.search.domain.model.SearchScreenState
 import com.practicum.playlistmaker.search.ui.view_model.SearchViewModel
@@ -173,7 +174,10 @@ class SearchFragment : Fragment() {
 
     private fun onTrackClick(track: Track) {
         viewModel.addTrackToHistory(track)
-        PlayerActivity.show(requireContext(), track)
+        parentFragmentManager.commit {
+            replace(R.id.fragment_container_view, PlayerFragment.newInstance(track))
+            addToBackStack("PlayerFragment")
+        }
     }
 
     private fun initTrackAdapter(onTrackClick: (Track) -> Unit) {
