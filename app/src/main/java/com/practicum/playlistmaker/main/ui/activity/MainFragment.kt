@@ -6,12 +6,9 @@ import android.view.View
 import android.view.View.OnClickListener
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.commit
+import androidx.navigation.fragment.findNavController
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.databinding.FragmentMainBinding
-import com.practicum.playlistmaker.library.ui.activity.LibraryFragment
-import com.practicum.playlistmaker.search.ui.activity.SearchFragment
-import com.practicum.playlistmaker.settings.ui.activity.SettingsFragment
 
 class MainFragment : Fragment() {
 
@@ -32,26 +29,17 @@ class MainFragment : Fragment() {
 
         val onClickListener: OnClickListener = object : OnClickListener {
             override fun onClick(v: View?) {
-                parentFragmentManager.commit {
-                    replace(R.id.fragment_container_view, SearchFragment.newInstance())
-                    addToBackStack("SearchFragment")
-                }
+                findNavController().navigate(R.id.action_mainFragment_to_searchFragment)
             }
         }
         binding.buttonSearch.setOnClickListener(onClickListener)
 
         binding.buttonLibrary.setOnClickListener {
-            parentFragmentManager.commit {
-                replace(R.id.fragment_container_view, LibraryFragment.newInstance())
-                addToBackStack("LibraryFragment")
-            }
+            findNavController().navigate(R.id.action_mainFragment_to_libraryFragment)
         }
 
         binding.buttonSettings.setOnClickListener {
-            parentFragmentManager.commit {
-                replace(R.id.fragment_container_view, SettingsFragment.newInstance())
-                addToBackStack("SettingsFragment")
-            }
+            findNavController().navigate(R.id.action_mainFragment_to_settingsFragment)
         }
     }
 

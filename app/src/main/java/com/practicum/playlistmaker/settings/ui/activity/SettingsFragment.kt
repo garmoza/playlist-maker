@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.databinding.FragmentSettingsBinding
 import com.practicum.playlistmaker.settings.domain.model.ThemeMode
@@ -32,7 +33,7 @@ class SettingsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.toolbarSettings.setOnClickListener {
-            parentFragmentManager.popBackStack()
+            findNavController().navigateUp()
         }
 
         viewModel.getThemeSettingsLiveData().observe(viewLifecycleOwner) { state ->
@@ -52,10 +53,10 @@ class SettingsFragment : Fragment() {
         binding.textViewSupport.setOnClickListener {
             viewModel.openSupport(
                 EmailData(
-                sendToAddresses = listOf(getString(R.string.developer_email)),
-                subject = getString(R.string.support_email_subject),
-                body = getString(R.string.support_email_body)
-            )
+                    sendToAddresses = listOf(getString(R.string.developer_email)),
+                    subject = getString(R.string.support_email_subject),
+                    body = getString(R.string.support_email_body)
+                )
             )
         }
 
@@ -67,9 +68,5 @@ class SettingsFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-    }
-
-    companion object {
-        fun newInstance() = SettingsFragment()
     }
 }

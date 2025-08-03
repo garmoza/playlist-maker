@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.practicum.playlistmaker.R
@@ -52,7 +53,7 @@ class PlayerFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.toolbar.setOnClickListener {
-            parentFragmentManager.popBackStack()
+            findNavController().navigateUp()
         }
 
         val artworkUrl512 = requireArguments().getString(ARTWORK_URL_512_EXTRA)
@@ -128,8 +129,8 @@ class PlayerFragment : Fragment() {
         private const val UNKNOWN_ARTIST_NAME = "Artist Unknown"
         private const val UNKNOWN_VALUE = "-"
 
-        fun newInstance(track: Track) = PlayerFragment().apply {
-            arguments = bundleOf(
+        fun createArgs(track: Track): Bundle =
+            bundleOf(
                 ARTWORK_URL_512_EXTRA to track.artworkUrl512,
                 TRACK_NAME_EXTRA to track.trackName,
                 ARTIST_NAME_EXTRA to track.artistName,
@@ -140,6 +141,5 @@ class PlayerFragment : Fragment() {
                 TRACK_TIME_EXTRA to track.trackTime,
                 PREVIEW_URL_EXTRA to track.previewUrl
             )
-        }
     }
 }

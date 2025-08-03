@@ -14,7 +14,7 @@ import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.commit
+import androidx.navigation.fragment.findNavController
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.common.domain.models.Track
 import com.practicum.playlistmaker.common.ui.debounce.ClickDebounce
@@ -94,7 +94,7 @@ class SearchFragment : Fragment() {
         initTrackHistoryAdapter(this::onTrackClick)
 
         binding.toolbarSearch.setOnClickListener {
-            parentFragmentManager.popBackStack()
+            findNavController().navigateUp()
         }
 
         binding.imageViewClear.setOnClickListener {
@@ -174,10 +174,10 @@ class SearchFragment : Fragment() {
 
     private fun onTrackClick(track: Track) {
         viewModel.addTrackToHistory(track)
-        parentFragmentManager.commit {
-            replace(R.id.fragment_container_view, PlayerFragment.newInstance(track))
-            addToBackStack("PlayerFragment")
-        }
+        findNavController().navigate(
+            R.id.action_searchFragment_to_playerFragment,
+            PlayerFragment.createArgs(track)
+        )
     }
 
     private fun initTrackAdapter(onTrackClick: (Track) -> Unit) {
@@ -276,7 +276,5 @@ class SearchFragment : Fragment() {
         private const val SEARCHED_VALUE_KEY = "SEARCH_VALUE"
         private const val DEFAULT_SEARCHED_VALUE = ""
         private val TAG = SearchFragment::class.simpleName
-
-        fun newInstance() = SearchFragment()
     }
 }
