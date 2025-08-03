@@ -11,6 +11,7 @@ import androidx.fragment.app.commit
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.databinding.FragmentMainBinding
 import com.practicum.playlistmaker.library.ui.activity.LibraryActivity
+import com.practicum.playlistmaker.library.ui.activity.LibraryFragment
 import com.practicum.playlistmaker.search.ui.activity.SearchFragment
 import com.practicum.playlistmaker.settings.ui.activity.SettingsFragment
 
@@ -42,8 +43,10 @@ class MainFragment : Fragment() {
         binding.buttonSearch.setOnClickListener(onClickListener)
 
         binding.buttonLibrary.setOnClickListener {
-            val displayIntent = Intent(context, LibraryActivity::class.java)
-            startActivity(displayIntent)
+            parentFragmentManager.commit {
+                replace(R.id.fragment_container_view, LibraryFragment.newInstance())
+                addToBackStack("LibraryFragment")
+            }
         }
 
         binding.buttonSettings.setOnClickListener {
