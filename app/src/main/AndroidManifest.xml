@@ -28,9 +28,6 @@
         <activity
             android:name=".library.ui.activity.LibraryActivity"
             android:exported="false" />
-        <activity
-            android:name=".palyer.ui.activity.PlayerActivity"
-            android:exported="false" />
     </application>
 
 </manifest>
