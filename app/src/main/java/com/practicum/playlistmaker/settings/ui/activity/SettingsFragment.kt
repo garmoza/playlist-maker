@@ -35,9 +35,10 @@ class SettingsFragment : Fragment() {
             binding.themeSwitcher.isChecked = (state.themeMode == ThemeMode.DARK)
         }
         binding.themeSwitcher.setOnCheckedChangeListener { _, isChecked ->
-            viewModel.setThemeMode(when (isChecked) {
-                true -> ThemeMode.DARK
-                false -> ThemeMode.LIGHT
+            viewModel.setThemeMode(if (isChecked) {
+                ThemeMode.DARK
+            } else {
+                ThemeMode.LIGHT
             })
         }
 

@@ -28,7 +28,7 @@
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNavigationView"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="56dp"
 
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -40,6 +40,8 @@
         app:itemTextColor="@drawable/menu_selector"
         app:itemIconTint="@drawable/menu_selector"
         app:itemActiveIndicatorStyle="@android:color/transparent"
+        app:itemPaddingTop="8dp"
+        app:itemPaddingBottom="12dp"
     />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
