@@ -35,6 +35,11 @@
         app:layout_constraintStart_toStartOf="parent"
 
         app:menu="@menu/bottom_navigation_menu"
-        />
+
+        android:background="@drawable/background_bottom_nav"
+        app:itemTextColor="@drawable/menu_selector"
+        app:itemIconTint="@drawable/menu_selector"
+        app:itemActiveIndicatorStyle="@android:color/transparent"
+    />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
