@@ -11,7 +11,7 @@
 
     <Toolbar
         android:id="@+id/toolbarSearch"
-        style="@style/ToolbarWithNavigationIconStyle"
+        style="@style/ToolbarStyle"
         android:title="@string/search" />
 
     <FrameLayout

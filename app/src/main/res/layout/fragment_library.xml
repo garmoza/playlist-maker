@@ -11,7 +11,7 @@
 
     <Toolbar
         android:id="@+id/toolbarLibrary"
-        style="@style/ToolbarWithNavigationIconStyle"
+        style="@style/ToolbarStyle"
         android:title="@string/library" />
 
     <com.google.android.material.tabs.TabLayout

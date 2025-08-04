@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.navigation.fragment.findNavController
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.databinding.FragmentSettingsBinding
 import com.practicum.playlistmaker.settings.domain.model.ThemeMode
@@ -31,10 +30,6 @@ class SettingsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        binding.toolbarSettings.setOnClickListener {
-            findNavController().navigateUp()
-        }
 
         viewModel.getThemeSettingsLiveData().observe(viewLifecycleOwner) { state ->
             binding.themeSwitcher.isChecked = (state.themeMode == ThemeMode.DARK)

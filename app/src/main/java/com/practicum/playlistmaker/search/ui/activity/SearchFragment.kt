@@ -93,10 +93,6 @@ class SearchFragment : Fragment() {
         initTrackAdapter(this::onTrackClick)
         initTrackHistoryAdapter(this::onTrackClick)
 
-        binding.toolbarSearch.setOnClickListener {
-            findNavController().navigateUp()
-        }
-
         binding.imageViewClear.setOnClickListener {
             trackAdapter.setItems(emptyList())
             binding.editTextSearch.setText("")
