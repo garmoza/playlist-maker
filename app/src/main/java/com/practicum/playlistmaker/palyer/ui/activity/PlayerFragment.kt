@@ -12,15 +12,6 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.common.domain.models.Track
-import com.practicum.playlistmaker.common.ui.ARTIST_NAME_EXTRA
-import com.practicum.playlistmaker.common.ui.ARTWORK_URL_512_EXTRA
-import com.practicum.playlistmaker.common.ui.COLLECTION_NAME_EXTRA
-import com.practicum.playlistmaker.common.ui.COUNTRY_EXTRA
-import com.practicum.playlistmaker.common.ui.PREVIEW_URL_EXTRA
-import com.practicum.playlistmaker.common.ui.PRIMARY_GENRE_NAME_EXTRA
-import com.practicum.playlistmaker.common.ui.RELEASE_YEAR_EXTRA
-import com.practicum.playlistmaker.common.ui.TRACK_NAME_EXTRA
-import com.practicum.playlistmaker.common.ui.TRACK_TIME_EXTRA
 import com.practicum.playlistmaker.common.ui.dpToPx
 import com.practicum.playlistmaker.databinding.FragmentPlayerBinding
 import com.practicum.playlistmaker.palyer.domain.model.PlayerState
@@ -128,6 +119,16 @@ class PlayerFragment : Fragment() {
         private const val UNKNOWN_TRACK_NAME = "Track Unknown"
         private const val UNKNOWN_ARTIST_NAME = "Artist Unknown"
         private const val UNKNOWN_VALUE = "-"
+
+        private const val ARTWORK_URL_512_EXTRA = "ARTWORK_URL_512_EXTRA"
+        private const val TRACK_NAME_EXTRA = "TRACK_NAME_EXTRA"
+        private const val ARTIST_NAME_EXTRA = "ARTIST_NAME_EXTRA"
+        private const val COLLECTION_NAME_EXTRA = "COLLECTION_NAME_EXTRA"
+        private const val RELEASE_YEAR_EXTRA = "RELEASE_YEAR_EXTRA"
+        private const val PRIMARY_GENRE_NAME_EXTRA = "PRIMARY_GENRE_NAME_EXTRA"
+        private const val COUNTRY_EXTRA = "COUNTRY_EXTRA"
+        private const val TRACK_TIME_EXTRA = "TRACK_TIME_EXTRA"
+        private const val PREVIEW_URL_EXTRA = "PREVIEW_URL_EXTRA"
 
         fun createArgs(track: Track): Bundle =
             bundleOf(
