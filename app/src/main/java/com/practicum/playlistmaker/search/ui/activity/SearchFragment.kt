@@ -14,12 +14,13 @@ import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.common.domain.models.Track
-import com.practicum.playlistmaker.common.ui.debounce.ClickDebounce
 import com.practicum.playlistmaker.common.ui.debounce.SearchDebounce
 import com.practicum.playlistmaker.common.ui.debounce.SearchDebounce.Companion.NONE_DELAY
+import com.practicum.playlistmaker.common.ui.debounceClick
 import com.practicum.playlistmaker.databinding.FragmentSearchBinding
 import com.practicum.playlistmaker.palyer.ui.activity.PlayerFragment
 import com.practicum.playlistmaker.search.domain.model.ErrorType
@@ -39,7 +40,6 @@ class SearchFragment : Fragment() {
     private lateinit var trackAdapter: TrackAdapter
     private lateinit var trackHistoryAdapter: TrackAdapter
     private lateinit var handler: Handler
-    private lateinit var clickDebounce: ClickDebounce
     private lateinit var searchDebounce: SearchDebounce
 
     private val searchTask = Runnable {
@@ -59,7 +59,6 @@ class SearchFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         handler = Handler(Looper.getMainLooper())
-        clickDebounce = ClickDebounce(Looper.getMainLooper())
         searchDebounce = SearchDebounce(Looper.getMainLooper())
 
         viewModel.getSearchScreenLiveData().observe(viewLifecycleOwner) { state ->
@@ -177,23 +176,19 @@ class SearchFragment : Fragment() {
     }
 
     private fun initTrackAdapter(onTrackClick: (Track) -> Unit) {
-        val onSearchedTrackDebounceClick = {track: Track ->
-            clickDebounce.execute(
-                { onTrackClick(track) },
-                binding.recyclerViewTrack.id
-            )
-        }
+        val onSearchedTrackDebounceClick = debounceClick(
+            coroutineScope = viewLifecycleOwner.lifecycleScope,
+            action = onTrackClick
+        )
         trackAdapter = TrackAdapter(onSearchedTrackDebounceClick)
         binding.recyclerViewTrack.adapter = trackAdapter
     }
 
     private fun initTrackHistoryAdapter(onTrackClick: (Track) -> Unit) {
-        val onHistoryTrackDebounceClick = {track: Track ->
-            clickDebounce.execute(
-                { onTrackClick(track) },
-                binding.recyclerViewHistoryTrack.id
-            )
-        }
+        val onHistoryTrackDebounceClick = debounceClick(
+            coroutineScope = viewLifecycleOwner.lifecycleScope,
+            action = onTrackClick
+        )
         trackHistoryAdapter = TrackAdapter(onHistoryTrackDebounceClick)
         binding.recyclerViewHistoryTrack.adapter = trackHistoryAdapter
     }
