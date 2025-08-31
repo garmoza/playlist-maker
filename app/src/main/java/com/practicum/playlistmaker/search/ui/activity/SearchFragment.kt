@@ -1,35 +1,41 @@
 package com.practicum.playlistmaker.search.ui.activity
 
 import android.content.Context
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import androidx.core.view.isVisible
+import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
+import com.practicum.playlistmaker.R
+import com.practicum.playlistmaker.common.domain.models.Track
 import com.practicum.playlistmaker.common.ui.debounce.ClickDebounce
 import com.practicum.playlistmaker.common.ui.debounce.SearchDebounce
-import com.practicum.playlistmaker.R
-import com.practicum.playlistmaker.palyer.ui.activity.PlayerActivity
-import com.practicum.playlistmaker.databinding.ActivitySearchBinding
-import com.practicum.playlistmaker.common.domain.models.Track
 import com.practicum.playlistmaker.common.ui.debounce.SearchDebounce.Companion.NONE_DELAY
+import com.practicum.playlistmaker.databinding.FragmentSearchBinding
+import com.practicum.playlistmaker.palyer.ui.activity.PlayerFragment
 import com.practicum.playlistmaker.search.domain.model.ErrorType
 import com.practicum.playlistmaker.search.domain.model.SearchScreenState
 import com.practicum.playlistmaker.search.ui.view_model.SearchViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class SearchActivity : AppCompatActivity() {
+class SearchFragment : Fragment() {
 
     private val viewModel by viewModel<SearchViewModel>()
 
     private var searchedValue = DEFAULT_SEARCHED_VALUE
 
-    private lateinit var binding: ActivitySearchBinding
+    private var _binding: FragmentSearchBinding? = null
+    private val binding get() = _binding!!
+
     private lateinit var trackAdapter: TrackAdapter
     private lateinit var trackHistoryAdapter: TrackAdapter
     private lateinit var handler: Handler
@@ -40,16 +46,23 @@ class SearchActivity : AppCompatActivity() {
         viewModel.searchTracks(binding.editTextSearch.text.toString())
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        binding = ActivitySearchBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        _binding = FragmentSearchBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         handler = Handler(Looper.getMainLooper())
         clickDebounce = ClickDebounce(Looper.getMainLooper())
         searchDebounce = SearchDebounce(Looper.getMainLooper())
 
-        viewModel.getSearchScreenLiveData().observe(this) { state ->
+        viewModel.getSearchScreenLiveData().observe(viewLifecycleOwner) { state ->
             when (state) {
                 is SearchScreenState.Content -> {
                     if (state.tracks.isEmpty()) {
@@ -80,15 +93,11 @@ class SearchActivity : AppCompatActivity() {
         initTrackAdapter(this::onTrackClick)
         initTrackHistoryAdapter(this::onTrackClick)
 
-        binding.toolbarSearch.setOnClickListener {
-            finish()
-        }
-
         binding.imageViewClear.setOnClickListener {
             trackAdapter.setItems(emptyList())
             binding.editTextSearch.setText("")
             binding.editTextSearch.clearFocus()
-            val manager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            val manager = requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
             manager.hideSoftInputFromWindow(binding.editTextSearch.windowToken, 0)
             binding.setState(SearchActivityState.EMPTY)
         }
@@ -155,11 +164,16 @@ class SearchActivity : AppCompatActivity() {
         binding.clearHistoryButton.setOnClickListener {
             viewModel.clearHistory()
         }
+
+        onRestoreInstanceState(savedInstanceState)
     }
 
     private fun onTrackClick(track: Track) {
         viewModel.addTrackToHistory(track)
-        PlayerActivity.show(this@SearchActivity, track)
+        findNavController().navigate(
+            R.id.action_searchFragment_to_playerFragment,
+            PlayerFragment.createArgs(track)
+        )
     }
 
     private fun initTrackAdapter(onTrackClick: (Track) -> Unit) {
@@ -184,9 +198,10 @@ class SearchActivity : AppCompatActivity() {
         binding.recyclerViewHistoryTrack.adapter = trackHistoryAdapter
     }
 
-    override fun onDestroy() {
+    override fun onDestroyView() {
         searchDebounce.remove(searchTask)
-        super.onDestroy()
+        super.onDestroyView()
+        _binding = null
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -194,13 +209,12 @@ class SearchActivity : AppCompatActivity() {
         outState.putString(SEARCHED_VALUE_KEY, searchedValue)
     }
 
-    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
-        super.onRestoreInstanceState(savedInstanceState)
-        searchedValue = savedInstanceState.getString(SEARCHED_VALUE_KEY, DEFAULT_SEARCHED_VALUE)
+    private fun onRestoreInstanceState(savedInstanceState: Bundle?) {
+        searchedValue = savedInstanceState?.getString(SEARCHED_VALUE_KEY) ?: DEFAULT_SEARCHED_VALUE
         binding.editTextSearch.setText(searchedValue)
     }
 
-    private fun ActivitySearchBinding.setState(state: SearchActivityState) {
+    private fun FragmentSearchBinding.setState(state: SearchActivityState) {
         when (state) {
             SearchActivityState.EMPTY -> {
                 hideViews()
@@ -244,7 +258,7 @@ class SearchActivity : AppCompatActivity() {
         }
     }
 
-    private fun ActivitySearchBinding.hideViews() {
+    private fun FragmentSearchBinding.hideViews() {
         recyclerViewTrack.isVisible = false
         placeholderImage.isVisible = false
         placeholderMessage.isVisible = false
@@ -257,6 +271,6 @@ class SearchActivity : AppCompatActivity() {
     companion object {
         private const val SEARCHED_VALUE_KEY = "SEARCH_VALUE"
         private const val DEFAULT_SEARCHED_VALUE = ""
-        private val TAG = SearchActivity::class.simpleName
+        private val TAG = SearchFragment::class.simpleName
     }
 }

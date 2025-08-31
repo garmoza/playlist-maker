@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="?attr/colorPrimary">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?attr/colorPrimary"
+    tools:context=".palyer.ui.activity.PlayerFragment"
+    >
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/startGuideline"
@@ -79,7 +81,7 @@
         app:layout_constraintStart_toEndOf="@id/startGuideline"
         app:layout_constraintEnd_toStartOf="@id/endGuideline"
         />
-    
+
     <ImageButton
         android:id="@+id/addTrackButton"
         android:layout_width="@dimen/play_side_button_size"
@@ -114,7 +116,7 @@
         app:layout_constraintStart_toStartOf="@id/playButton"
         app:layout_constraintEnd_toEndOf="@id/playButton"
         />
-    
+
     <androidx.constraintlayout.widget.Barrier
         android:id="@+id/descriptionBarrier"
         android:layout_width="wrap_content"

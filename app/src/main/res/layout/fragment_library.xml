@@ -5,11 +5,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="?attr/colorPrimary">
+    android:background="?attr/colorPrimary"
+    tools:context=".library.ui.activity.LibraryFragment"
+    >
 
     <Toolbar
         android:id="@+id/toolbarLibrary"
-        style="@style/ToolbarWithNavigationIconStyle"
+        style="@style/ToolbarStyle"
         android:title="@string/library" />
 
     <com.google.android.material.tabs.TabLayout
