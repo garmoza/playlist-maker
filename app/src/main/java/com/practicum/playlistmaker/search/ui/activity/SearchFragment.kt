@@ -18,14 +18,16 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.common.domain.models.Track
-import com.practicum.playlistmaker.common.ui.debounce.SearchDebounce
-import com.practicum.playlistmaker.common.ui.debounce.SearchDebounce.Companion.NONE_DELAY
+import com.practicum.playlistmaker.common.ui.DEBOUNCE_REQUEST_DELAY_DEFAULT
+import com.practicum.playlistmaker.common.ui.DEBOUNCE_DELAY_NONE
 import com.practicum.playlistmaker.common.ui.debounceClick
+import com.practicum.playlistmaker.common.ui.debounceRequest
 import com.practicum.playlistmaker.databinding.FragmentSearchBinding
 import com.practicum.playlistmaker.palyer.ui.activity.PlayerFragment
 import com.practicum.playlistmaker.search.domain.model.ErrorType
 import com.practicum.playlistmaker.search.domain.model.SearchScreenState
 import com.practicum.playlistmaker.search.ui.view_model.SearchViewModel
+import kotlinx.coroutines.Job
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SearchFragment : Fragment() {
@@ -40,11 +42,8 @@ class SearchFragment : Fragment() {
     private lateinit var trackAdapter: TrackAdapter
     private lateinit var trackHistoryAdapter: TrackAdapter
     private lateinit var handler: Handler
-    private lateinit var searchDebounce: SearchDebounce
 
-    private val searchTask = Runnable {
-        viewModel.searchTracks(binding.editTextSearch.text.toString())
-    }
+    private var searchJob: Job? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -59,7 +58,6 @@ class SearchFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         handler = Handler(Looper.getMainLooper())
-        searchDebounce = SearchDebounce(Looper.getMainLooper())
 
         viewModel.getSearchScreenLiveData().observe(viewLifecycleOwner) { state ->
             when (state) {
@@ -101,6 +99,9 @@ class SearchFragment : Fragment() {
             binding.setState(SearchActivityState.EMPTY)
         }
 
+        val debounceSearch = debounceRequest(viewLifecycleOwner.lifecycleScope) { changedText: String ->
+            viewModel.searchTracks(changedText)
+        }
         val searchTextWatcher = object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
                 // empty
@@ -109,10 +110,10 @@ class SearchFragment : Fragment() {
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 searchedValue = s.toString()
                 binding.imageViewClear.isVisible = if (s.isNullOrEmpty()) {
-                    searchDebounce.remove(searchTask)
+                    searchJob?.cancel()
                     false
                 } else {
-                    searchDebounce.execute(searchTask)
+                    searchJob = debounceSearch(searchedValue, DEBOUNCE_REQUEST_DELAY_DEFAULT)
                     true
                 }
             }
@@ -126,14 +127,14 @@ class SearchFragment : Fragment() {
         binding.editTextSearch.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 Log.i(TAG, "Search action editor click")
-                searchDebounce.execute(searchTask, NONE_DELAY)
+                searchJob = debounceSearch(searchedValue, DEBOUNCE_DELAY_NONE)
             }
             false
         }
 
         binding.placeholderButton.setOnClickListener {
             Log.i(TAG, "Search action button click")
-            searchDebounce.execute(searchTask, NONE_DELAY)
+            searchJob = debounceSearch(searchedValue, DEBOUNCE_DELAY_NONE)
         }
 
         binding.editTextSearch.setOnFocusChangeListener { v, hasFocus ->
@@ -194,7 +195,7 @@ class SearchFragment : Fragment() {
     }
 
     override fun onDestroyView() {
-        searchDebounce.remove(searchTask)
+        searchJob = null
         super.onDestroyView()
         _binding = null
     }
