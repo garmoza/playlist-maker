@@ -47,35 +47,27 @@ class PlayerFragment : Fragment() {
             findNavController().navigateUp()
         }
 
-        val artworkUrl512 = requireArguments().getString(ARTWORK_URL_512_EXTRA)
-        artworkUrl512?.let {
+        val track: Track? = requireArguments().getParcelable(TRACK_KEY)
+
+        track?.artworkUrl512?.let {
             Glide.with(this)
                 .load(it)
                 .placeholder(R.drawable.placeholder_track_label)
                 .transform(RoundedCorners(dpToPx(8F, requireContext())))
                 .into(binding.trackLabel)
         }
-
-        val trackName = requireArguments().getString(TRACK_NAME_EXTRA)?: UNKNOWN_TRACK_NAME
-        val artistName = requireArguments().getString(ARTIST_NAME_EXTRA)?: UNKNOWN_ARTIST_NAME
-        val collectionName = requireArguments().getString(COLLECTION_NAME_EXTRA)?: UNKNOWN_VALUE
-        val releaseYear = requireArguments().getString(RELEASE_YEAR_EXTRA)?: UNKNOWN_VALUE
-        val primaryGenreName = requireArguments().getString(PRIMARY_GENRE_NAME_EXTRA)?: UNKNOWN_VALUE
-        val country = requireArguments().getString(COUNTRY_EXTRA)?: UNKNOWN_VALUE
-        val trackTime = requireArguments().getString(TRACK_TIME_EXTRA)?: UNKNOWN_VALUE
         with(binding) {
-            this.trackName.text = trackName
-            this.artistName.text = artistName
-            durationValue.text = trackTime
-            albumValue.text = collectionName
-            yearValue.text = releaseYear
-            genreValue.text = primaryGenreName
-            countryValue.text = country
+            this.trackName.text = track?.trackName ?: UNKNOWN_TRACK_NAME
+            this.artistName.text = track?.artistName ?: UNKNOWN_ARTIST_NAME
+            durationValue.text = track?.trackTime ?: UNKNOWN_VALUE
+            albumValue.text = track?.collectionName ?: UNKNOWN_VALUE
+            yearValue.text = track?.releaseYear ?: UNKNOWN_VALUE
+            genreValue.text = track?.primaryGenreName ?: UNKNOWN_VALUE
+            countryValue.text = track?.country ?: UNKNOWN_VALUE
         }
 
-        val previewUrl = requireArguments().getString(PREVIEW_URL_EXTRA)
         viewModel = getKoin().get<PlayerViewModel> {
-            parametersOf(previewUrl)
+            parametersOf(track?.previewUrl)
         }
         viewModel.getPlayerLiveData().observe(viewLifecycleOwner) { status ->
             renderPlayerStatus(status)
@@ -120,27 +112,11 @@ class PlayerFragment : Fragment() {
         private const val UNKNOWN_ARTIST_NAME = "Artist Unknown"
         private const val UNKNOWN_VALUE = "-"
 
-        private const val ARTWORK_URL_512_EXTRA = "ARTWORK_URL_512_EXTRA"
-        private const val TRACK_NAME_EXTRA = "TRACK_NAME_EXTRA"
-        private const val ARTIST_NAME_EXTRA = "ARTIST_NAME_EXTRA"
-        private const val COLLECTION_NAME_EXTRA = "COLLECTION_NAME_EXTRA"
-        private const val RELEASE_YEAR_EXTRA = "RELEASE_YEAR_EXTRA"
-        private const val PRIMARY_GENRE_NAME_EXTRA = "PRIMARY_GENRE_NAME_EXTRA"
-        private const val COUNTRY_EXTRA = "COUNTRY_EXTRA"
-        private const val TRACK_TIME_EXTRA = "TRACK_TIME_EXTRA"
-        private const val PREVIEW_URL_EXTRA = "PREVIEW_URL_EXTRA"
+        private const val TRACK_KEY = "TRACK_KEY"
 
         fun createArgs(track: Track): Bundle =
             bundleOf(
-                ARTWORK_URL_512_EXTRA to track.artworkUrl512,
-                TRACK_NAME_EXTRA to track.trackName,
-                ARTIST_NAME_EXTRA to track.artistName,
-                COLLECTION_NAME_EXTRA to track.collectionName,
-                RELEASE_YEAR_EXTRA to track.releaseYear,
-                PRIMARY_GENRE_NAME_EXTRA to track.primaryGenreName,
-                COUNTRY_EXTRA to track.country,
-                TRACK_TIME_EXTRA to track.trackTime,
-                PREVIEW_URL_EXTRA to track.previewUrl
+                TRACK_KEY to track
             )
     }
 }
