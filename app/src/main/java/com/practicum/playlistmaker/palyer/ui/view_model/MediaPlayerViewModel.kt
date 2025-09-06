@@ -74,6 +74,7 @@ class MediaPlayerViewModel(
     }
 
     private fun updatePlaytime() {
+        timerJob?.cancel()
         timerJob = viewModelScope.launch {
             while (mediaPlayer.isPlaying) {
                 playerLiveData.value = playerLiveData.value?.copy(progress = mediaPlayer.currentPosition)
