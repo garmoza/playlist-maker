@@ -6,7 +6,7 @@ import com.practicum.playlistmaker.favourite.data.db.entity.FavouriteTrack
 object FavouriteTrackEntityMapper {
     fun map(model: Track): FavouriteTrack =
         FavouriteTrack(
-            id = model.trackId!!,
+            id = model.trackId,
             trackName = model.trackName,
             artistName = model.artistName,
             trackTimeMillis = model.trackTimeMillis,
