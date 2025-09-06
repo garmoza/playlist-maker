@@ -16,7 +16,7 @@ import com.practicum.playlistmaker.common.ui.dpToPx
 import com.practicum.playlistmaker.databinding.FragmentPlayerBinding
 import com.practicum.playlistmaker.palyer.domain.model.PlayerState
 import com.practicum.playlistmaker.palyer.domain.model.TrackNotAvailableToastState
-import com.practicum.playlistmaker.palyer.ui.view_model.PlayerViewModel
+import com.practicum.playlistmaker.palyer.ui.view_model.MediaPlayerViewModel
 import org.koin.android.ext.android.getKoin
 import org.koin.core.parameter.parametersOf
 import java.text.SimpleDateFormat
@@ -24,7 +24,7 @@ import java.util.Locale
 
 class PlayerFragment : Fragment() {
 
-    private lateinit var viewModel: PlayerViewModel
+    private lateinit var viewModel: MediaPlayerViewModel
 
     private var _binding: FragmentPlayerBinding? = null
     private val binding get() = _binding!!
@@ -66,7 +66,7 @@ class PlayerFragment : Fragment() {
             countryValue.text = track?.country ?: UNKNOWN_VALUE
         }
 
-        viewModel = getKoin().get<PlayerViewModel> {
+        viewModel = getKoin().get<MediaPlayerViewModel> {
             parametersOf(track?.previewUrl)
         }
         viewModel.getPlayerLiveData().observe(viewLifecycleOwner) { status ->

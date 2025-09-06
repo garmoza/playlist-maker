@@ -8,8 +8,6 @@ import android.net.ConnectivityManager
 import com.google.gson.Gson
 import com.practicum.playlistmaker.common.data.network.NetworkClient
 import com.practicum.playlistmaker.common.data.preferences.PLAYLIST_MAKER_PREFERENCES
-import com.practicum.playlistmaker.palyer.data.PlayerImpl
-import com.practicum.playlistmaker.palyer.domain.Player
 import com.practicum.playlistmaker.search.data.network.ITunseApiService
 import com.practicum.playlistmaker.search.data.network.ITunseRetrofitNetworkClient
 import com.practicum.playlistmaker.sharing.data.ExternalNavigatorImpl
@@ -47,10 +45,6 @@ val dataModule = module {
     }
 
     factory { Gson() }
-
-    factory<Player> {
-        PlayerImpl()
-    }
 
     single<ExternalNavigator> {
         ExternalNavigatorImpl(androidContext())
