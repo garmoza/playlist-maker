@@ -52,7 +52,7 @@ val dataModule = module {
         ExternalNavigatorImpl(androidContext())
     }
 
-    single {
+    single<AppDatabase> {
         Room.databaseBuilder(
             androidContext(),
             AppDatabase::class.java,

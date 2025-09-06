@@ -26,7 +26,7 @@ class TracksSearchHistoryRepositoryImpl(
         }
         historyTracks.add(0, track)
         if (historyTracks.size > HISTORY_LIST_SIZE) {
-            historyTracks.removeLast()
+            historyTracks.removeAt(historyTracks.lastIndex)
         }
 
         updateSharedPreferences()
