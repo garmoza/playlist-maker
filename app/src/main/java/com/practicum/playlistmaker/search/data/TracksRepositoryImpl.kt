@@ -28,7 +28,7 @@ class TracksRepositoryImpl(
             200 -> {
                 with(response as ITunseTracksResponse) {
                     val tracks = results.map(TrackMapper::map)
-                    val favouriteTrackIds = favouriteTrackDao.getFavouriteTrackIds().toSet()
+                    val favouriteTrackIds = favouriteTrackDao.getFavouriteTrackIds()
                     tracks.forEach {
                         track -> track.isFavorite = track.trackId in favouriteTrackIds
                     }

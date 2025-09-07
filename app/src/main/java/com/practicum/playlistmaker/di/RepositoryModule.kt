@@ -16,7 +16,7 @@ val repositoryModule = module {
     }
 
     single<TracksSearchHistoryRepository> {
-        TracksSearchHistoryRepositoryImpl(get(), get())
+        TracksSearchHistoryRepositoryImpl(get(), get(), get())
     }
 
     single<ThemeRepository> {

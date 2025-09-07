@@ -1,6 +1,7 @@
 package com.practicum.playlistmaker.search.domain
 
 import com.practicum.playlistmaker.common.domain.models.Track
+import kotlinx.coroutines.flow.Flow
 
 interface TracksSearchHistoryRepository {
     fun addTrack(track: Track)
@@ -9,5 +10,5 @@ interface TracksSearchHistoryRepository {
 
     fun clear()
 
-    fun getTracks(): List<Track>
+    fun getTracks(): Flow<List<Track>>
 }
