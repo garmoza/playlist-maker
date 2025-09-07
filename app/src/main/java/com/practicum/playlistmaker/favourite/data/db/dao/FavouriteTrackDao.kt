@@ -16,8 +16,8 @@ interface FavouriteTrackDao {
     fun deleteFavouriteTrack(favouriteTrack: FavouriteTrack)
 
     @Query("SELECT * FROM favourite_track")
-    fun getFavouriteTracks(): List<FavouriteTrack>
+    suspend fun getFavouriteTracks(): List<FavouriteTrack>
 
     @Query("SELECT id FROM favourite_track")
-    fun getFavouriteTrackIds(): List<String>
+    suspend fun getFavouriteTrackIds(): List<String>
 }
