@@ -5,6 +5,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.practicum.playlistmaker.common.domain.models.Track
+import com.practicum.playlistmaker.favourite.domain.FavouriteTracksInteractor
 import com.practicum.playlistmaker.palyer.domain.model.PlayerState
 import com.practicum.playlistmaker.palyer.domain.model.TrackNotAvailableToastState
 import kotlinx.coroutines.Job
@@ -12,7 +14,8 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class MediaPlayerViewModel(
-    trackUrl: String?
+    private val favouriteTracksInteractor: FavouriteTracksInteractor,
+    private val track: Track
 ) : ViewModel() {
 
     private var mediaPlayer: MediaPlayer = MediaPlayer()
@@ -20,13 +23,19 @@ class MediaPlayerViewModel(
     private var timerJob: Job? = null
 
     init {
-        mediaPlayer.setDataSource(trackUrl)
+        mediaPlayer.setDataSource(track.previewUrl)
         mediaPlayer.prepareAsync()
         mediaPlayer.setOnPreparedListener {
-            playerLiveData.value = DEFAULT_PLAYER_STATE.copy(isTrackAvailable = true)
+            playerLiveData.value = DEFAULT_PLAYER_STATE.copy(
+                isTrackAvailable = true,
+                isFavourite = track.isFavorite
+            )
         }
         mediaPlayer.setOnCompletionListener {
-            playerLiveData.value = DEFAULT_PLAYER_STATE.copy(isTrackAvailable = true)
+            playerLiveData.value = DEFAULT_PLAYER_STATE.copy(
+                isTrackAvailable = true,
+                isFavourite = track.isFavorite
+            )
         }
     }
 
@@ -87,10 +96,23 @@ class MediaPlayerViewModel(
         trackNotAvailableToastLiveData.value = TrackNotAvailableToastState.None
     }
 
+    fun onFavouriteClick() {
+        viewModelScope.launch {
+            if (playerLiveData.value?.isFavourite == true) {
+                playerLiveData.value = playerLiveData.value?.copy(isFavourite = false)
+                favouriteTracksInteractor.removeFavouriteTrack(track)
+            } else {
+                playerLiveData.value = playerLiveData.value?.copy(isFavourite = true)
+                favouriteTracksInteractor.addFavouriteTrack(track)
+            }
+        }
+    }
+
     companion object {
         private val DEFAULT_PLAYER_STATE = PlayerState(
             isTrackAvailable = false,
             isPlaying = false,
+            isFavourite = false,
             progress = 0
         )
 

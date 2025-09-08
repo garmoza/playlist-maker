@@ -208,6 +208,11 @@ class SearchFragment : Fragment() {
     private fun onRestoreInstanceState(savedInstanceState: Bundle?) {
         searchedValue = savedInstanceState?.getString(SEARCHED_VALUE_KEY) ?: DEFAULT_SEARCHED_VALUE
         binding.editTextSearch.setText(searchedValue)
+        // todo: replace with SELECT * FROM favourite_track WHERE id = :trackId
+        // update history
+        if (viewModel.getSearchScreenLiveData().value is SearchScreenState.History) {
+            viewModel.displayHistory()
+        }
     }
 
     private fun FragmentSearchBinding.setState(state: SearchActivityState) {

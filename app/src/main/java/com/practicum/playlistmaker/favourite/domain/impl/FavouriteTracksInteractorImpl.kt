@@ -8,11 +8,11 @@ import kotlinx.coroutines.flow.Flow
 class FavouriteTracksInteractorImpl(
     private val favouriteTracksRepository: FavouriteTracksRepository
 ) : FavouriteTracksInteractor {
-    override fun addFavouriteTrack(track: Track) {
+    override suspend fun addFavouriteTrack(track: Track) {
         favouriteTracksRepository.addFavouriteTrack(track)
     }
 
-    override fun removeFavouriteTrack(track: Track) {
+    override suspend fun removeFavouriteTrack(track: Track) {
         favouriteTracksRepository.removeFavouriteTrack(track)
     }
 

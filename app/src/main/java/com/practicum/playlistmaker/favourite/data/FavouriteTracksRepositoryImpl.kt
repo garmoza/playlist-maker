@@ -16,13 +16,13 @@ class FavouriteTracksRepositoryImpl(
 
     private val favouriteTrackDao: FavouriteTrackDao = appDatabase.favouriteTrackDao()
 
-    override fun addFavouriteTrack(track: Track) {
+    override suspend fun addFavouriteTrack(track: Track) {
         favouriteTrackDao.insertFavouriteTrack(
             FavouriteTrackEntityMapper.map(track)
         )
     }
 
-    override fun removeFavouriteTrack(track: Track) {
+    override suspend fun removeFavouriteTrack(track: Track) {
         favouriteTrackDao.deleteFavouriteTrack(
             FavouriteTrackEntityMapper.map(track)
         )
