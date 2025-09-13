@@ -28,7 +28,7 @@ class LibraryFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val adapter = FavoritesTracksPagerAdapter(
+        val adapter = LibraryPagerAdapter(
             fragmentManager = childFragmentManager,
             lifecycle = lifecycle
         )

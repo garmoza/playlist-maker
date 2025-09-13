@@ -40,9 +40,13 @@ class SearchViewModel(
     }
 
     fun displayHistory() {
-        searchScreenLiveData.value = SearchScreenState.History(
-            tracksSearchHistoryIneractor.getTracks()
-        )
+        viewModelScope.launch {
+            tracksSearchHistoryIneractor
+                .getTracks()
+                .collect { tracks ->
+                    searchScreenLiveData.value = SearchScreenState.History(tracks)
+                }
+        }
     }
 
     fun clearHistory() {

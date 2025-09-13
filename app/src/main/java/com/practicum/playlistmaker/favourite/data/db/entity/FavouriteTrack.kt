@@ -1,7 +1,12 @@
-package com.practicum.playlistmaker.search.data.dto
+package com.practicum.playlistmaker.favourite.data.db.entity
 
-data class ITunseTrackDto(
-    val trackId: String,
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+
+@Entity(tableName = "favourite_track")
+data class FavouriteTrack(
+    @PrimaryKey
+    val id: String,
     val trackName: String?,
     val artistName: String?,
     val trackTimeMillis: Long?,

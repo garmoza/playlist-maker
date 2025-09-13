@@ -47,9 +47,9 @@ class PlayerFragment : Fragment() {
             findNavController().navigateUp()
         }
 
-        val track: Track? = requireArguments().getParcelable(TRACK_KEY)
+        val track: Track = requireArguments().getParcelable(TRACK_KEY)!!
 
-        track?.artworkUrl512?.let {
+        track.artworkUrl512?.let {
             Glide.with(this)
                 .load(it)
                 .placeholder(R.drawable.placeholder_track_label)
@@ -57,17 +57,18 @@ class PlayerFragment : Fragment() {
                 .into(binding.trackLabel)
         }
         with(binding) {
-            this.trackName.text = track?.trackName ?: UNKNOWN_TRACK_NAME
-            this.artistName.text = track?.artistName ?: UNKNOWN_ARTIST_NAME
-            durationValue.text = track?.trackTime ?: UNKNOWN_VALUE
-            albumValue.text = track?.collectionName ?: UNKNOWN_VALUE
-            yearValue.text = track?.releaseYear ?: UNKNOWN_VALUE
-            genreValue.text = track?.primaryGenreName ?: UNKNOWN_VALUE
-            countryValue.text = track?.country ?: UNKNOWN_VALUE
+            this.trackName.text = track.trackName ?: UNKNOWN_TRACK_NAME
+            this.artistName.text = track.artistName ?: UNKNOWN_ARTIST_NAME
+            durationValue.text = track.trackTime ?: UNKNOWN_VALUE
+            albumValue.text = track.collectionName ?: UNKNOWN_VALUE
+            yearValue.text = track.releaseYear ?: UNKNOWN_VALUE
+            genreValue.text = track.primaryGenreName ?: UNKNOWN_VALUE
+            countryValue.text = track.country ?: UNKNOWN_VALUE
         }
+        renderLikeTrackButton(track.isFavorite)
 
         viewModel = getKoin().get<MediaPlayerViewModel> {
-            parametersOf(track?.previewUrl)
+            parametersOf(track)
         }
         viewModel.getPlayerLiveData().observe(viewLifecycleOwner) { status ->
             renderPlayerStatus(status)
@@ -85,6 +86,9 @@ class PlayerFragment : Fragment() {
         binding.playButton.setOnClickListener {
             viewModel.switchBetweenPlayAndPause()
         }
+        binding.likeTrackButton.setOnClickListener {
+            viewModel.onFavouriteClick()
+        }
     }
 
     private fun renderPlayerStatus(status: PlayerState) {
@@ -95,6 +99,16 @@ class PlayerFragment : Fragment() {
         }
 
         binding.playtime.text = dateFormat.format(status.progress)
+
+        renderLikeTrackButton(status.isFavourite)
+    }
+
+    private fun renderLikeTrackButton(isFavourite: Boolean) {
+        if (isFavourite) {
+            binding.likeTrackButton.setImageResource(R.drawable.ic_liked_track)
+        } else {
+            binding.likeTrackButton.setImageResource(R.drawable.ic_like_track)
+        }
     }
 
     override fun onPause() {

@@ -1,5 +1,7 @@
 package com.practicum.playlistmaker.di
 
+import com.practicum.playlistmaker.favourite.data.FavouriteTracksRepositoryImpl
+import com.practicum.playlistmaker.favourite.domain.FavouriteTracksRepository
 import com.practicum.playlistmaker.search.data.TracksRepositoryImpl
 import com.practicum.playlistmaker.search.data.TracksSearchHistoryRepositoryImpl
 import com.practicum.playlistmaker.search.domain.TracksRepository
@@ -10,14 +12,18 @@ import org.koin.dsl.module
 
 val repositoryModule = module {
     single<TracksRepository> {
-        TracksRepositoryImpl(get())
+        TracksRepositoryImpl(get(), get())
     }
 
     single<TracksSearchHistoryRepository> {
-        TracksSearchHistoryRepositoryImpl(get(), get())
+        TracksSearchHistoryRepositoryImpl(get(), get(), get())
     }
 
     single<ThemeRepository> {
         ThemeRepositoryImpl(get(), get())
+    }
+
+    single<FavouriteTracksRepository> {
+        FavouriteTracksRepositoryImpl(get())
     }
 }
