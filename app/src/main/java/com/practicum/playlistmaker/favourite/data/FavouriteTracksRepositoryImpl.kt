@@ -32,6 +32,7 @@ class FavouriteTracksRepositoryImpl(
         val tracks = favouriteTrackDao
             .getFavouriteTracks()
             .map { entity -> FavouriteTrackEntityMapper.map(entity) }
+            .reversed()
         emit(tracks)
     }.flowOn(Dispatchers.IO)
 }

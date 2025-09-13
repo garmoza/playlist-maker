@@ -22,27 +22,21 @@ class MediaPlayerViewModel(
 
     private var timerJob: Job? = null
 
+    private val playerLiveData = MutableLiveData(DEFAULT_PLAYER_STATE.copy(isFavourite = track.isFavorite))
+    private val trackNotAvailableToastLiveData = MutableLiveData<TrackNotAvailableToastState>(
+        TrackNotAvailableToastState.None
+    )
+
     init {
         mediaPlayer.setDataSource(track.previewUrl)
         mediaPlayer.prepareAsync()
         mediaPlayer.setOnPreparedListener {
-            playerLiveData.value = DEFAULT_PLAYER_STATE.copy(
-                isTrackAvailable = true,
-                isFavourite = track.isFavorite
-            )
+            playerLiveData.value = playerLiveData.value?.copy(isTrackAvailable = true)
         }
         mediaPlayer.setOnCompletionListener {
-            playerLiveData.value = DEFAULT_PLAYER_STATE.copy(
-                isTrackAvailable = true,
-                isFavourite = track.isFavorite
-            )
+            playerLiveData.value = playerLiveData.value?.copy(isTrackAvailable = true)
         }
     }
-
-    private val playerLiveData = MutableLiveData<PlayerState>()
-    private val trackNotAvailableToastLiveData = MutableLiveData<TrackNotAvailableToastState>(
-        TrackNotAvailableToastState.None
-    )
 
     fun getPlayerLiveData(): LiveData<PlayerState> = playerLiveData
     fun getToastLiveData(): LiveData<TrackNotAvailableToastState> = trackNotAvailableToastLiveData
@@ -99,9 +93,11 @@ class MediaPlayerViewModel(
     fun onFavouriteClick() {
         viewModelScope.launch {
             if (playerLiveData.value?.isFavourite == true) {
+                track.isFavorite = false
                 playerLiveData.value = playerLiveData.value?.copy(isFavourite = false)
                 favouriteTracksInteractor.removeFavouriteTrack(track)
             } else {
+                track.isFavorite = true
                 playerLiveData.value = playerLiveData.value?.copy(isFavourite = true)
                 favouriteTracksInteractor.addFavouriteTrack(track)
             }
