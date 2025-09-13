@@ -30,5 +30,7 @@ object FavouriteTrackEntityMapper {
             primaryGenreName = entity.primaryGenreName,
             country = entity.country,
             previewUrl = entity.previewUrl
-        )
+        ).apply {
+            isFavorite = true
+        }
 }
