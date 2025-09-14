@@ -9,4 +9,6 @@ interface FavouriteTracksInteractor {
     suspend fun removeFavouriteTrack(track: Track)
 
     fun getFavouriteTracks(): Flow<List<Track>>
+
+    suspend fun existsById(id: String): Boolean
 }

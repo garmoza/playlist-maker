@@ -19,4 +19,8 @@ class FavouriteTracksInteractorImpl(
     override fun getFavouriteTracks(): Flow<List<Track>> {
         return favouriteTracksRepository.getFavouriteTracks()
     }
+
+    override suspend fun existsById(id: String): Boolean {
+        return favouriteTracksRepository.existsById(id)
+    }
 }

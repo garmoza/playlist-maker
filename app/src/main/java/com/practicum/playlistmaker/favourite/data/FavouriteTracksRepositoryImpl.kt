@@ -35,4 +35,8 @@ class FavouriteTracksRepositoryImpl(
             .reversed()
         emit(tracks)
     }.flowOn(Dispatchers.IO)
+
+    override suspend fun existsById(id: String): Boolean {
+        return favouriteTrackDao.existsById(id)
+    }
 }

@@ -22,12 +22,24 @@ class MediaPlayerViewModel(
 
     private var timerJob: Job? = null
 
-    private val playerLiveData = MutableLiveData(DEFAULT_PLAYER_STATE.copy(isFavourite = track.isFavorite))
+    private val playerLiveData = MutableLiveData(LOADING_STATE)
     private val trackNotAvailableToastLiveData = MutableLiveData<TrackNotAvailableToastState>(
         TrackNotAvailableToastState.None
     )
 
     init {
+        viewModelScope.launch {
+            val isFavourite = favouriteTracksInteractor.existsById(track.trackId)
+            playerLiveData.value = playerLiveData.value?.copy(
+                isLoading = false,
+                isFavourite = isFavourite
+            )
+        }
+
+        prepareMediaPlayer()
+    }
+
+    private fun prepareMediaPlayer() {
         mediaPlayer.setDataSource(track.previewUrl)
         mediaPlayer.prepareAsync()
         mediaPlayer.setOnPreparedListener {
@@ -93,11 +105,9 @@ class MediaPlayerViewModel(
     fun onFavouriteClick() {
         viewModelScope.launch {
             if (playerLiveData.value?.isFavourite == true) {
-                track.isFavorite = false
                 playerLiveData.value = playerLiveData.value?.copy(isFavourite = false)
                 favouriteTracksInteractor.removeFavouriteTrack(track)
             } else {
-                track.isFavorite = true
                 playerLiveData.value = playerLiveData.value?.copy(isFavourite = true)
                 favouriteTracksInteractor.addFavouriteTrack(track)
             }
@@ -105,7 +115,8 @@ class MediaPlayerViewModel(
     }
 
     companion object {
-        private val DEFAULT_PLAYER_STATE = PlayerState(
+        private val LOADING_STATE = PlayerState(
+            isLoading = true,
             isTrackAvailable = false,
             isPlaying = false,
             isFavourite = false,
