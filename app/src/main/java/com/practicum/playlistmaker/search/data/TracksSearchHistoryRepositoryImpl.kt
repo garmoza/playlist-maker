@@ -2,11 +2,9 @@ package com.practicum.playlistmaker.search.data
 
 import android.content.SharedPreferences
 import com.google.gson.Gson
-import com.practicum.playlistmaker.common.data.db.AppDatabase
 import com.practicum.playlistmaker.common.data.preferences.HISTORY_TRACKS_KEY
 import com.practicum.playlistmaker.search.domain.TracksSearchHistoryRepository
 import com.practicum.playlistmaker.common.domain.models.Track
-import com.practicum.playlistmaker.favourite.data.db.dao.FavouriteTrackDao
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -14,8 +12,7 @@ import kotlinx.coroutines.flow.flowOn
 
 class TracksSearchHistoryRepositoryImpl(
     private val sharedPreferences: SharedPreferences,
-    private val gson: Gson,
-    appDatabase: AppDatabase
+    private val gson: Gson
 ): TracksSearchHistoryRepository {
 
     private val historyTracks: MutableList<Track> = mutableListOf()
@@ -26,8 +23,6 @@ class TracksSearchHistoryRepositoryImpl(
             historyTracks.addAll(createTracksListFromJson(historyTracksJson))
         }
     }
-
-    private val favouriteTrackDao: FavouriteTrackDao = appDatabase.favouriteTrackDao()
 
     override fun addTrack(track: Track) {
         if (historyTracks.contains(track)) {
@@ -53,8 +48,6 @@ class TracksSearchHistoryRepositoryImpl(
 
     override fun getTracks(): Flow<List<Track>> = flow {
         val tracks = historyTracks.toList()
-        val favouriteTracksIds = favouriteTrackDao.getFavouriteTrackIds()
-        tracks.forEach { track -> track.isFavorite = track.trackId in favouriteTracksIds }
         emit(tracks)
     }.flowOn(Dispatchers.IO)
 

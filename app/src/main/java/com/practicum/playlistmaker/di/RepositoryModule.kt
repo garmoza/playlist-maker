@@ -12,11 +12,11 @@ import org.koin.dsl.module
 
 val repositoryModule = module {
     single<TracksRepository> {
-        TracksRepositoryImpl(get(), get())
+        TracksRepositoryImpl(get())
     }
 
     single<TracksSearchHistoryRepository> {
-        TracksSearchHistoryRepositoryImpl(get(), get(), get())
+        TracksSearchHistoryRepositoryImpl(get(), get())
     }
 
     single<ThemeRepository> {
