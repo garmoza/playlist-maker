@@ -1,6 +1,5 @@
 package com.practicum.playlistmaker.favourite.data
 
-import com.practicum.playlistmaker.common.data.db.AppDatabase
 import com.practicum.playlistmaker.common.domain.models.Track
 import com.practicum.playlistmaker.favourite.data.db.dao.FavouriteTrackDao
 import com.practicum.playlistmaker.favourite.data.mapper.FavouriteTrackEntityMapper
@@ -11,10 +10,8 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 
 class FavouriteTracksRepositoryImpl(
-    appDatabase: AppDatabase
+    private val favouriteTrackDao: FavouriteTrackDao
 ) : FavouriteTracksRepository {
-
-    private val favouriteTrackDao: FavouriteTrackDao = appDatabase.favouriteTrackDao()
 
     override suspend fun addFavouriteTrack(track: Track) {
         favouriteTrackDao.insertFavouriteTrack(

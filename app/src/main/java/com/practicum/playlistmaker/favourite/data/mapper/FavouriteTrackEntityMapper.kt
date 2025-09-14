@@ -29,8 +29,7 @@ object FavouriteTrackEntityMapper {
             releaseDate = entity.releaseDate,
             primaryGenreName = entity.primaryGenreName,
             country = entity.country,
-            previewUrl = entity.previewUrl
-        ).apply {
+            previewUrl = entity.previewUrl,
             isFavorite = true
-        }
+        )
 }

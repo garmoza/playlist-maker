@@ -36,10 +36,6 @@ class TracksSearchHistoryRepositoryImpl(
         updateSharedPreferences()
     }
 
-    override fun getSize(): Int {
-        return historyTracks.size
-    }
-
     override fun clear() {
         historyTracks.clear()
 
