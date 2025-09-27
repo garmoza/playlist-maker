@@ -5,7 +5,9 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.content.res.Resources
 import android.net.ConnectivityManager
+import androidx.room.Room
 import com.google.gson.Gson
+import com.practicum.playlistmaker.common.data.db.AppDatabase
 import com.practicum.playlistmaker.common.data.network.NetworkClient
 import com.practicum.playlistmaker.common.data.preferences.PLAYLIST_MAKER_PREFERENCES
 import com.practicum.playlistmaker.search.data.network.ITunseApiService
@@ -48,5 +50,13 @@ val dataModule = module {
 
     single<ExternalNavigator> {
         ExternalNavigatorImpl(androidContext())
+    }
+
+    single<AppDatabase> {
+        Room.databaseBuilder(
+            androidContext(),
+            AppDatabase::class.java,
+            "database.db"
+        ).build()
     }
 }

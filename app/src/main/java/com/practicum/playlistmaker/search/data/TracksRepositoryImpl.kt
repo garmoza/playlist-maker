@@ -11,7 +11,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
 class TracksRepositoryImpl(
-    private val networkClient: NetworkClient
+    private val networkClient: NetworkClient,
 ) : TracksRepository {
 
     override fun searchTracks(expression: String): Flow<Resource<List<Track>>> = flow {
@@ -22,8 +22,8 @@ class TracksRepositoryImpl(
             }
             200 -> {
                 with(response as ITunseTracksResponse) {
-                    val data = results.map(TrackMapper::map)
-                    emit(Resource.Success(data))
+                    val tracks = results.map(TrackMapper::map)
+                    emit(Resource.Success(tracks))
                 }
             }
             else -> {
