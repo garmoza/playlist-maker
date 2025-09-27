@@ -37,4 +37,8 @@
     <string name="your_library_is_empty">Your library is empty</string>
     <string name="you_have_not_playlists">You haven\'t created\nany playlists yet</string>
     <string name="new_playlist">New playlist</string>
+    <string name="create">Create</string>
+    <string name="name">Name</string>
+    <string name="description">Description</string>
+    <string name="playlist_label">Playlist label</string>
 </resources>
