@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.databinding.FragmentPlaylistsBinding
 import com.practicum.playlistmaker.library.domain.model.PlaylistsScreenState
@@ -41,6 +42,12 @@ class PlaylistsFragment : Fragment() {
                     }
                 }
             }
+        }
+
+        binding.placeholderButton.setOnClickListener {
+            findNavController().navigate(
+                R.id.action_libraryFragment_to_addPlaylistFragment
+            )
         }
     }
 
