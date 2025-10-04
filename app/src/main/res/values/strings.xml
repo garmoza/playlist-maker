@@ -41,4 +41,5 @@
     <string name="name">Name</string>
     <string name="description">Description</string>
     <string name="playlist_label">Playlist label</string>
+    <string name="add_to_playlist">Add to playlist</string>
 </resources>

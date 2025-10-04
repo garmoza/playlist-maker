@@ -9,8 +9,8 @@
     >
 
     <Button
-        android:id="@+id/placeholderButton"
-        style="@style/ButtonPlaceholder"
+        android:id="@+id/newPlaylistButton"
+        style="@style/ButtonRounded"
         android:layout_marginTop="24dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -43,7 +43,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/screen_horizontal_indent"
-        app:layout_constraintTop_toBottomOf="@id/placeholderButton"
+        app:layout_constraintTop_toBottomOf="@id/newPlaylistButton"
         tools:minHeight="30dp"
         tools:background="#FFFF00"
         />

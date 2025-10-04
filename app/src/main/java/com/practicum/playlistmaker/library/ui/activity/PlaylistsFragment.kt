@@ -50,7 +50,7 @@ class PlaylistsFragment : Fragment() {
 
         initPlaylistRecyclerView()
 
-        binding.placeholderButton.setOnClickListener {
+        binding.newPlaylistButton.setOnClickListener {
             findNavController().navigate(
                 R.id.action_libraryFragment_to_addPlaylistFragment
             )
@@ -80,8 +80,8 @@ class PlaylistsFragment : Fragment() {
         when (state) {
             PlaylistsFragmentState.PLAYLISTS_NOT_FOUND -> {
                 hideViews()
-                placeholderButton.isVisible = true
-                placeholderButton.setText(R.string.new_playlist)
+                newPlaylistButton.isVisible = true
+                newPlaylistButton.setText(R.string.new_playlist)
                 placeholderImage.isVisible = true
                 placeholderImage.setImageResource(R.drawable.track_not_found)
                 placeholderMessage.isVisible = true
@@ -89,15 +89,15 @@ class PlaylistsFragment : Fragment() {
             }
             PlaylistsFragmentState.PLAYLIST_LIST -> {
                 hideViews()
-                placeholderButton.isVisible = true
-                placeholderButton.setText(R.string.new_playlist)
+                newPlaylistButton.isVisible = true
+                newPlaylistButton.setText(R.string.new_playlist)
                 recyclerViewPlaylist.isVisible = true
             }
         }
     }
 
     private fun FragmentPlaylistsBinding.hideViews() {
-        placeholderButton.isVisible = false
+        newPlaylistButton.isVisible = false
         placeholderImage.isVisible = false
         placeholderMessage.isVisible = false
         recyclerViewPlaylist.isVisible = false
