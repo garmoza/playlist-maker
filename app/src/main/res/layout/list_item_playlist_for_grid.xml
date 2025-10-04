@@ -44,9 +44,11 @@
             android:id="@+id/tracksCount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="0 tracks"
+            tools:text="0 tracks"
             android:textSize="@dimen/list_item_playlist_text_size"
             android:textColor="?attr/colorOnPrimary"
+            android:maxLines="1"
+            android:ellipsize="end"
             app:layout_constraintTop_toBottomOf="@id/playlistName"
             app:layout_constraintStart_toStartOf="@id/label"
             />

@@ -33,6 +33,8 @@ class PlayerFragment : Fragment() {
 
     private val dateFormat by lazy { SimpleDateFormat("mm:ss", Locale.getDefault()) }
 
+    private lateinit var playlistBottomSheetAdapter: PlaylistBottomSheetAdapter
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -84,6 +86,9 @@ class PlayerFragment : Fragment() {
                 is TrackNotAvailableToastState.None -> Unit
             }
         }
+        viewModel.getPlaylistsLiveData().observe(viewLifecycleOwner) { playlists ->
+            playlistBottomSheetAdapter.setItems(playlists)
+        }
 
         binding.playButton.setOnClickListener {
             viewModel.switchBetweenPlayAndPause()
@@ -116,6 +121,13 @@ class PlayerFragment : Fragment() {
                 // nothing
             }
         })
+
+        initPlaylistRecyclerView()
+    }
+
+    private fun initPlaylistRecyclerView() {
+        playlistBottomSheetAdapter = PlaylistBottomSheetAdapter()
+        binding.recyclerViewPlaylist.adapter = playlistBottomSheetAdapter
     }
 
     private fun renderPlayerStatus(status: PlayerState) {

@@ -5,8 +5,10 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.practicum.playlistmaker.common.domain.models.Playlist
 import com.practicum.playlistmaker.common.domain.models.Track
 import com.practicum.playlistmaker.favourite.domain.FavouriteTracksInteractor
+import com.practicum.playlistmaker.library.domain.PlaylistInteractor
 import com.practicum.playlistmaker.palyer.domain.model.PlayerState
 import com.practicum.playlistmaker.palyer.domain.model.TrackNotAvailableToastState
 import kotlinx.coroutines.Job
@@ -15,6 +17,7 @@ import kotlinx.coroutines.launch
 
 class MediaPlayerViewModel(
     private val favouriteTracksInteractor: FavouriteTracksInteractor,
+    private val playlistInteractor: PlaylistInteractor,
     private val track: Track
 ) : ViewModel() {
 
@@ -26,6 +29,7 @@ class MediaPlayerViewModel(
     private val trackNotAvailableToastLiveData = MutableLiveData<TrackNotAvailableToastState>(
         TrackNotAvailableToastState.None
     )
+    private val playlistsLiveData = MutableLiveData(emptyList<Playlist>())
 
     init {
         viewModelScope.launch {
@@ -37,6 +41,14 @@ class MediaPlayerViewModel(
         }
 
         prepareMediaPlayer()
+
+        viewModelScope.launch {
+            playlistInteractor
+                .getPlaylists()
+                .collect { playlists ->
+                    playlistsLiveData.postValue(playlists)
+                }
+        }
     }
 
     private fun prepareMediaPlayer() {
@@ -52,6 +64,7 @@ class MediaPlayerViewModel(
 
     fun getPlayerLiveData(): LiveData<PlayerState> = playerLiveData
     fun getToastLiveData(): LiveData<TrackNotAvailableToastState> = trackNotAvailableToastLiveData
+    fun getPlaylistsLiveData(): LiveData<List<Playlist>> = playlistsLiveData
 
     fun switchBetweenPlayAndPause() {
         if (playerLiveData.value?.isPlaying == true) {
