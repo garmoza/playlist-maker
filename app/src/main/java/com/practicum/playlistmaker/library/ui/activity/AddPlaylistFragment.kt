@@ -18,10 +18,14 @@ import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.practicum.playlistmaker.common.ui.dpToPx
 import com.practicum.playlistmaker.databinding.FragmentAddPlaylistBinding
+import com.practicum.playlistmaker.library.ui.view_model.AddPlaylistViewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.io.File
 import java.io.FileOutputStream
 
 class AddPlaylistFragment : Fragment() {
+
+    private val viewModel by viewModel<AddPlaylistViewModel>()
 
     private var _binding: FragmentAddPlaylistBinding? = null
     private val binding get() = _binding!!
@@ -40,17 +44,23 @@ class AddPlaylistFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        viewModel.getLiveData().observe(viewLifecycleOwner) { state ->
+            if (state.isReadyToAdd) {
+                // make create button is Active
+            }
+        }
+
         binding.toolbar.setOnClickListener {
             findNavController().navigateUp()
         }
 
         val pickMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
             if (uri != null) {
-                playlistLabelUri = uri
                 Glide.with(this)
                     .load(uri)
                     .transform(CenterCrop(), RoundedCorners(dpToPx(8F, requireContext())))
                     .into(binding.playlistLabel)
+                viewModel.onPickPlaylistLabel(uri)
             } else {
                 Log.i("AddPlaylistFragment", "No media selected")
             }

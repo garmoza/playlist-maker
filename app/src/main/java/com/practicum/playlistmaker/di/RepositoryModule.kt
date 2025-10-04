@@ -3,6 +3,8 @@ package com.practicum.playlistmaker.di
 import com.practicum.playlistmaker.common.data.db.AppDatabase
 import com.practicum.playlistmaker.favourite.data.FavouriteTracksRepositoryImpl
 import com.practicum.playlistmaker.favourite.domain.FavouriteTracksRepository
+import com.practicum.playlistmaker.library.data.PlaylistRepositoryImpl
+import com.practicum.playlistmaker.library.domain.PlaylistRepository
 import com.practicum.playlistmaker.search.data.TracksRepositoryImpl
 import com.practicum.playlistmaker.search.data.TracksSearchHistoryRepositoryImpl
 import com.practicum.playlistmaker.search.domain.TracksRepository
@@ -26,5 +28,9 @@ val repositoryModule = module {
 
     factory<FavouriteTracksRepository> {
         FavouriteTracksRepositoryImpl(get<AppDatabase>().favouriteTrackDao())
+    }
+
+    factory<PlaylistRepository> {
+        PlaylistRepositoryImpl(get<AppDatabase>().playlistDao())
     }
 }

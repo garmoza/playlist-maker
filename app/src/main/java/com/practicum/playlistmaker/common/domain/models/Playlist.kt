@@ -1,5 +1,8 @@
 package com.practicum.playlistmaker.common.domain.models
 
 data class Playlist(
-    val playlistId: String
+    val id: Long? = null,
+    val name: String,
+    val description: String,
+    val labelPath: String
 )
