@@ -64,6 +64,9 @@ class AddPlaylistFragment : Fragment() {
 
         binding.buttonCreate.setOnClickListener {
             viewModel.addPlaylist()
+            findNavController().previousBackStackEntry?.savedStateHandle?.set(
+                "playlist_created", true
+            )
             findNavController().navigateUp()
         }
 

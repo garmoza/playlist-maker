@@ -55,6 +55,14 @@ class PlaylistsFragment : Fragment() {
                 R.id.action_libraryFragment_to_addPlaylistFragment
             )
         }
+
+        findNavController().getBackStackEntry(R.id.libraryFragment).savedStateHandle
+            .getLiveData<Boolean>("playlist_created")
+            .observe(viewLifecycleOwner) { playlistCreated ->
+                if (playlistCreated) {
+                    viewModel.loadPlaylists()
+                }
+            }
     }
 
     private fun initPlaylistRecyclerView() {

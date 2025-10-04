@@ -1,6 +1,5 @@
 package com.practicum.playlistmaker.library.ui.view_model
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -20,17 +19,17 @@ class PlaylistsViewModel(
     fun getLiveData(): LiveData<PlaylistsScreenState> = liveData
 
     init {
-        Log.i("PlaylistsViewModel", "Init class")
+        loadPlaylists()
+    }
+
+    fun loadPlaylists() {
         viewModelScope.launch {
             playlistInteractor
                 .getPlaylists()
                 .collect { playlists ->
-                    Log.i("PlaylistsViewModel", "Saved playlists: $playlists")
                     val state = PlaylistsScreenState.Content(playlists)
                     liveData.postValue(state)
                 }
-            Log.i("PlaylistsViewModel", "Complete launch")
         }
-        Log.i("PlaylistsViewModel", "Complete init")
     }
 }
