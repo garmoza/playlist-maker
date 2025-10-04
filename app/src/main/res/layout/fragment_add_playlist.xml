@@ -99,6 +99,7 @@
         android:textColor="@color/app_white"
         app:backgroundTint="@null"
         android:background="@drawable/selector_button"
+        android:enabled="false"
         android:layout_marginHorizontal="16dp"
         android:layout_marginBottom="32dp"
         app:layout_constraintBottom_toBottomOf="parent"

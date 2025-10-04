@@ -47,9 +47,7 @@ class AddPlaylistFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         viewModel.getLiveData().observe(viewLifecycleOwner) { state ->
-            if (state.isReadyToAdd) {
-                // make create button is Active
-            }
+            binding.buttonCreate.isEnabled = state.isReadyToAdd
         }
 
         binding.toolbar.setOnClickListener {
