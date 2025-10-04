@@ -4,6 +4,7 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.practicum.playlistmaker.R
@@ -19,6 +20,7 @@ class PlaylistViewHolder(parent: ViewGroup) : RecyclerView.ViewHolder(
 
     private val context: Context = parent.context
     private val label: ImageView = itemView.findViewById(R.id.label)
+    private val playlistName: TextView = itemView.findViewById(R.id.playlistName)
 
     fun bind(model: Playlist) {
         Glide.with(itemView)
@@ -26,5 +28,6 @@ class PlaylistViewHolder(parent: ViewGroup) : RecyclerView.ViewHolder(
             .transform(CenterCrop(),  RoundedCorners(dpToPx(8F, context)))
             .placeholder(R.drawable.placeholder_track_label)
             .into(label)
+        playlistName.text = model.name
     }
 }

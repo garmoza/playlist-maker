@@ -6,6 +6,7 @@
     <!-- Text size-->
     <dimen name="title_text_size">22sp</dimen>
     <dimen name="list_item_text_size">16sp</dimen>
+    <dimen name="list_item_playlist_text_size">12sp</dimen>
     <dimen name="list_sub_item_text_size">11sp</dimen>
 
     <!-- Header-->
