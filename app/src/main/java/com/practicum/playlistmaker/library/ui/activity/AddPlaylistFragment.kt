@@ -1,10 +1,6 @@
 package com.practicum.playlistmaker.library.ui.activity
 
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.net.Uri
 import android.os.Bundle
-import android.os.Environment
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
@@ -22,8 +18,6 @@ import com.practicum.playlistmaker.common.ui.dpToPx
 import com.practicum.playlistmaker.databinding.FragmentAddPlaylistBinding
 import com.practicum.playlistmaker.library.ui.view_model.AddPlaylistViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import java.io.File
-import java.io.FileOutputStream
 
 class AddPlaylistFragment : Fragment() {
 
@@ -31,8 +25,6 @@ class AddPlaylistFragment : Fragment() {
 
     private var _binding: FragmentAddPlaylistBinding? = null
     private val binding get() = _binding!!
-
-    private var playlistLabelUri: Uri? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -71,13 +63,8 @@ class AddPlaylistFragment : Fragment() {
         }
 
         binding.buttonCreate.setOnClickListener {
-            val playlistName = binding.playlistNameEditText.text.toString()
-            if (playlistLabelUri != null && playlistName.isNotBlank()) {
-                saveImageToAppPrivateStorage(
-                    uri = playlistLabelUri!!,
-                    playlistName = playlistName
-                )
-            }
+            viewModel.addPlaylist()
+            findNavController().navigateUp()
         }
 
         binding.playlistNameEditText.addTextChangedListener(object : TextWatcher {
@@ -107,21 +94,6 @@ class AddPlaylistFragment : Fragment() {
                 // empty
             }
         })
-    }
-
-    private fun saveImageToAppPrivateStorage(uri: Uri, playlistName: String) {
-        val filePath = File(requireActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES), "playlists")
-
-        if (!filePath.exists()) {
-            filePath.mkdirs()
-        }
-
-        val file = File(filePath, "${playlistName}.jpg")
-        val inputStream = requireActivity().contentResolver.openInputStream(uri)
-        val outputStream = FileOutputStream(file)
-        BitmapFactory
-            .decodeStream(inputStream)
-            .compress(Bitmap.CompressFormat.JPEG, 30, outputStream)
     }
 
     override fun onDestroyView() {
