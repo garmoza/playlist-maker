@@ -81,7 +81,6 @@ class PlaylistsFragment : Fragment() {
             PlaylistsFragmentState.PLAYLISTS_NOT_FOUND -> {
                 hideViews()
                 newPlaylistButton.isVisible = true
-                newPlaylistButton.setText(R.string.new_playlist)
                 placeholderImage.isVisible = true
                 placeholderImage.setImageResource(R.drawable.track_not_found)
                 placeholderMessage.isVisible = true
@@ -90,7 +89,6 @@ class PlaylistsFragment : Fragment() {
             PlaylistsFragmentState.PLAYLIST_LIST -> {
                 hideViews()
                 newPlaylistButton.isVisible = true
-                newPlaylistButton.setText(R.string.new_playlist)
                 recyclerViewPlaylist.isVisible = true
             }
         }
