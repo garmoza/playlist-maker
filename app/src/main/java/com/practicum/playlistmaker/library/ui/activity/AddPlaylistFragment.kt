@@ -5,6 +5,8 @@ import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -79,6 +81,34 @@ class AddPlaylistFragment : Fragment() {
                 )
             }
         }
+
+        binding.playlistNameEditText.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+                // empty
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                viewModel.onNameChanged(s.toString())
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+                // empty
+            }
+        })
+
+        binding.playlistDescriptionEditText.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+                // empty
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                viewModel.onDescriptionChanged(s.toString())
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+                // empty
+            }
+        })
     }
 
     private fun saveImageToAppPrivateStorage(uri: Uri, playlistName: String) {
