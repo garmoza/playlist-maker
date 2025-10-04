@@ -4,5 +4,5 @@ data class Playlist(
     val id: Long? = null,
     val name: String,
     val description: String,
-    val labelPath: String
+    val labelUri: String
 )

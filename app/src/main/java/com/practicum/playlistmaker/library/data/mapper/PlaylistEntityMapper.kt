@@ -9,7 +9,7 @@ object PlaylistEntityMapper {
             id = model.id,
             name = model.name,
             description = model.description,
-            labelPath = model.labelPath
+            labelUri = model.labelUri
         )
 
     fun map(entity: PlaylistEntity): Playlist =
@@ -17,6 +17,6 @@ object PlaylistEntityMapper {
             id = entity.id,
             name = entity.name,
             description = entity.description,
-            labelPath = entity.labelPath
+            labelUri = entity.labelUri
         )
 }

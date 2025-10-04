@@ -5,6 +5,7 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Environment
+import androidx.core.net.toUri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -27,13 +28,17 @@ class AddPlaylistViewModel(
 
     fun addPlaylist() {
         if (liveData.value?.isReadyToAdd == true) {
-            saveImageToAppPrivateStorage(
+            val storageUri = saveImageToAppPrivateStorage(
                 uri = liveData.value?.playlistLabelUri!!,
                 playlistName = liveData.value?.playlistName!!
             )
             viewModelScope.launch {
                 playlistInteractor.addPlaylist(
-                    mapStateToDomain(liveData.value!!)
+                    Playlist(
+                        name = liveData.value?.playlistName!!,
+                        description = liveData.value?.playlistDescription!!,
+                        labelUri = storageUri.toString()
+                    )
                 )
             }
         }
@@ -51,14 +56,7 @@ class AddPlaylistViewModel(
         liveData.value = liveData.value?.copy(playlistDescription = description)
     }
 
-    private fun mapStateToDomain(state: AddPlaylistState) =
-        Playlist(
-            name = state.playlistName!!,
-            description = state.playlistDescription!!,
-            labelPath = state.playlistLabelUri?.path!!
-        )
-
-    private fun saveImageToAppPrivateStorage(uri: Uri, playlistName: String) {
+    private fun saveImageToAppPrivateStorage(uri: Uri, playlistName: String): Uri {
         val filePath = File(application.getExternalFilesDir(Environment.DIRECTORY_PICTURES), "playlists")
 
         if (!filePath.exists()) {
@@ -71,6 +69,8 @@ class AddPlaylistViewModel(
         BitmapFactory
             .decodeStream(inputStream)
             .compress(Bitmap.CompressFormat.JPEG, 30, outputStream)
+
+        return file.toUri()
     }
 
     companion object {
