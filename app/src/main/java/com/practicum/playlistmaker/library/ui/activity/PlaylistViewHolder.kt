@@ -15,7 +15,7 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.practicum.playlistmaker.common.ui.dpToPx
 
 class PlaylistViewHolder(parent: ViewGroup) : RecyclerView.ViewHolder(
-    LayoutInflater.from(parent.context).inflate(R.layout.list_item_playlist, parent, false)
+    LayoutInflater.from(parent.context).inflate(R.layout.list_item_playlist_for_grid, parent, false)
 ) {
 
     private val context: Context = parent.context
