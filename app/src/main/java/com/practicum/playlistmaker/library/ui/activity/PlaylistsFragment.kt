@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.GridLayoutManager
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.databinding.FragmentPlaylistsBinding
 import com.practicum.playlistmaker.library.domain.model.PlaylistsScreenState
@@ -19,6 +20,8 @@ class PlaylistsFragment : Fragment() {
 
     private var _binding: FragmentPlaylistsBinding? = null
     private val binding get() = _binding!!
+
+    private lateinit var playlistAdapter: PlaylistAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -38,17 +41,26 @@ class PlaylistsFragment : Fragment() {
                     if (state.playlists.isEmpty()) {
                         binding.setState(PlaylistsFragmentState.PLAYLISTS_NOT_FOUND)
                     } else {
-                        // render
+                        playlistAdapter.setItems(state.playlists)
+                        binding.setState(PlaylistsFragmentState.PLAYLIST_LIST)
                     }
                 }
             }
         }
+
+        initPlaylistRecyclerView()
 
         binding.placeholderButton.setOnClickListener {
             findNavController().navigate(
                 R.id.action_libraryFragment_to_addPlaylistFragment
             )
         }
+    }
+
+    private fun initPlaylistRecyclerView() {
+        playlistAdapter = PlaylistAdapter()
+        binding.recyclerViewPlaylist.layoutManager = GridLayoutManager(requireContext(), 2)
+        binding.recyclerViewPlaylist.adapter = playlistAdapter
     }
 
     override fun onDestroyView() {
@@ -67,6 +79,12 @@ class PlaylistsFragment : Fragment() {
                 placeholderMessage.isVisible = true
                 placeholderMessage.setText(R.string.you_have_not_playlists)
             }
+            PlaylistsFragmentState.PLAYLIST_LIST -> {
+                hideViews()
+                placeholderButton.isVisible = true
+                placeholderButton.setText(R.string.new_playlist)
+                recyclerViewPlaylist.isVisible = true
+            }
         }
     }
 
@@ -74,6 +92,7 @@ class PlaylistsFragment : Fragment() {
         placeholderButton.isVisible = false
         placeholderImage.isVisible = false
         placeholderMessage.isVisible = false
+        recyclerViewPlaylist.isVisible = false
     }
 
     companion object {
