@@ -42,13 +42,7 @@ class MediaPlayerViewModel(
 
         prepareMediaPlayer()
 
-        viewModelScope.launch {
-            playlistInteractor
-                .getPlaylists()
-                .collect { playlists ->
-                    playlistsLiveData.postValue(playlists)
-                }
-        }
+        loadPlaylists()
     }
 
     private fun prepareMediaPlayer() {
@@ -124,6 +118,16 @@ class MediaPlayerViewModel(
                 playerLiveData.value = playerLiveData.value?.copy(isFavourite = true)
                 favouriteTracksInteractor.addFavouriteTrack(track)
             }
+        }
+    }
+
+    fun loadPlaylists() {
+        viewModelScope.launch {
+            playlistInteractor
+                .getPlaylists()
+                .collect { playlists ->
+                    playlistsLiveData.postValue(playlists)
+                }
         }
     }
 

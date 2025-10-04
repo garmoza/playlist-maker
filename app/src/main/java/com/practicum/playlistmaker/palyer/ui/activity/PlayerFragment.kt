@@ -123,11 +123,23 @@ class PlayerFragment : Fragment() {
         })
 
         initPlaylistRecyclerView()
+
+        binding.newPlaylistButton.setOnClickListener {
+            findNavController().navigate(
+                R.id.action_playerFragment_to_addPlaylistFragment
+            )
+        }
     }
 
     private fun initPlaylistRecyclerView() {
         playlistBottomSheetAdapter = PlaylistBottomSheetAdapter()
         binding.recyclerViewPlaylist.adapter = playlistBottomSheetAdapter
+    }
+
+    override fun onViewStateRestored(savedInstanceState: Bundle?) {
+        super.onViewStateRestored(savedInstanceState)
+
+        viewModel.loadPlaylists()
     }
 
     private fun renderPlayerStatus(status: PlayerState) {
