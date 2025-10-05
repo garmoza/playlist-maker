@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
@@ -57,11 +58,13 @@ class PlaylistsFragment : Fragment() {
         }
 
         findNavController().getBackStackEntry(R.id.libraryFragment).savedStateHandle
-            .getLiveData<Boolean>("playlist_created")
-            .observe(viewLifecycleOwner) { playlistCreated ->
-                if (playlistCreated) {
-                    viewModel.loadPlaylists()
-                }
+            .getLiveData<String>(AddPlaylistFragment.PLAYLIST_CREATED_LIVE_DATA_KEY)
+            .observe(viewLifecycleOwner) { playlistName ->
+                findNavController().getBackStackEntry(R.id.libraryFragment).savedStateHandle
+                    .remove<String>(AddPlaylistFragment.PLAYLIST_CREATED_LIVE_DATA_KEY)
+
+                showPlaylistCreatedToast(playlistName)
+                viewModel.loadPlaylists()
             }
     }
 
@@ -74,6 +77,13 @@ class PlaylistsFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    private fun Fragment.showPlaylistCreatedToast(playlistName: String) {
+        val message = getString(R.string.playlist_has_been_crated, playlistName)
+        val toast = Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT)
+
+        toast.show()
     }
 
     private fun FragmentPlaylistsBinding.setState(state: PlaylistsFragmentState) {

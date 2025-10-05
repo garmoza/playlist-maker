@@ -69,8 +69,9 @@ class AddPlaylistFragment : Fragment() {
 
         binding.buttonCreate.setOnClickListener {
             viewModel.addPlaylist()
+            val playlistName = viewModel.getLiveData().value?.playlistName!!
             findNavController().previousBackStackEntry?.savedStateHandle?.set(
-                "playlist_created", true
+                PLAYLIST_CREATED_LIVE_DATA_KEY, playlistName
             )
             findNavController().navigateUp()
         }
@@ -130,5 +131,9 @@ class AddPlaylistFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    companion object {
+        const val PLAYLIST_CREATED_LIVE_DATA_KEY = "playlist_created"
     }
 }
