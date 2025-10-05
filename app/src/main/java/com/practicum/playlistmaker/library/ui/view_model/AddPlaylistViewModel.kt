@@ -28,15 +28,17 @@ class AddPlaylistViewModel(
 
     fun addPlaylist() {
         if (liveData.value?.isReadyToAdd == true) {
-            val storageUri = saveImageToAppPrivateStorage(
-                uri = liveData.value?.playlistLabelUri!!,
-                playlistName = liveData.value?.playlistName!!
-            )
+            val storageUri: Uri? = liveData.value?.playlistLabelUri?.let {
+                saveImageToAppPrivateStorage(
+                    uri = it,
+                    playlistName = liveData.value?.playlistName!!
+                )
+            }
             viewModelScope.launch {
                 playlistInteractor.addPlaylist(
                     Playlist(
                         name = liveData.value?.playlistName!!,
-                        description = liveData.value?.playlistDescription!!,
+                        description = liveData.value?.playlistDescription,
                         labelUri = storageUri.toString()
                     )
                 )

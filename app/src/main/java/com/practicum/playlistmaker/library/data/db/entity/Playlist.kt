@@ -8,6 +8,6 @@ data class Playlist(
     @PrimaryKey(autoGenerate = true)
     val id: Long?,
     val name: String,
-    val description: String,
-    val labelUri: String
+    val description: String?,
+    val labelUri: String?
 )

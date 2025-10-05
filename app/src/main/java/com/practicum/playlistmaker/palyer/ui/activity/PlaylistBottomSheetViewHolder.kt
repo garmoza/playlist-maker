@@ -23,7 +23,7 @@ class PlaylistBottomSheetViewHolder(parent: ViewGroup) : RecyclerView.ViewHolder
 
     fun bind(model: Playlist) {
         Glide.with(itemView)
-            .load(model.labelUri.toUri())
+            .load(model.labelUri?.toUri())
             .placeholder(R.drawable.placeholder_track_label)
             .transform(CenterCrop(),  RoundedCorners(dpToPx(2F, itemView.context)))
             .into(label)
