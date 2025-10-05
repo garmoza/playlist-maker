@@ -42,4 +42,9 @@
     <string name="description">Description</string>
     <string name="playlist_label">Playlist label</string>
     <string name="add_to_playlist">Add to playlist</string>
+
+    <string name="finish_creating_the_playlist">Finish creating the playlist?</string>
+    <string name="all_unsaved_data_will_be_lost">All unsaved data will be lost</string>
+    <string name="finish">Finish</string>
+    <string name="cancel">Cancel</string>
 </resources>

@@ -11,4 +11,9 @@ data class AddPlaylistState(
         get() = !playlistName.isNullOrBlank()
                 && playlistDescription != null
                 && playlistLabelUri != null
+
+    val isStartedFilling: Boolean
+        get() = !playlistName.isNullOrBlank()
+                || !playlistDescription.isNullOrBlank()
+                || playlistLabelUri != null
 }

@@ -7,6 +7,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
@@ -14,6 +15,8 @@ import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.common.ui.dpToPx
 import com.practicum.playlistmaker.databinding.FragmentAddPlaylistBinding
 import com.practicum.playlistmaker.library.ui.view_model.AddPlaylistViewModel
@@ -25,6 +28,8 @@ class AddPlaylistFragment : Fragment() {
 
     private var _binding: FragmentAddPlaylistBinding? = null
     private val binding get() = _binding!!
+
+    private lateinit var confirmDialog: MaterialAlertDialogBuilder
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -43,7 +48,7 @@ class AddPlaylistFragment : Fragment() {
         }
 
         binding.toolbar.setOnClickListener {
-            findNavController().navigateUp()
+            onNavigateUp()
         }
 
         val pickMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
@@ -97,6 +102,29 @@ class AddPlaylistFragment : Fragment() {
                 // empty
             }
         })
+
+        confirmDialog = MaterialAlertDialogBuilder(requireContext())
+            .setTitle(R.string.finish_creating_the_playlist)
+            .setMessage(R.string.all_unsaved_data_will_be_lost)
+            .setNeutralButton(R.string.cancel) { _, _ ->
+                // nothing
+            }.setPositiveButton(R.string.finish) { _, _ ->
+                findNavController().navigateUp()
+            }
+
+        requireActivity().onBackPressedDispatcher.addCallback(object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                onNavigateUp()
+            }
+        })
+    }
+
+    private fun onNavigateUp() {
+        if (viewModel.getLiveData().value?.isStartedFilling == true) {
+            confirmDialog.show()
+        } else {
+            findNavController().navigateUp()
+        }
     }
 
     override fun onDestroyView() {
