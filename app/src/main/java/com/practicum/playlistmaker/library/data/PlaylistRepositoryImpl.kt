@@ -6,10 +6,8 @@ import com.practicum.playlistmaker.library.data.db.dao.PlaylistDao
 import com.practicum.playlistmaker.library.data.mapper.PlaylistEntityMapper
 import com.practicum.playlistmaker.library.data.mapper.TrackEntityMapper
 import com.practicum.playlistmaker.library.domain.PlaylistRepository
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.flowOn
 
 class PlaylistRepositoryImpl(
     private val playlistDao: PlaylistDao,
@@ -26,7 +24,7 @@ class PlaylistRepositoryImpl(
             .getPlaylists()
             .map(playlistEntityMapper::map)
         emit(playlists)
-    }.flowOn(Dispatchers.IO)
+    }
 
     override suspend fun addTrack(track: Track) {
         playlistDao.insertTrack(
