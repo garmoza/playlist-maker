@@ -9,5 +9,7 @@ data class Playlist(
     val id: Long?,
     val name: String,
     val description: String?,
-    val labelUri: String?
+    val labelUri: String?,
+    val trackIds: String = "",
+    val numberOfTracks: Int = 0
 )
