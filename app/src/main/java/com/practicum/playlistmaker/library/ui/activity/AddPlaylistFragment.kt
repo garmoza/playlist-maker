@@ -113,11 +113,14 @@ class AddPlaylistFragment : Fragment() {
                 findNavController().navigateUp()
             }
 
-        requireActivity().onBackPressedDispatcher.addCallback(object : OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
-                onNavigateUp()
+        requireActivity().onBackPressedDispatcher.addCallback(
+            viewLifecycleOwner,
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    onNavigateUp()
+                }
             }
-        })
+        )
     }
 
     private fun onNavigateUp() {
