@@ -1,8 +1,6 @@
 package com.practicum.playlistmaker.library.ui.activity
 
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -10,6 +8,7 @@ import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
@@ -76,33 +75,13 @@ class AddPlaylistFragment : Fragment() {
             findNavController().navigateUp()
         }
 
-        binding.playlistNameEditText.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-                // empty
-            }
+        binding.playlistNameEditText.doOnTextChanged { text, _, _, _ ->
+            viewModel.onNameChanged(text.toString())
+        }
 
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                viewModel.onNameChanged(s.toString())
-            }
-
-            override fun afterTextChanged(s: Editable?) {
-                // empty
-            }
-        })
-
-        binding.playlistDescriptionEditText.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-                // empty
-            }
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                viewModel.onDescriptionChanged(s.toString())
-            }
-
-            override fun afterTextChanged(s: Editable?) {
-                // empty
-            }
-        })
+        binding.playlistNameEditText.doOnTextChanged { text, _, _, _ ->
+            viewModel.onDescriptionChanged(text.toString())
+        }
 
         confirmDialog = MaterialAlertDialogBuilder(requireContext(), R.style.CustomDialogTheme)
             .setTitle(R.string.finish_creating_the_playlist)
