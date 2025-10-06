@@ -5,5 +5,5 @@ data class Playlist(
     val name: String,
     val description: String?,
     val labelUri: String?,
-    val trackIds: Set<Long> = emptySet()
+    val trackIds: Set<String> = emptySet()
 )

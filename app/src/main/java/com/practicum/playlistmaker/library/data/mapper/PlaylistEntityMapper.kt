@@ -22,6 +22,6 @@ class PlaylistEntityMapper(
             name = entity.name,
             description = entity.description,
             labelUri = entity.labelUri,
-            trackIds = gson.fromJson(entity.trackIds, Array<Long>::class.java).toSet()
+            trackIds = gson.fromJson(entity.trackIds, Array<String>::class.java).toSet()
         )
 }
