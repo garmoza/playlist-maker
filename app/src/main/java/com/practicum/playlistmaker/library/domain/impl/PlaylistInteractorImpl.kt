@@ -18,8 +18,10 @@ class PlaylistInteractorImpl(
     }
 
     override suspend fun addTrackToPlaylist(playlist: Playlist, track: Track) {
-        playlist.trackIds.toMutableSet().add(track.trackId)
+        val newTrackIds = playlist.trackIds.toMutableSet().apply {
+            add(track.trackId)
+        }
         playlistRepository.addTrack(track)
-        playlistRepository.addPlaylist(playlist)
+        playlistRepository.addPlaylist(playlist.copy(trackIds = newTrackIds))
     }
 }

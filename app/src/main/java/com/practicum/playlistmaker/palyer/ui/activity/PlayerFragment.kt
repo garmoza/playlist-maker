@@ -8,15 +8,19 @@ import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.practicum.playlistmaker.R
+import com.practicum.playlistmaker.common.domain.models.Playlist
 import com.practicum.playlistmaker.common.domain.models.Track
+import com.practicum.playlistmaker.common.ui.debounceClick
 import com.practicum.playlistmaker.common.ui.dpToPx
 import com.practicum.playlistmaker.databinding.FragmentPlayerBinding
 import com.practicum.playlistmaker.palyer.domain.model.PlayerState
+import com.practicum.playlistmaker.palyer.domain.model.TrackAddedToPlaylistToastState
 import com.practicum.playlistmaker.palyer.domain.model.TrackNotAvailableToastState
 import com.practicum.playlistmaker.palyer.ui.view_model.MediaPlayerViewModel
 import org.koin.android.ext.android.getKoin
@@ -89,6 +93,21 @@ class PlayerFragment : Fragment() {
         viewModel.getPlaylistsLiveData().observe(viewLifecycleOwner) { playlists ->
             playlistBottomSheetAdapter.setItems(playlists)
         }
+        viewModel.getTrackAddedToPlaylistLiveData().observe(viewLifecycleOwner) { status ->
+            when (status) {
+                is TrackAddedToPlaylistToastState.ShowNewAdded -> {
+                    val message = getString(R.string.added_to_playlist, status.trackName)
+                    Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+                    viewModel.toastWasShow()
+                }
+                is TrackAddedToPlaylistToastState.ShowAlreadyAdded -> {
+                    val message = getString(R.string.track_already_in_playlist, status.trackName)
+                    Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+                    viewModel.toastWasShow()
+                }
+                is TrackAddedToPlaylistToastState.None -> Unit
+            }
+        }
 
         binding.playButton.setOnClickListener {
             viewModel.switchBetweenPlayAndPause()
@@ -122,7 +141,7 @@ class PlayerFragment : Fragment() {
             }
         })
 
-        initPlaylistRecyclerView()
+        initPlaylistRecyclerView(this::onPlaylistClick)
 
         binding.newPlaylistButton.setOnClickListener {
             findNavController().navigate(
@@ -131,8 +150,16 @@ class PlayerFragment : Fragment() {
         }
     }
 
-    private fun initPlaylistRecyclerView() {
-        playlistBottomSheetAdapter = PlaylistBottomSheetAdapter()
+    private fun onPlaylistClick(playlist: Playlist) {
+        viewModel.addCurrentTrackToPlaylist(playlist)
+    }
+
+    private fun initPlaylistRecyclerView(onPlaylistClick: (Playlist) -> Unit) {
+        val onPlaylistDebounceClick = debounceClick(
+            coroutineScope = viewLifecycleOwner.lifecycleScope,
+            action = onPlaylistClick
+        )
+        playlistBottomSheetAdapter = PlaylistBottomSheetAdapter(onPlaylistDebounceClick)
         binding.recyclerViewPlaylist.adapter = playlistBottomSheetAdapter
     }
 

@@ -10,7 +10,7 @@ import com.practicum.playlistmaker.library.data.db.entity.Track
 @Dao
 interface PlaylistDao {
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertPlaylist(playlist: Playlist)
 
     @Query("SELECT * FROM playlist")

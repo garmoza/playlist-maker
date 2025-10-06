@@ -64,7 +64,6 @@ class PlaylistsFragment : Fragment() {
                     .remove<String>(AddPlaylistFragment.PLAYLIST_CREATED_LIVE_DATA_KEY)
 
                 showPlaylistCreatedToast(playlistName)
-                viewModel.loadPlaylists()
             }
     }
 
@@ -72,6 +71,12 @@ class PlaylistsFragment : Fragment() {
         playlistAdapter = PlaylistAdapter()
         binding.recyclerViewPlaylist.layoutManager = GridLayoutManager(requireContext(), 2)
         binding.recyclerViewPlaylist.adapter = playlistAdapter
+    }
+
+    override fun onViewStateRestored(savedInstanceState: Bundle?) {
+        super.onViewStateRestored(savedInstanceState)
+
+        viewModel.loadPlaylists()
     }
 
     override fun onDestroyView() {
