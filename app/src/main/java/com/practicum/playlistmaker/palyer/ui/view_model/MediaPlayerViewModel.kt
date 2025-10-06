@@ -145,8 +145,6 @@ class MediaPlayerViewModel(
             viewModelScope.launch {
                 playlistInteractor.addTrackToPlaylist(playlist, track)
                 trackAddedToPlaylistToastLiveData.value = TrackAddedToPlaylistToastState.ShowNewAdded(trackName)
-
-                loadPlaylists()
             }
         }
     }

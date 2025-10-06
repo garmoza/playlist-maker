@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
@@ -38,6 +39,8 @@ class PlayerFragment : Fragment() {
     private val dateFormat by lazy { SimpleDateFormat("mm:ss", Locale.getDefault()) }
 
     private lateinit var playlistBottomSheetAdapter: PlaylistBottomSheetAdapter
+
+    private lateinit var bottomSheetBehavior: BottomSheetBehavior<LinearLayout>
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -96,9 +99,13 @@ class PlayerFragment : Fragment() {
         viewModel.getTrackAddedToPlaylistLiveData().observe(viewLifecycleOwner) { status ->
             when (status) {
                 is TrackAddedToPlaylistToastState.ShowNewAdded -> {
+                    bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+
                     val message = getString(R.string.added_to_playlist, status.trackName)
                     Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
                     viewModel.toastWasShow()
+
+                    viewModel.loadPlaylists()
                 }
                 is TrackAddedToPlaylistToastState.ShowAlreadyAdded -> {
                     val message = getString(R.string.track_already_in_playlist, status.trackName)
@@ -116,32 +123,13 @@ class PlayerFragment : Fragment() {
             viewModel.onFavouriteClick()
         }
 
-        val bottomSheetBehavior = BottomSheetBehavior.from(binding.bottomSheet)
-        bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
-        bottomSheetBehavior.peekHeight = (resources.displayMetrics.heightPixels * 0.65).toInt()
+        initPlaylistRecyclerView(this::onPlaylistClick)
+
+        initBottomSheetBehavior()
 
         binding.addTrackButton.setOnClickListener  {
             bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
         }
-
-        bottomSheetBehavior.addBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
-            override fun onStateChanged(bottomSheet: View, newState: Int) {
-                when (newState) {
-                    BottomSheetBehavior.STATE_HIDDEN -> {
-                        binding.overlay.isVisible = false
-                    }
-                    else -> {
-                        binding.overlay.isVisible = true
-                    }
-                }
-            }
-
-            override fun onSlide(bottomSheet: View, slideOffset: Float) {
-                // nothing
-            }
-        })
-
-        initPlaylistRecyclerView(this::onPlaylistClick)
 
         binding.newPlaylistButton.setOnClickListener {
             findNavController().navigate(
@@ -161,6 +149,29 @@ class PlayerFragment : Fragment() {
         )
         playlistBottomSheetAdapter = PlaylistBottomSheetAdapter(onPlaylistDebounceClick)
         binding.recyclerViewPlaylist.adapter = playlistBottomSheetAdapter
+    }
+
+    private fun initBottomSheetBehavior() {
+        bottomSheetBehavior = BottomSheetBehavior.from(binding.bottomSheet)
+        bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+        bottomSheetBehavior.peekHeight = (resources.displayMetrics.heightPixels * 0.65).toInt()
+
+        bottomSheetBehavior.addBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
+            override fun onStateChanged(bottomSheet: View, newState: Int) {
+                when (newState) {
+                    BottomSheetBehavior.STATE_HIDDEN -> {
+                        binding.overlay.isVisible = false
+                    }
+                    else -> {
+                        binding.overlay.isVisible = true
+                    }
+                }
+            }
+
+            override fun onSlide(bottomSheet: View, slideOffset: Float) {
+                // nothing
+            }
+        })
     }
 
     override fun onViewStateRestored(savedInstanceState: Bundle?) {
