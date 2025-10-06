@@ -10,18 +10,19 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 
 class PlaylistRepositoryImpl(
-    private val playlistDao: PlaylistDao
+    private val playlistDao: PlaylistDao,
+    private val playlistEntityMapper: PlaylistEntityMapper
 ) : PlaylistRepository {
     override suspend fun addPlaylist(playlist: Playlist) {
         playlistDao.insertPlaylist(
-            PlaylistEntityMapper.map(playlist)
+            playlistEntityMapper.map(playlist)
         )
     }
 
     override fun getPlaylists(): Flow<List<Playlist>> = flow {
         val playlists = playlistDao
             .getPlaylists()
-            .map(PlaylistEntityMapper::map)
+            .map(playlistEntityMapper::map)
         emit(playlists)
     }.flowOn(Dispatchers.IO)
 }
