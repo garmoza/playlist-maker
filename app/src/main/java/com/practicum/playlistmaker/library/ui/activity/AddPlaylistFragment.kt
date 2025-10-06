@@ -104,7 +104,7 @@ class AddPlaylistFragment : Fragment() {
             }
         })
 
-        confirmDialog = MaterialAlertDialogBuilder(requireContext())
+        confirmDialog = MaterialAlertDialogBuilder(requireContext(), R.style.CustomDialogTheme)
             .setTitle(R.string.finish_creating_the_playlist)
             .setMessage(R.string.all_unsaved_data_will_be_lost)
             .setNeutralButton(R.string.cancel) { _, _ ->
