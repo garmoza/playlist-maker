@@ -47,7 +47,7 @@ class AddPlaylistFragment : Fragment() {
             binding.buttonCreate.isEnabled = state.isReadyToAdd
         }
 
-        binding.toolbar.setOnClickListener {
+        binding.toolbar.setNavigationOnClickListener {
             onNavigateUp()
         }
 
