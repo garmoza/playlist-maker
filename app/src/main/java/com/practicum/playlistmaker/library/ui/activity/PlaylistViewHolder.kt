@@ -28,6 +28,15 @@ class PlaylistViewHolder(parent: ViewGroup) : RecyclerView.ViewHolder(
             .transform(CenterCrop(),  RoundedCorners(dpToPx(8F, itemView.context)))
             .into(label)
         playlistName.text = model.name
-        tracksCount.text = "0 tracks"
+
+        val numberOfTracks = model.trackIds.size
+        val numberOfTracksStringTemplate = when (numberOfTracks) {
+            1 -> R.string.number_of_tracks_template_1
+            2 -> R.string.number_of_tracks_template_2
+            3 -> R.string.number_of_tracks_template_3
+            4 -> R.string.number_of_tracks_template_4
+            else -> R.string.number_of_tracks_template_default
+        }
+        tracksCount.text = itemView.context.getString(numberOfTracksStringTemplate, numberOfTracks)
     }
 }

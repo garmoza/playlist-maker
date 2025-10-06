@@ -48,4 +48,9 @@
     <string name="finish">Finish</string>
     <string name="cancel">Cancel</string>
     <string name="playlist_has_been_crated">The %s playlist been created</string>
+    <string name="number_of_tracks_template_default">%d tracks</string>
+    <string name="number_of_tracks_template_1">%d tracks</string>
+    <string name="number_of_tracks_template_2">%d tracks</string>
+    <string name="number_of_tracks_template_3">%d tracks</string>
+    <string name="number_of_tracks_template_4">%d tracks</string>
 </resources>
