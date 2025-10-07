@@ -28,8 +28,6 @@ class AddPlaylistFragment : Fragment() {
     private var _binding: FragmentAddPlaylistBinding? = null
     private val binding get() = _binding!!
 
-    private lateinit var confirmDialog: MaterialAlertDialogBuilder
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -83,15 +81,6 @@ class AddPlaylistFragment : Fragment() {
             viewModel.onDescriptionChanged(text.toString())
         }
 
-        confirmDialog = MaterialAlertDialogBuilder(requireContext(), R.style.CustomDialogTheme)
-            .setTitle(R.string.finish_creating_the_playlist)
-            .setMessage(R.string.all_unsaved_data_will_be_lost)
-            .setNeutralButton(R.string.cancel) { _, _ ->
-                // nothing
-            }.setPositiveButton(R.string.finish) { _, _ ->
-                findNavController().navigateUp()
-            }
-
         requireActivity().onBackPressedDispatcher.addCallback(
             viewLifecycleOwner,
             object : OnBackPressedCallback(true) {
@@ -104,7 +93,14 @@ class AddPlaylistFragment : Fragment() {
 
     private fun onNavigateUp() {
         if (viewModel.getLiveData().value?.isStartedFilling == true) {
-            confirmDialog.show()
+            MaterialAlertDialogBuilder(requireContext(), R.style.CustomDialogTheme)
+                .setTitle(R.string.finish_creating_the_playlist)
+                .setMessage(R.string.all_unsaved_data_will_be_lost)
+                .setNeutralButton(R.string.cancel) { _, _ ->
+                    // nothing
+                }.setPositiveButton(R.string.finish) { _, _ ->
+                    findNavController().navigateUp()
+                }.show()
         } else {
             findNavController().navigateUp()
         }
