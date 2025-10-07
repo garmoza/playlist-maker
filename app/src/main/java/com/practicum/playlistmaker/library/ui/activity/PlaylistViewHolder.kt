@@ -8,7 +8,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.common.domain.models.Playlist
-import androidx.core.net.toUri
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.practicum.playlistmaker.common.ui.dpToPx
@@ -23,7 +22,7 @@ class PlaylistViewHolder(parent: ViewGroup) : RecyclerView.ViewHolder(
 
     fun bind(model: Playlist) {
         Glide.with(itemView)
-            .load(model.labelUri?.toUri())
+            .load(model.label)
             .placeholder(R.drawable.placeholder_track_label)
             .transform(CenterCrop(),  RoundedCorners(dpToPx(8F, itemView.context)))
             .into(label)

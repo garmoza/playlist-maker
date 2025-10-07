@@ -1,5 +1,6 @@
 package com.practicum.playlistmaker.library.data.mapper
 
+import androidx.core.net.toUri
 import com.google.gson.Gson
 import com.practicum.playlistmaker.common.domain.models.Playlist
 import com.practicum.playlistmaker.library.data.db.entity.Playlist as PlaylistEntity
@@ -12,7 +13,7 @@ class PlaylistEntityMapper(
             id = model.id,
             name = model.name,
             description = model.description,
-            labelUri = model.labelUri,
+            labelUri = model.label.toString(),
             trackIds = gson.toJson(model.trackIds)
         )
 
@@ -21,7 +22,7 @@ class PlaylistEntityMapper(
             id = entity.id,
             name = entity.name,
             description = entity.description,
-            labelUri = entity.labelUri,
+            label = entity.labelUri?.toUri(),
             trackIds = gson.fromJson(entity.trackIds, Array<String>::class.java).toSet()
         )
 }

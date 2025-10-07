@@ -1,6 +1,5 @@
 package com.practicum.playlistmaker.library.domain.impl
 
-import android.net.Uri
 import com.practicum.playlistmaker.common.domain.PrivateStorageRepository
 import com.practicum.playlistmaker.common.domain.models.Playlist
 import com.practicum.playlistmaker.common.domain.models.Track
@@ -13,7 +12,12 @@ class PlaylistInteractorImpl(
     private val privateStorageRepository: PrivateStorageRepository
 ) : PlaylistInteractor {
     override suspend fun addPlaylist(playlist: Playlist) {
-        playlistRepository.addPlaylist(playlist)
+        val storageUri = playlist.label?.let {
+            privateStorageRepository.savePlaylistLabel(playlist.label, playlist.name)
+        }
+        playlistRepository.addPlaylist(
+            playlist.copy(label = storageUri)
+        )
     }
 
     override fun getPlaylists(): Flow<List<Playlist>> {
@@ -26,9 +30,5 @@ class PlaylistInteractorImpl(
         }
         playlistRepository.addTrack(track)
         playlistRepository.addPlaylist(playlist.copy(trackIds = newTrackIds))
-    }
-
-    override fun saveLabelToPrivateStorage(uri: Uri, playlistName: String): Uri {
-        return privateStorageRepository.savePlaylistLabel(uri, playlistName)
     }
 }

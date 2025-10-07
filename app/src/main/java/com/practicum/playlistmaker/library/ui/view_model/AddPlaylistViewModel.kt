@@ -20,18 +20,12 @@ class AddPlaylistViewModel(
 
     fun addPlaylist() {
         if (liveData.value?.isReadyToAdd == true) {
-            val storageUri: Uri? = liveData.value?.playlistLabelUri?.let {
-                playlistInteractor.saveLabelToPrivateStorage(
-                    uri = it,
-                    playlistName = liveData.value?.playlistName!!
-                )
-            }
             viewModelScope.launch {
                 playlistInteractor.addPlaylist(
                     Playlist(
                         name = liveData.value?.playlistName!!,
                         description = liveData.value?.playlistDescription,
-                        labelUri = storageUri.toString()
+                        label = liveData.value?.playlistLabelUri
                     )
                 )
             }

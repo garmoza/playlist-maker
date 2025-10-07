@@ -4,7 +4,6 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.core.net.toUri
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
@@ -23,7 +22,7 @@ class PlaylistBottomSheetViewHolder(parent: ViewGroup) : RecyclerView.ViewHolder
 
     fun bind(model: Playlist) {
         Glide.with(itemView)
-            .load(model.labelUri?.toUri())
+            .load(model.label)
             .placeholder(R.drawable.placeholder_track_label)
             .transform(CenterCrop(),  RoundedCorners(dpToPx(2F, itemView.context)))
             .into(label)
