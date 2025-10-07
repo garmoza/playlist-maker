@@ -1,6 +1,8 @@
 package com.practicum.playlistmaker.di
 
+import com.practicum.playlistmaker.common.data.PrivateStorageRepositoryImpl
 import com.practicum.playlistmaker.common.data.db.AppDatabase
+import com.practicum.playlistmaker.common.domain.PrivateStorageRepository
 import com.practicum.playlistmaker.favourite.data.FavouriteTracksRepositoryImpl
 import com.practicum.playlistmaker.favourite.domain.FavouriteTracksRepository
 import com.practicum.playlistmaker.library.data.PlaylistRepositoryImpl
@@ -12,6 +14,7 @@ import com.practicum.playlistmaker.search.domain.TracksRepository
 import com.practicum.playlistmaker.search.domain.TracksSearchHistoryRepository
 import com.practicum.playlistmaker.settings.data.ThemeRepositoryImpl
 import com.practicum.playlistmaker.settings.domain.ThemeRepository
+import org.koin.android.ext.koin.androidApplication
 import org.koin.dsl.module
 
 val repositoryModule = module {
@@ -37,5 +40,9 @@ val repositoryModule = module {
 
     factory<PlaylistEntityMapper> {
         PlaylistEntityMapper(get())
+    }
+
+    factory<PrivateStorageRepository> {
+        PrivateStorageRepositoryImpl(androidApplication())
     }
 }

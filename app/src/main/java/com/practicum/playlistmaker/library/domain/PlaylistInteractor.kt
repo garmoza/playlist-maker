@@ -1,5 +1,6 @@
 package com.practicum.playlistmaker.library.domain
 
+import android.net.Uri
 import com.practicum.playlistmaker.common.domain.models.Playlist
 import com.practicum.playlistmaker.common.domain.models.Track
 import kotlinx.coroutines.flow.Flow
@@ -10,4 +11,6 @@ interface PlaylistInteractor {
     fun getPlaylists(): Flow<List<Playlist>>
 
     suspend fun addTrackToPlaylist(playlist: Playlist, track: Track)
+
+    fun saveLabelToPrivateStorage(uri: Uri, playlistName: String): Uri
 }
