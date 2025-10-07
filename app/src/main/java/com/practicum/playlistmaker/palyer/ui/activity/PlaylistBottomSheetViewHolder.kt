@@ -30,13 +30,10 @@ class PlaylistBottomSheetViewHolder(parent: ViewGroup) : RecyclerView.ViewHolder
         playlistName.text = model.name
 
         val numberOfTracks = model.trackIds.size
-        val numberOfTracksStringTemplate = when (numberOfTracks) {
-            1 -> R.string.number_of_tracks_template_1
-            2 -> R.string.number_of_tracks_template_2
-            3 -> R.string.number_of_tracks_template_3
-            4 -> R.string.number_of_tracks_template_4
-            else -> R.string.number_of_tracks_template_default
-        }
-        tracksCount.text = itemView.context.getString(numberOfTracksStringTemplate, numberOfTracks)
+        tracksCount.text = itemView.resources.getQuantityString(
+            R.plurals.number_of_tracks,
+            numberOfTracks,
+            numberOfTracks
+        )
     }
 }
