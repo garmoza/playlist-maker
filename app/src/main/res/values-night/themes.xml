@@ -5,6 +5,7 @@
         <item name="colorPrimary">@color/app_black</item>
         <item name="colorOnPrimary">@color/app_white</item>
         <item name="colorOnPrimaryVariant">@color/app_white</item>
+        <item name="colorOnPrimaryVariantLight">@color/app_white</item>
         <item name="colorInputHint">@color/yp_black</item>
         <item name="colorOnPrimaryTransparent25">@color/yp_white_transparent25</item>
 

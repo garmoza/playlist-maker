@@ -2,5 +2,6 @@
 <resources>
     <attr name="colorInputHint" format="color"/>
     <attr name="colorOnPrimaryVariant" format="color"/>
+    <attr name="colorOnPrimaryVariantLight" format="color"/>
     <attr name="colorOnPrimaryTransparent25" format="color"/>
 </resources>

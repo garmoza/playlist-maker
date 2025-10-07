@@ -37,4 +37,23 @@
     <string name="your_library_is_empty">Your library is empty</string>
     <string name="you_have_not_playlists">You haven\'t created\nany playlists yet</string>
     <string name="new_playlist">New playlist</string>
+    <string name="create">Create</string>
+    <string name="name_required">Name*</string>
+    <string name="description">Description</string>
+    <string name="playlist_label">Playlist label</string>
+    <string name="add_to_playlist">Add to playlist</string>
+
+    <string name="finish_creating_the_playlist">Finish creating the playlist?</string>
+    <string name="all_unsaved_data_will_be_lost">All unsaved data will be lost</string>
+    <string name="finish">Finish</string>
+    <string name="cancel">Cancel</string>
+    <string name="playlist_has_been_crated">The %s playlist been created</string>
+
+    <plurals name="number_of_tracks">
+        <item quantity="one">%d track</item>
+        <item quantity="other">%d tracks</item>
+    </plurals>
+
+    <string name="added_to_playlist">Added to playlist %s</string>
+    <string name="track_already_in_playlist">The track is already in the playlist %s</string>
 </resources>

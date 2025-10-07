@@ -9,13 +9,13 @@
     >
 
     <Button
-        android:id="@+id/placeholderButton"
-        style="@style/ButtonPlaceholder"
+        android:id="@+id/newPlaylistButton"
+        style="@style/ButtonRounded"
         android:layout_marginTop="24dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="@string/new_playlist"
+        android:text="@string/new_playlist"
         />
 
     <ImageView
@@ -36,6 +36,14 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/placeholderImage"
         tools:text="@string/you_have_not_playlists"
+        />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerViewPlaylist"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="76dp"
+        android:layout_marginHorizontal="@dimen/screen_horizontal_indent"
         />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -5,9 +5,12 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.practicum.playlistmaker.common.domain.models.Playlist
 import com.practicum.playlistmaker.common.domain.models.Track
 import com.practicum.playlistmaker.favourite.domain.FavouriteTracksInteractor
+import com.practicum.playlistmaker.library.domain.PlaylistInteractor
 import com.practicum.playlistmaker.palyer.domain.model.PlayerState
+import com.practicum.playlistmaker.palyer.domain.model.TrackAddedToPlaylistToastState
 import com.practicum.playlistmaker.palyer.domain.model.TrackNotAvailableToastState
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -15,6 +18,7 @@ import kotlinx.coroutines.launch
 
 class MediaPlayerViewModel(
     private val favouriteTracksInteractor: FavouriteTracksInteractor,
+    private val playlistInteractor: PlaylistInteractor,
     private val track: Track
 ) : ViewModel() {
 
@@ -25,6 +29,10 @@ class MediaPlayerViewModel(
     private val playerLiveData = MutableLiveData(LOADING_STATE)
     private val trackNotAvailableToastLiveData = MutableLiveData<TrackNotAvailableToastState>(
         TrackNotAvailableToastState.None
+    )
+    private val playlistsLiveData = MutableLiveData(emptyList<Playlist>())
+    private val trackAddedToPlaylistToastLiveData = MutableLiveData<TrackAddedToPlaylistToastState>(
+        TrackAddedToPlaylistToastState.None
     )
 
     init {
@@ -37,6 +45,8 @@ class MediaPlayerViewModel(
         }
 
         prepareMediaPlayer()
+
+        loadPlaylists()
     }
 
     private fun prepareMediaPlayer() {
@@ -52,6 +62,8 @@ class MediaPlayerViewModel(
 
     fun getPlayerLiveData(): LiveData<PlayerState> = playerLiveData
     fun getToastLiveData(): LiveData<TrackNotAvailableToastState> = trackNotAvailableToastLiveData
+    fun getPlaylistsLiveData(): LiveData<List<Playlist>> = playlistsLiveData
+    fun getTrackAddedToPlaylistLiveData(): LiveData<TrackAddedToPlaylistToastState> = trackAddedToPlaylistToastLiveData
 
     fun switchBetweenPlayAndPause() {
         if (playerLiveData.value?.isPlaying == true) {
@@ -100,6 +112,7 @@ class MediaPlayerViewModel(
 
     fun toastWasShow() {
         trackNotAvailableToastLiveData.value = TrackNotAvailableToastState.None
+        trackAddedToPlaylistToastLiveData.value = TrackAddedToPlaylistToastState.None
     }
 
     fun onFavouriteClick() {
@@ -114,6 +127,28 @@ class MediaPlayerViewModel(
         }
     }
 
+    fun loadPlaylists() {
+        viewModelScope.launch {
+            playlistInteractor
+                .getPlaylists()
+                .collect { playlists ->
+                    playlistsLiveData.postValue(playlists)
+                }
+        }
+    }
+
+    fun addCurrentTrackToPlaylist(playlist: Playlist) {
+        val trackName = track.trackName ?: UNKNOWN_TRACK_NAME
+        if (playlist.trackIds.contains(track.trackId)) {
+            trackAddedToPlaylistToastLiveData.value = TrackAddedToPlaylistToastState.ShowAlreadyAdded(trackName)
+        } else {
+            viewModelScope.launch {
+                playlistInteractor.addTrackToPlaylist(playlist, track)
+                trackAddedToPlaylistToastLiveData.value = TrackAddedToPlaylistToastState.ShowNewAdded(trackName)
+            }
+        }
+    }
+
     companion object {
         private val LOADING_STATE = PlayerState(
             isLoading = true,
@@ -124,5 +159,7 @@ class MediaPlayerViewModel(
         )
 
         private const val DELAY = 300L
+
+        private const val UNKNOWN_TRACK_NAME = "Track Unknown"
     }
 }
