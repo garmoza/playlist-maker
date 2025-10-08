@@ -56,4 +56,9 @@
 
     <string name="added_to_playlist">Added to playlist %s</string>
     <string name="track_already_in_playlist">The track is already in the playlist %s</string>
+
+    <plurals name="number_of_minutes">
+        <item quantity="one">%d minute</item>
+        <item quantity="other">%d minutes</item>
+    </plurals>
 </resources>

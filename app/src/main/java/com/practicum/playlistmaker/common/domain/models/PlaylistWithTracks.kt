@@ -19,4 +19,6 @@ data class PlaylistWithTracks(
         label = playlist.label,
         tracks = tracks
     )
+    val totalDurationMillis: Long
+        get() = tracks.sumOf { it.trackTimeMillis ?: 0L }
 }

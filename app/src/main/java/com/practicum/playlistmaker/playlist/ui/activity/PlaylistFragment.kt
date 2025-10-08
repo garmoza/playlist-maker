@@ -17,6 +17,8 @@ import com.practicum.playlistmaker.playlist.domain.model.PlaylistScreenState
 import com.practicum.playlistmaker.playlist.ui.view_model.PlaylistViewModel
 import org.koin.android.ext.android.getKoin
 import org.koin.core.parameter.parametersOf
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 class PlaylistFragment : Fragment() {
 
@@ -24,6 +26,8 @@ class PlaylistFragment : Fragment() {
 
     private var _binding: FragmentPlaylistBinding? = null
     private val binding get() = _binding!!
+
+    private val durationFormat by lazy { SimpleDateFormat("mm", Locale.getDefault()) }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -82,7 +86,12 @@ class PlaylistFragment : Fragment() {
         }
         playlistName.text = playlist.name
         playlistDescription.text = playlist.description
-        playlistDuration.text = "0 минут"
+        val totalDuration = durationFormat.format(playlist.totalDurationMillis).toInt()
+        playlistDuration.text = resources.getQuantityString(
+            R.plurals.number_of_minutes,
+            totalDuration,
+            totalDuration
+        )
         val numberOfTracks = playlist.tracks.size
         playlistNumberOfTracks.text = resources.getQuantityString(
             R.plurals.number_of_tracks,
