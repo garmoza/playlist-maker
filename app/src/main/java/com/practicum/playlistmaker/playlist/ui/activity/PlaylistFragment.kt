@@ -11,6 +11,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.common.domain.models.PlaylistWithTracks
 import com.practicum.playlistmaker.common.domain.models.Track
@@ -61,7 +62,7 @@ class PlaylistFragment : Fragment() {
             binding.setState(state)
         }
 
-        initTrackAdapter(this::onTrackClick)
+        initTrackAdapter(this::onTrackClick, this::onLongTrackClick)
     }
 
     private fun onTrackClick(track: Track) {
@@ -71,12 +72,25 @@ class PlaylistFragment : Fragment() {
         )
     }
 
-    private fun initTrackAdapter(onTrackClick: (Track) -> Unit) {
+    private fun onLongTrackClick(track: Track) {
+        MaterialAlertDialogBuilder(requireContext(), R.style.CustomDialogTheme)
+            .setTitle(R.string.want_to_delete_track)
+            .setPositiveButton(R.string.yes) { _, _ ->
+                // todo
+            }.setNeutralButton(R.string.no) { _, _ ->
+                // todo
+            }.show()
+    }
+
+    private fun initTrackAdapter(
+        onTrackClick: (Track) -> Unit,
+        onLongTrackClick: (Track) -> Unit
+    ) {
         val onTrackDebounceClick = debounceClick(
             coroutineScope = viewLifecycleOwner.lifecycleScope,
             action = onTrackClick
         )
-        trackAdapter = TrackAdapter(onTrackDebounceClick)
+        trackAdapter = TrackAdapter(onTrackDebounceClick, onLongTrackClick)
         binding.recyclerViewTrack.adapter = trackAdapter
     }
 

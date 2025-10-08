@@ -53,4 +53,7 @@
         <item quantity="many">%d минут</item>
         <item quantity="other">%d минут</item>
     </plurals>
+    <string name="want_to_delete_track">Хотите удалить трек?</string>
+    <string name="yes">Да</string>
+    <string name="no">Нет</string>
 </resources>
