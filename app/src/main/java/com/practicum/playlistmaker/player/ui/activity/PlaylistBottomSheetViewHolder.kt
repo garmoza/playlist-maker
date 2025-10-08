@@ -1,4 +1,4 @@
-package com.practicum.playlistmaker.palyer.ui.activity
+package com.practicum.playlistmaker.player.ui.activity
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

@@ -1,4 +1,4 @@
-package com.practicum.playlistmaker.palyer.domain.model
+package com.practicum.playlistmaker.player.domain.model
 
 sealed interface TrackAddedToPlaylistToastState {
     data class ShowNewAdded(val trackName: String): TrackAddedToPlaylistToastState

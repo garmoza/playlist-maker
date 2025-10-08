@@ -1,4 +1,4 @@
-package com.practicum.playlistmaker.palyer.ui.activity
+package com.practicum.playlistmaker.player.ui.activity
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -20,10 +20,10 @@ import com.practicum.playlistmaker.common.domain.models.Track
 import com.practicum.playlistmaker.common.ui.debounceClick
 import com.practicum.playlistmaker.common.ui.dpToPx
 import com.practicum.playlistmaker.databinding.FragmentPlayerBinding
-import com.practicum.playlistmaker.palyer.domain.model.PlayerState
-import com.practicum.playlistmaker.palyer.domain.model.TrackAddedToPlaylistToastState
-import com.practicum.playlistmaker.palyer.domain.model.TrackNotAvailableToastState
-import com.practicum.playlistmaker.palyer.ui.view_model.MediaPlayerViewModel
+import com.practicum.playlistmaker.player.domain.model.PlayerState
+import com.practicum.playlistmaker.player.domain.model.TrackAddedToPlaylistToastState
+import com.practicum.playlistmaker.player.domain.model.TrackNotAvailableToastState
+import com.practicum.playlistmaker.player.ui.view_model.MediaPlayerViewModel
 import org.koin.android.ext.android.getKoin
 import org.koin.core.parameter.parametersOf
 import java.text.SimpleDateFormat

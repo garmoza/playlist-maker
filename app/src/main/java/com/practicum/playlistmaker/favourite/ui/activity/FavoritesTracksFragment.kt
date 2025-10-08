@@ -14,7 +14,7 @@ import com.practicum.playlistmaker.common.ui.debounceClick
 import com.practicum.playlistmaker.databinding.FragmentFavoritesTracksBinding
 import com.practicum.playlistmaker.favourite.domain.model.FavoritesTracksScreenState
 import com.practicum.playlistmaker.favourite.ui.view_model.FavoritesTracksViewModel
-import com.practicum.playlistmaker.palyer.ui.activity.PlayerFragment
+import com.practicum.playlistmaker.player.ui.activity.PlayerFragment
 import com.practicum.playlistmaker.search.ui.activity.TrackAdapter
 import org.koin.androidx.viewmodel.ext.android.viewModel
 

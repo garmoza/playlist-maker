@@ -1,4 +1,4 @@
-package com.practicum.playlistmaker.palyer.ui.view_model
+package com.practicum.playlistmaker.player.ui.view_model
 
 import android.media.MediaPlayer
 import androidx.lifecycle.LiveData
@@ -9,9 +9,9 @@ import com.practicum.playlistmaker.common.domain.models.Playlist
 import com.practicum.playlistmaker.common.domain.models.Track
 import com.practicum.playlistmaker.favourite.domain.FavouriteTracksInteractor
 import com.practicum.playlistmaker.library.domain.PlaylistInteractor
-import com.practicum.playlistmaker.palyer.domain.model.PlayerState
-import com.practicum.playlistmaker.palyer.domain.model.TrackAddedToPlaylistToastState
-import com.practicum.playlistmaker.palyer.domain.model.TrackNotAvailableToastState
+import com.practicum.playlistmaker.player.domain.model.PlayerState
+import com.practicum.playlistmaker.player.domain.model.TrackAddedToPlaylistToastState
+import com.practicum.playlistmaker.player.domain.model.TrackNotAvailableToastState
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
