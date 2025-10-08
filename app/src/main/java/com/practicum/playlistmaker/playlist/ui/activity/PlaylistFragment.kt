@@ -78,7 +78,7 @@ class PlaylistFragment : Fragment() {
             .setPositiveButton(R.string.yes) { _, _ ->
                 // todo
             }.setNeutralButton(R.string.no) { _, _ ->
-                // todo
+                // nothing
             }.show()
     }
 
@@ -120,30 +120,30 @@ class PlaylistFragment : Fragment() {
         }
     }
 
-    private fun FragmentPlaylistBinding.bindContent(playlist: PlaylistWithTracks) {
-        playlist.label?.let {
+    private fun FragmentPlaylistBinding.bindContent(model: PlaylistWithTracks) {
+        model.playlist.label?.let {
             Glide.with(this@PlaylistFragment)
                 .load(it)
                 .placeholder(R.drawable.placeholder_track_label)
                 .transform(CenterCrop())
                 .into(binding.playlistLabel)
         }
-        playlistName.text = playlist.name
-        playlistDescription.text = playlist.description
-        val totalDuration = durationFormat.format(playlist.totalDurationMillis).toInt()
+        playlistName.text = model.playlist.name
+        playlistDescription.text = model.playlist.description
+        val totalDuration = durationFormat.format(model.totalDurationMillis).toInt()
         playlistDuration.text = resources.getQuantityString(
             R.plurals.number_of_minutes,
             totalDuration,
             totalDuration
         )
-        val numberOfTracks = playlist.tracks.size
+        val numberOfTracks = model.tracks.size
         playlistNumberOfTracks.text = resources.getQuantityString(
             R.plurals.number_of_tracks,
             numberOfTracks,
             numberOfTracks
         )
 
-        trackAdapter.setItems(playlist.tracks)
+        trackAdapter.setItems(model.tracks)
     }
 
     private fun FragmentPlaylistBinding.hideViews() {
