@@ -2,10 +2,12 @@ package com.practicum.playlistmaker.playlist.domain.impl
 
 import com.practicum.playlistmaker.common.domain.PrivateStorageRepository
 import com.practicum.playlistmaker.common.domain.models.Playlist
+import com.practicum.playlistmaker.common.domain.models.PlaylistWithTracks
 import com.practicum.playlistmaker.common.domain.models.Track
 import com.practicum.playlistmaker.playlist.domain.PlaylistInteractor
 import com.practicum.playlistmaker.playlist.domain.PlaylistRepository
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
 
 class PlaylistInteractorImpl(
     private val playlistRepository: PlaylistRepository,
@@ -30,5 +32,11 @@ class PlaylistInteractorImpl(
         }
         playlistRepository.addTrack(track)
         playlistRepository.addPlaylist(playlist.copy(trackIds = newTrackIds))
+    }
+
+    override suspend fun getPlaylistWithTracks(playlistId: Long): PlaylistWithTracks {
+        val playlist = playlistRepository.getPlaylistById(playlistId)
+        val tracks = playlistRepository.getTracks(playlist.trackIds).first()
+        return PlaylistWithTracks(playlist, tracks)
     }
 }

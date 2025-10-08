@@ -12,8 +12,14 @@ import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.common.domain.models.Playlist
 import com.practicum.playlistmaker.databinding.FragmentPlaylistBinding
+import com.practicum.playlistmaker.playlist.domain.model.PlaylistScreenState
+import com.practicum.playlistmaker.playlist.ui.view_model.PlaylistViewModel
+import org.koin.android.ext.android.getKoin
+import org.koin.core.parameter.parametersOf
 
 class PlaylistFragment : Fragment() {
+
+    private lateinit var viewModel: PlaylistViewModel
 
     private var _binding: FragmentPlaylistBinding? = null
     private val binding get() = _binding!!
@@ -53,6 +59,20 @@ class PlaylistFragment : Fragment() {
                 numberOfTracks,
                 numberOfTracks
             )
+        }
+
+        viewModel = getKoin().get<PlaylistViewModel> {
+            parametersOf(playlist.id)
+        }
+        viewModel.getScreenLiveData().observe(viewLifecycleOwner) { status ->
+            when (status) {
+                is PlaylistScreenState.Loading -> {
+                    binding.playlistName.text = "Loading"
+                }
+                is PlaylistScreenState.Content -> {
+                    binding.playlistName.text = "Loaded"
+                }
+            }
         }
     }
 

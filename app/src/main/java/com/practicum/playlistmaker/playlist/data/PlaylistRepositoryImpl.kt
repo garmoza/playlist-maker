@@ -26,9 +26,22 @@ class PlaylistRepositoryImpl(
         emit(playlists)
     }
 
+    override suspend fun getPlaylistById(playlistId: Long): Playlist {
+        val playlist = playlistDao.getPlaylistById(playlistId)
+        return playlistEntityMapper.map(playlist)
+    }
+
     override suspend fun addTrack(track: Track) {
         playlistDao.insertTrack(
             TrackEntityMapper.map(track)
         )
+    }
+
+    override fun getTracks(trackIds: Set<String>): Flow<List<Track>> = flow {
+        val tracks = playlistDao
+            .getTracks()
+            .filter { track -> track.id in trackIds }
+            .map(TrackEntityMapper::map)
+        emit(tracks)
     }
 }
