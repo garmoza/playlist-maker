@@ -16,6 +16,7 @@ import com.practicum.playlistmaker.common.ui.debounceClick
 import com.practicum.playlistmaker.databinding.FragmentPlaylistsBinding
 import com.practicum.playlistmaker.library.domain.model.PlaylistsScreenState
 import com.practicum.playlistmaker.library.ui.view_model.PlaylistsViewModel
+import com.practicum.playlistmaker.playlist.ui.activity.AddPlaylistFragment
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class PlaylistsFragment : Fragment() {

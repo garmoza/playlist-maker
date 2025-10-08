@@ -1,7 +1,7 @@
-package com.practicum.playlistmaker.library.data.mapper
+package com.practicum.playlistmaker.playlist.data.mapper
 
 import com.practicum.playlistmaker.common.domain.models.Track
-import com.practicum.playlistmaker.library.data.db.entity.Track as TrackEntity
+import com.practicum.playlistmaker.playlist.data.db.entity.Track as TrackEntity
 
 object TrackEntityMapper {
     fun map(model: Track): TrackEntity =

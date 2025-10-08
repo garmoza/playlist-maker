@@ -1,4 +1,4 @@
-package com.practicum.playlistmaker.library.domain.model
+package com.practicum.playlistmaker.playlist.domain.model
 
 import android.net.Uri
 

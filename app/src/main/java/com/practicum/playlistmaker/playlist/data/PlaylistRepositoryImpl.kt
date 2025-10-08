@@ -1,11 +1,11 @@
-package com.practicum.playlistmaker.library.data
+package com.practicum.playlistmaker.playlist.data
 
 import com.practicum.playlistmaker.common.domain.models.Playlist
 import com.practicum.playlistmaker.common.domain.models.Track
-import com.practicum.playlistmaker.library.data.db.dao.PlaylistDao
-import com.practicum.playlistmaker.library.data.mapper.PlaylistEntityMapper
-import com.practicum.playlistmaker.library.data.mapper.TrackEntityMapper
-import com.practicum.playlistmaker.library.domain.PlaylistRepository
+import com.practicum.playlistmaker.playlist.data.db.dao.PlaylistDao
+import com.practicum.playlistmaker.playlist.data.mapper.PlaylistEntityMapper
+import com.practicum.playlistmaker.playlist.data.mapper.TrackEntityMapper
+import com.practicum.playlistmaker.playlist.domain.PlaylistRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 

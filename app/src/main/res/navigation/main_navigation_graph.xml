@@ -45,7 +45,7 @@
     </fragment>
     <fragment
         android:id="@+id/addPlaylistFragment"
-        android:name="com.practicum.playlistmaker.library.ui.activity.AddPlaylistFragment"
+        android:name="com.practicum.playlistmaker.playlist.ui.activity.AddPlaylistFragment"
         android:label="fragment_add_playlist"
         tools:layout="@layout/fragment_add_playlist" />
     <fragment

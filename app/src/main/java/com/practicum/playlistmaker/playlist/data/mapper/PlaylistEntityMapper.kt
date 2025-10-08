@@ -1,9 +1,9 @@
-package com.practicum.playlistmaker.library.data.mapper
+package com.practicum.playlistmaker.playlist.data.mapper
 
 import androidx.core.net.toUri
 import com.google.gson.Gson
 import com.practicum.playlistmaker.common.domain.models.Playlist
-import com.practicum.playlistmaker.library.data.db.entity.Playlist as PlaylistEntity
+import com.practicum.playlistmaker.playlist.data.db.entity.Playlist as PlaylistEntity
 
 class PlaylistEntityMapper(
     private val gson: Gson

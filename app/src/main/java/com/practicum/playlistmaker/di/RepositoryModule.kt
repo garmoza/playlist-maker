@@ -5,9 +5,9 @@ import com.practicum.playlistmaker.common.data.db.AppDatabase
 import com.practicum.playlistmaker.common.domain.PrivateStorageRepository
 import com.practicum.playlistmaker.favourite.data.FavouriteTracksRepositoryImpl
 import com.practicum.playlistmaker.favourite.domain.FavouriteTracksRepository
-import com.practicum.playlistmaker.library.data.PlaylistRepositoryImpl
-import com.practicum.playlistmaker.library.data.mapper.PlaylistEntityMapper
-import com.practicum.playlistmaker.library.domain.PlaylistRepository
+import com.practicum.playlistmaker.playlist.data.PlaylistRepositoryImpl
+import com.practicum.playlistmaker.playlist.data.mapper.PlaylistEntityMapper
+import com.practicum.playlistmaker.playlist.domain.PlaylistRepository
 import com.practicum.playlistmaker.search.data.TracksRepositoryImpl
 import com.practicum.playlistmaker.search.data.TracksSearchHistoryRepositoryImpl
 import com.practicum.playlistmaker.search.domain.TracksRepository

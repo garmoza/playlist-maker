@@ -1,11 +1,11 @@
-package com.practicum.playlistmaker.library.data.db.dao
+package com.practicum.playlistmaker.playlist.data.db.dao
 
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.practicum.playlistmaker.library.data.db.entity.Playlist
-import com.practicum.playlistmaker.library.data.db.entity.Track
+import com.practicum.playlistmaker.playlist.data.db.entity.Playlist
+import com.practicum.playlistmaker.playlist.data.db.entity.Track
 
 @Dao
 interface PlaylistDao {

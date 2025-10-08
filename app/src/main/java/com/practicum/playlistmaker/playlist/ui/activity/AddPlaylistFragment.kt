@@ -1,4 +1,4 @@
-package com.practicum.playlistmaker.library.ui.activity
+package com.practicum.playlistmaker.playlist.ui.activity
 
 import android.os.Bundle
 import android.util.Log
@@ -18,7 +18,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.common.ui.dpToPx
 import com.practicum.playlistmaker.databinding.FragmentAddPlaylistBinding
-import com.practicum.playlistmaker.library.ui.view_model.AddPlaylistViewModel
+import com.practicum.playlistmaker.playlist.ui.view_model.AddPlaylistViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class AddPlaylistFragment : Fragment() {

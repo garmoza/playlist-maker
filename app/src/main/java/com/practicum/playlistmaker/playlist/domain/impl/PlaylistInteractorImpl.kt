@@ -1,10 +1,10 @@
-package com.practicum.playlistmaker.library.domain.impl
+package com.practicum.playlistmaker.playlist.domain.impl
 
 import com.practicum.playlistmaker.common.domain.PrivateStorageRepository
 import com.practicum.playlistmaker.common.domain.models.Playlist
 import com.practicum.playlistmaker.common.domain.models.Track
-import com.practicum.playlistmaker.library.domain.PlaylistInteractor
-import com.practicum.playlistmaker.library.domain.PlaylistRepository
+import com.practicum.playlistmaker.playlist.domain.PlaylistInteractor
+import com.practicum.playlistmaker.playlist.domain.PlaylistRepository
 import kotlinx.coroutines.flow.Flow
 
 class PlaylistInteractorImpl(
