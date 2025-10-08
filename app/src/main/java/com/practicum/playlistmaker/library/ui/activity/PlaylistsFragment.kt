@@ -75,7 +75,7 @@ class PlaylistsFragment : Fragment() {
     private fun onPlaylistClick(playlist: Playlist) {
         findNavController().navigate(
             R.id.action_libraryFragment_to_playlistFragment,
-            PlaylistFragment.createArgs(playlist)
+            PlaylistFragment.createArgs(playlist.id!!)
         )
     }
 

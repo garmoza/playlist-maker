@@ -11,7 +11,7 @@ import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.practicum.playlistmaker.R
-import com.practicum.playlistmaker.common.domain.models.Playlist
+import com.practicum.playlistmaker.common.domain.models.PlaylistWithTracks
 import com.practicum.playlistmaker.databinding.FragmentPlaylistBinding
 import com.practicum.playlistmaker.playlist.domain.model.PlaylistScreenState
 import com.practicum.playlistmaker.playlist.ui.view_model.PlaylistViewModel
@@ -41,29 +41,10 @@ class PlaylistFragment : Fragment() {
             findNavController().navigateUp()
         }
 
-        val playlist: Playlist = requireArguments().getParcelable(PLAYLIST_KEY)!!
-
-        playlist.label?.let {
-            Glide.with(this)
-                .load(it)
-                .placeholder(R.drawable.placeholder_track_label)
-                .transform(CenterCrop())
-                .into(binding.playlistLabel)
-        }
-        with(binding) {
-            playlistName.text = playlist.name
-            playlistDescription.text = playlist.description
-            playlistDuration.text = "0 минут"
-            val numberOfTracks = playlist.trackIds.size
-            playlistNumberOfTracks.text = resources.getQuantityString(
-                R.plurals.number_of_tracks,
-                numberOfTracks,
-                numberOfTracks
-            )
-        }
+        val playlistId: Long = requireArguments().getLong(PLAYLIST_ID_KEY)
 
         viewModel = getKoin().get<PlaylistViewModel> {
-            parametersOf(playlist.id)
+            parametersOf(playlistId)
         }
         viewModel.getScreenLiveData().observe(viewLifecycleOwner) { state ->
             binding.setState(state)
@@ -77,23 +58,7 @@ class PlaylistFragment : Fragment() {
                 progressBar.isVisible = true
             }
             is PlaylistScreenState.Content -> {
-                state.playlist.label?.let {
-                    Glide.with(this@PlaylistFragment)
-                        .load(it)
-                        .placeholder(R.drawable.placeholder_track_label)
-                        .transform(CenterCrop())
-                        .into(binding.playlistLabel)
-                }
-                playlistName.text = state.playlist.name
-                playlistDescription.text = state.playlist.description
-                playlistDuration.text = "0 минут"
-                val numberOfTracks = state.playlist.tracks.size
-                playlistNumberOfTracks.text = resources.getQuantityString(
-                    R.plurals.number_of_tracks,
-                    numberOfTracks,
-                    numberOfTracks
-                )
-
+                bindContent(state.playlist)
                 hideViews()
                 playlistLabel.isVisible = true
                 playlistName.isVisible = true
@@ -105,6 +70,25 @@ class PlaylistFragment : Fragment() {
                 menuButton.isVisible = true
             }
         }
+    }
+
+    private fun FragmentPlaylistBinding.bindContent(playlist: PlaylistWithTracks) {
+        playlist.label?.let {
+            Glide.with(this@PlaylistFragment)
+                .load(it)
+                .placeholder(R.drawable.placeholder_track_label)
+                .transform(CenterCrop())
+                .into(binding.playlistLabel)
+        }
+        playlistName.text = playlist.name
+        playlistDescription.text = playlist.description
+        playlistDuration.text = "0 минут"
+        val numberOfTracks = playlist.tracks.size
+        playlistNumberOfTracks.text = resources.getQuantityString(
+            R.plurals.number_of_tracks,
+            numberOfTracks,
+            numberOfTracks
+        )
     }
 
     private fun FragmentPlaylistBinding.hideViews() {
@@ -120,11 +104,11 @@ class PlaylistFragment : Fragment() {
     }
 
     companion object {
-        private const val PLAYLIST_KEY = "PLAYLIST_KEY"
+        private const val PLAYLIST_ID_KEY = "PLAYLIST_ID_KEY"
 
-        fun createArgs(playlist: Playlist): Bundle =
+        fun createArgs(playlistId: Long): Bundle =
             bundleOf(
-                PLAYLIST_KEY to playlist
+                PLAYLIST_ID_KEY to playlistId
             )
     }
 }
