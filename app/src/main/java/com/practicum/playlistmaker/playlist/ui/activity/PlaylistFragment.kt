@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
@@ -64,16 +65,58 @@ class PlaylistFragment : Fragment() {
         viewModel = getKoin().get<PlaylistViewModel> {
             parametersOf(playlist.id)
         }
-        viewModel.getScreenLiveData().observe(viewLifecycleOwner) { status ->
-            when (status) {
-                is PlaylistScreenState.Loading -> {
-                    binding.playlistName.text = "Loading"
+        viewModel.getScreenLiveData().observe(viewLifecycleOwner) { state ->
+            binding.setState(state)
+        }
+    }
+
+    private fun FragmentPlaylistBinding.setState(state: PlaylistScreenState) {
+        when (state) {
+            is PlaylistScreenState.Loading -> {
+                hideViews()
+                progressBar.isVisible = true
+            }
+            is PlaylistScreenState.Content -> {
+                state.playlist.label?.let {
+                    Glide.with(this@PlaylistFragment)
+                        .load(it)
+                        .placeholder(R.drawable.placeholder_track_label)
+                        .transform(CenterCrop())
+                        .into(binding.playlistLabel)
                 }
-                is PlaylistScreenState.Content -> {
-                    binding.playlistName.text = "Loaded"
-                }
+                playlistName.text = state.playlist.name
+                playlistDescription.text = state.playlist.description
+                playlistDuration.text = "0 минут"
+                val numberOfTracks = state.playlist.tracks.size
+                playlistNumberOfTracks.text = resources.getQuantityString(
+                    R.plurals.number_of_tracks,
+                    numberOfTracks,
+                    numberOfTracks
+                )
+
+                hideViews()
+                playlistLabel.isVisible = true
+                playlistName.isVisible = true
+                playlistDescription.isVisible = true
+                playlistDuration.isVisible = true
+                dot.isVisible = true
+                playlistNumberOfTracks.isVisible = true
+                shareButton.isVisible = true
+                menuButton.isVisible = true
             }
         }
+    }
+
+    private fun FragmentPlaylistBinding.hideViews() {
+        progressBar.isVisible = false
+        playlistLabel.isVisible = false
+        playlistName.isVisible = false
+        playlistDescription.isVisible = false
+        playlistDuration.isVisible = false
+        dot.isVisible = false
+        playlistNumberOfTracks.isVisible = false
+        shareButton.isVisible = false
+        menuButton.isVisible = false
     }
 
     companion object {
