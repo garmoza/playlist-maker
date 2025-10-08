@@ -13,8 +13,8 @@ class PlaylistRepositoryImpl(
     private val playlistDao: PlaylistDao,
     private val playlistEntityMapper: PlaylistEntityMapper
 ) : PlaylistRepository {
-    override suspend fun addPlaylist(playlist: Playlist) {
-        playlistDao.insertPlaylist(
+    override suspend fun savePlaylist(playlist: Playlist) {
+        playlistDao.upsertPlaylist(
             playlistEntityMapper.map(playlist)
         )
     }
@@ -43,5 +43,9 @@ class PlaylistRepositoryImpl(
             .filter { track -> track.id in trackIds }
             .map(TrackEntityMapper::map)
         emit(tracks)
+    }
+
+    override suspend fun removeTrack(track: Track) {
+        playlistDao.deleteTrack(TrackEntityMapper.map(track))
     }
 }

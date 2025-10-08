@@ -8,6 +8,8 @@ import com.practicum.playlistmaker.playlist.domain.PlaylistInteractor
 import com.practicum.playlistmaker.playlist.domain.PlaylistRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.toList
 
 class PlaylistInteractorImpl(
     private val playlistRepository: PlaylistRepository,
@@ -17,7 +19,7 @@ class PlaylistInteractorImpl(
         val storageUri = playlist.label?.let {
             privateStorageRepository.savePlaylistLabel(playlist.label, playlist.name)
         }
-        playlistRepository.addPlaylist(
+        playlistRepository.savePlaylist(
             playlist.copy(label = storageUri)
         )
     }
@@ -31,12 +33,26 @@ class PlaylistInteractorImpl(
             add(track.trackId)
         }
         playlistRepository.addTrack(track)
-        playlistRepository.addPlaylist(playlist.copy(trackIds = newTrackIds))
+        playlistRepository.savePlaylist(playlist.copy(trackIds = newTrackIds))
     }
 
     override suspend fun getPlaylistWithTracks(playlistId: Long): PlaylistWithTracks {
         val playlist = playlistRepository.getPlaylistById(playlistId)
         val tracks = playlistRepository.getTracks(playlist.trackIds).first()
         return PlaylistWithTracks(playlist, tracks)
+    }
+
+    override suspend fun deleteTrackFromPlaylist(playlist: Playlist, track: Track) {
+        val newTrackIds = playlist.trackIds.toMutableSet().apply {
+            remove(track.trackId)
+        }
+        playlistRepository.savePlaylist(playlist.copy(trackIds = newTrackIds))
+
+        val allTrackIds = playlistRepository.getPlaylists()
+            .map { playlist.trackIds }.toList()
+            .flatten().toSet()
+        if (!allTrackIds.contains(track.trackId)) {
+            playlistRepository.removeTrack(track)
+        }
     }
 }
