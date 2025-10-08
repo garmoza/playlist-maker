@@ -7,14 +7,19 @@ import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.common.domain.models.PlaylistWithTracks
+import com.practicum.playlistmaker.common.domain.models.Track
+import com.practicum.playlistmaker.common.ui.debounceClick
 import com.practicum.playlistmaker.databinding.FragmentPlaylistBinding
+import com.practicum.playlistmaker.player.ui.activity.PlayerFragment
 import com.practicum.playlistmaker.playlist.domain.model.PlaylistScreenState
 import com.practicum.playlistmaker.playlist.ui.view_model.PlaylistViewModel
+import com.practicum.playlistmaker.search.ui.activity.TrackAdapter
 import org.koin.android.ext.android.getKoin
 import org.koin.core.parameter.parametersOf
 import java.text.SimpleDateFormat
@@ -28,6 +33,8 @@ class PlaylistFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val durationFormat by lazy { SimpleDateFormat("mm", Locale.getDefault()) }
+
+    private lateinit var trackAdapter: TrackAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -53,6 +60,29 @@ class PlaylistFragment : Fragment() {
         viewModel.getScreenLiveData().observe(viewLifecycleOwner) { state ->
             binding.setState(state)
         }
+
+        initTrackAdapter(this::onTrackClick)
+    }
+
+    private fun onTrackClick(track: Track) {
+        findNavController().navigate(
+            R.id.action_playlistFragment_to_playerFragment,
+            PlayerFragment.createArgs(track)
+        )
+    }
+
+    private fun initTrackAdapter(onTrackClick: (Track) -> Unit) {
+        val onTrackDebounceClick = debounceClick(
+            coroutineScope = viewLifecycleOwner.lifecycleScope,
+            action = onTrackClick
+        )
+        trackAdapter = TrackAdapter(onTrackDebounceClick)
+        binding.recyclerViewTrack.adapter = trackAdapter
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     private fun FragmentPlaylistBinding.setState(state: PlaylistScreenState) {
@@ -98,6 +128,8 @@ class PlaylistFragment : Fragment() {
             numberOfTracks,
             numberOfTracks
         )
+
+        trackAdapter.setItems(playlist.tracks)
     }
 
     private fun FragmentPlaylistBinding.hideViews() {
