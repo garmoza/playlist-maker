@@ -35,7 +35,8 @@ class PlaylistViewModel(
 
     fun deleteTrackFromPlaylist(track: Track) {
         viewModelScope.launch {
-            val playlist = (screenLiveData.value as PlaylistScreenState.Content).playlist.playlist
+            val playlist = (screenLiveData.value as PlaylistScreenState.Content)
+                .playlistWithTracks.playlist
             playlistInteractor.deleteTrackFromPlaylist(
                 playlist = playlist,
                 track = track

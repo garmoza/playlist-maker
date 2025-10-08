@@ -106,7 +106,7 @@ class PlaylistFragment : Fragment() {
                 progressBar.isVisible = true
             }
             is PlaylistScreenState.Content -> {
-                bindContent(state.playlist)
+                bindContent(state.playlistWithTracks)
                 hideViews()
                 playlistLabel.isVisible = true
                 playlistName.isVisible = true
