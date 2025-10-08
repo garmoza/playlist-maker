@@ -17,6 +17,7 @@ import com.practicum.playlistmaker.databinding.FragmentPlaylistsBinding
 import com.practicum.playlistmaker.library.domain.model.PlaylistsScreenState
 import com.practicum.playlistmaker.library.ui.view_model.PlaylistsViewModel
 import com.practicum.playlistmaker.playlist.ui.activity.AddPlaylistFragment
+import com.practicum.playlistmaker.playlist.ui.activity.PlaylistFragment
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class PlaylistsFragment : Fragment() {
@@ -73,7 +74,8 @@ class PlaylistsFragment : Fragment() {
 
     private fun onPlaylistClick(playlist: Playlist) {
         findNavController().navigate(
-            R.id.action_libraryFragment_to_playlistFragment
+            R.id.action_libraryFragment_to_playlistFragment,
+            PlaylistFragment.createArgs(playlist)
         )
     }
 
