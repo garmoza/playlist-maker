@@ -92,6 +92,7 @@ class PlaylistFragment : Fragment() {
         }
 
         binding.bottomSheetShare.setOnClickListener {
+            bottomSheetPlaylistMenuBehavior.state = BottomSheetBehavior.STATE_HIDDEN
             viewModel.sharePlaylist()
         }
 
