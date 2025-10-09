@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
@@ -12,6 +13,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.common.domain.models.PlaylistWithTracks
@@ -38,6 +40,8 @@ class PlaylistFragment : Fragment() {
     private val durationFormat by lazy { SimpleDateFormat("mm", Locale.getDefault()) }
 
     private lateinit var trackAdapter: TrackAdapter
+
+    private lateinit var bottomSheetPlaylistMenuBehavior: BottomSheetBehavior<LinearLayout>
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -78,6 +82,12 @@ class PlaylistFragment : Fragment() {
         binding.shareButton.setOnClickListener {
             viewModel.sharePlaylist()
         }
+
+        initBottomSheetPlaylistMenu()
+
+        binding.menuButton.setOnClickListener {
+            bottomSheetPlaylistMenuBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+        }
     }
 
     private fun onTrackClick(track: Track) {
@@ -107,6 +117,28 @@ class PlaylistFragment : Fragment() {
         )
         trackAdapter = TrackAdapter(onTrackDebounceClick, onLongTrackClick)
         binding.recyclerViewTrack.adapter = trackAdapter
+    }
+
+    private fun initBottomSheetPlaylistMenu() {
+        bottomSheetPlaylistMenuBehavior = BottomSheetBehavior.from(binding.bottomSheetPlaylistMenu)
+        bottomSheetPlaylistMenuBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+
+        bottomSheetPlaylistMenuBehavior.addBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
+            override fun onStateChanged(bottomSheet: View, newState: Int) {
+                when (newState) {
+                    BottomSheetBehavior.STATE_HIDDEN -> {
+                        binding.overlay.isVisible = false
+                    }
+                    else -> {
+                        binding.overlay.isVisible = true
+                    }
+                }
+            }
+
+            override fun onSlide(bottomSheet: View, slideOffset: Float) {
+                // nothing
+            }
+        })
     }
 
     override fun onDestroyView() {

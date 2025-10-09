@@ -142,7 +142,7 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <LinearLayout
-        android:id="@+id/bottomSheet"
+        android:id="@+id/bottomSheetPlaylistTracks"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@drawable/rounded_rectangle"
@@ -166,6 +166,35 @@
             android:layout_height="match_parent"
             android:layout_marginTop="8dp"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            />
+
+    </LinearLayout>
+
+    <View
+        android:id="@+id/overlay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#99000000"
+        android:visibility="gone"
+        />
+
+    <LinearLayout
+        android:id="@+id/bottomSheetPlaylistMenu"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/rounded_rectangle"
+        android:orientation="vertical"
+        app:behavior_hideable="true"
+        app:behavior_peekHeight="310dp"
+        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
+        >
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/bottom_sheet_stretch_line"
+            android:layout_marginTop="8dp"
+            android:layout_gravity="center_horizontal"
             />
 
     </LinearLayout>
