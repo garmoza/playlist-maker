@@ -13,12 +13,14 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.common.domain.models.PlaylistWithTracks
 import com.practicum.playlistmaker.common.domain.models.Track
 import com.practicum.playlistmaker.common.ui.debounceClick
+import com.practicum.playlistmaker.common.ui.dpToPx
 import com.practicum.playlistmaker.databinding.FragmentPlaylistBinding
 import com.practicum.playlistmaker.player.ui.activity.PlayerFragment
 import com.practicum.playlistmaker.playlist.domain.model.PlaylistScreenState
@@ -154,6 +156,7 @@ class PlaylistFragment : Fragment() {
             }
             is PlaylistScreenState.Content -> {
                 bindContent(state.playlistWithTracks)
+                bindBottomSheetMenu(state.playlistWithTracks)
                 hideViews()
                 playlistLabel.isVisible = true
                 playlistName.isVisible = true
@@ -203,6 +206,22 @@ class PlaylistFragment : Fragment() {
         playlistNumberOfTracks.isVisible = false
         shareButton.isVisible = false
         menuButton.isVisible = false
+    }
+
+    private fun FragmentPlaylistBinding.bindBottomSheetMenu(model: PlaylistWithTracks) {
+        Glide.with(this@PlaylistFragment)
+            .load(model.playlist.label)
+            .placeholder(R.drawable.placeholder_track_label)
+            .transform(CenterCrop(),  RoundedCorners(dpToPx(2F, requireContext())))
+            .into(bottomSheetPlaylistMenuInclude.label)
+        bottomSheetPlaylistMenuInclude.playlistName.text = model.playlist.name
+
+        val numberOfTracks = model.tracks.size
+        bottomSheetPlaylistMenuInclude.tracksCount.text = resources.getQuantityString(
+            R.plurals.number_of_tracks,
+            numberOfTracks,
+            numberOfTracks
+        )
     }
 
     companion object {
