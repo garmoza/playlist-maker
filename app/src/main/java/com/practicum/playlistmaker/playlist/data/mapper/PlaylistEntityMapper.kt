@@ -13,7 +13,7 @@ class PlaylistEntityMapper(
             id = model.id,
             name = model.name,
             description = model.description,
-            labelUri = model.label.toString(),
+            labelUri = model.label?.toString(),
             trackIds = gson.toJson(model.trackIds)
         )
 

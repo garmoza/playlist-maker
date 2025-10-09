@@ -167,6 +167,12 @@ class PlaylistFragment : Fragment() {
         })
     }
 
+    override fun onViewStateRestored(savedInstanceState: Bundle?) {
+        super.onViewStateRestored(savedInstanceState)
+
+        viewModel.loadContent()
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null

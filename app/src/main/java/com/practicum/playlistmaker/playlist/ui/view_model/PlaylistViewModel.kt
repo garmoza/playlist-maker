@@ -29,16 +29,16 @@ class PlaylistViewModel(
     fun getToastLiveData(): LiveData<PlaylistToastState> = toastLiveData
 
     init {
-        viewModelScope.launch {
-            loadContent()
-        }
+        loadContent()
     }
 
-    private suspend fun loadContent() {
-        val playlist = playlistInteractor.getPlaylistWithTracks(playlistId)
-        screenLiveData.postValue(
-            PlaylistScreenState.Content(playlist)
-        )
+    fun loadContent() {
+        viewModelScope.launch {
+            val playlist = playlistInteractor.getPlaylistWithTracks(playlistId)
+            screenLiveData.postValue(
+                PlaylistScreenState.Content(playlist)
+            )
+        }
     }
 
     fun deleteTrackFromPlaylist(track: Track) {

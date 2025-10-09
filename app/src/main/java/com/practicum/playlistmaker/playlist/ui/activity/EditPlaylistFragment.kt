@@ -6,8 +6,12 @@ import androidx.core.os.bundleOf
 import androidx.navigation.fragment.findNavController
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.common.domain.models.Playlist
+import com.practicum.playlistmaker.playlist.ui.view_model.EditPlaylistViewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class EditPlaylistFragment : AddPlaylistFragment() {
+
+    override val viewModel by viewModel<EditPlaylistViewModel>()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -16,6 +20,8 @@ class EditPlaylistFragment : AddPlaylistFragment() {
         binding.buttonCreate.setText(R.string.save)
 
         val playlist: Playlist = requireArguments().getParcelable(PLAYLIST_KEY)!!
+
+        viewModel.setPlaylist(playlist)
 
         playlist.label?.let {
             bindLabel(it)
@@ -28,6 +34,11 @@ class EditPlaylistFragment : AddPlaylistFragment() {
         val playlistDescription = playlist.description ?: EMPTY_DESCRIPTION
         binding.playlistDescriptionEditText.setText(playlistDescription)
         viewModel.onDescriptionChanged(playlistDescription)
+
+        binding.buttonCreate.setOnClickListener {
+            viewModel.savePlaylist()
+            findNavController().navigateUp()
+        }
     }
 
     override fun onNavigateUp() {

@@ -5,6 +5,7 @@ import com.practicum.playlistmaker.favourite.ui.view_model.FavoritesTracksViewMo
 import com.practicum.playlistmaker.playlist.ui.view_model.AddPlaylistViewModel
 import com.practicum.playlistmaker.library.ui.view_model.PlaylistsViewModel
 import com.practicum.playlistmaker.player.ui.view_model.MediaPlayerViewModel
+import com.practicum.playlistmaker.playlist.ui.view_model.EditPlaylistViewModel
 import com.practicum.playlistmaker.playlist.ui.view_model.PlaylistViewModel
 import com.practicum.playlistmaker.search.ui.view_model.SearchViewModel
 import com.practicum.playlistmaker.settings.ui.view_model.SettingsViewModel
@@ -33,4 +34,6 @@ val viewModelModule = module {
     viewModel { (playlistId: Long) ->
         PlaylistViewModel(get(), get(), playlistId)
     }
+
+    viewModel { EditPlaylistViewModel(get()) }
 }

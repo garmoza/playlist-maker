@@ -14,7 +14,7 @@ open class AddPlaylistViewModel(
     private val playlistInteractor: PlaylistInteractor
 ) : ViewModel() {
 
-    private val liveData = MutableLiveData(EMPTY_STATE)
+    protected val liveData = MutableLiveData(EMPTY_STATE)
 
     fun getLiveData(): LiveData<AddPlaylistState> = liveData
 

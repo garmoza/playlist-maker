@@ -24,7 +24,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 
 open class AddPlaylistFragment : Fragment() {
 
-    protected val viewModel by viewModel<AddPlaylistViewModel>()
+    open val viewModel by viewModel<AddPlaylistViewModel>()
 
     private var _binding: FragmentAddPlaylistBinding? = null
     protected val binding get() = _binding!!
@@ -75,7 +75,7 @@ open class AddPlaylistFragment : Fragment() {
             viewModel.onNameChanged(text.toString())
         }
 
-        binding.playlistNameEditText.doOnTextChanged { text, _, _, _ ->
+        binding.playlistDescriptionEditText.doOnTextChanged { text, _, _, _ ->
             viewModel.onDescriptionChanged(text.toString())
         }
 
@@ -92,6 +92,7 @@ open class AddPlaylistFragment : Fragment() {
     protected fun bindLabel(uri: Uri) {
         Glide.with(this)
             .load(uri)
+            .placeholder(R.drawable.ic_add_photo)
             .transform(CenterCrop(), RoundedCorners(dpToPx(8F, requireContext())))
             .into(binding.playlistLabel)
     }
