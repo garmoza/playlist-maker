@@ -71,4 +71,5 @@
     <string name="want_to_delete_playlist">Want to delete the «%s» playlist?</string>
     <string name="edit">Edit</string>
     <string name="save">Save</string>
+    <string name="no_tracks_in_playlist">There are no tracks in the playlist</string>
 </resources>

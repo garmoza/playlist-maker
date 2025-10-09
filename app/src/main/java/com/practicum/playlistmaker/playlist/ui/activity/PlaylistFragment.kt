@@ -196,6 +196,11 @@ class PlaylistFragment : Fragment() {
                 playlistNumberOfTracks.isVisible = true
                 shareButton.isVisible = true
                 menuButton.isVisible = true
+                if (state.playlistWithTracks.tracks.isEmpty()) {
+                    binding.placeholderMessage.isVisible = true
+                } else {
+                    binding.recyclerViewTrack.isVisible = true
+                }
             }
         }
     }
@@ -236,6 +241,8 @@ class PlaylistFragment : Fragment() {
         playlistNumberOfTracks.isVisible = false
         shareButton.isVisible = false
         menuButton.isVisible = false
+        binding.placeholderMessage.isVisible = false
+        binding.recyclerViewTrack.isVisible = false
     }
 
     private fun FragmentPlaylistBinding.bindBottomSheetMenu(model: PlaylistWithTracks) {

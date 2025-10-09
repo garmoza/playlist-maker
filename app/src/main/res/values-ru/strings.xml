@@ -63,4 +63,5 @@
     <string name="want_to_delete_playlist">Хотите удалить плейтист «%s»?</string>
     <string name="edit">Редактировать</string>
     <string name="save">Сохранить</string>
+    <string name="no_tracks_in_playlist">В плейлисте нет треков</string>
 </resources>
