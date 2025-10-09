@@ -3,6 +3,7 @@ package com.practicum.playlistmaker.playlist.ui.activity
 import android.os.Bundle
 import android.view.View
 import androidx.core.os.bundleOf
+import androidx.navigation.fragment.findNavController
 import com.practicum.playlistmaker.common.domain.models.Playlist
 
 class EditPlaylistFragment : AddPlaylistFragment() {
@@ -23,6 +24,10 @@ class EditPlaylistFragment : AddPlaylistFragment() {
         val playlistDescription = playlist.description ?: EMPTY_DESCRIPTION
         binding.playlistDescriptionEditText.setText(playlistDescription)
         viewModel.onDescriptionChanged(playlistDescription)
+    }
+
+    override fun onNavigateUp() {
+        findNavController().navigateUp()
     }
 
     companion object {

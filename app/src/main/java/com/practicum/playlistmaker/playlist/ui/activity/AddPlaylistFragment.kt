@@ -96,7 +96,7 @@ open class AddPlaylistFragment : Fragment() {
             .into(binding.playlistLabel)
     }
 
-    private fun onNavigateUp() {
+    open fun onNavigateUp() {
         if (viewModel.getLiveData().value?.isStartedFilling == true) {
             MaterialAlertDialogBuilder(requireContext(), R.style.CustomDialogTheme)
                 .setTitle(R.string.finish_creating_the_playlist)
