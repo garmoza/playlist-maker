@@ -30,6 +30,7 @@
             android:id="@+id/toolbar"
             style="@style/ToolbarWithNavigationIconStyle"
             android:title=""
+            android:navigationIcon="@drawable/ic_arrow_back_app_black"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             />
