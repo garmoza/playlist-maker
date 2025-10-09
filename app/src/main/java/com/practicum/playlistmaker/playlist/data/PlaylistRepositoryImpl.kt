@@ -31,6 +31,10 @@ class PlaylistRepositoryImpl(
         return playlistEntityMapper.map(playlist)
     }
 
+    override suspend fun removePlaylist(playlist: Playlist) {
+        playlistDao.deletePlaylist(playlistEntityMapper.map(playlist))
+    }
+
     override suspend fun addTrack(track: Track) {
         playlistDao.insertTrack(
             TrackEntityMapper.map(track)

@@ -67,4 +67,12 @@ class PlaylistViewModel(
     fun toastWasShow() {
         toastLiveData.value = PlaylistToastState.None
     }
+
+    fun deletePlaylist() {
+        viewModelScope.launch {
+            playlistInteractor.deletePlaylistWithTracks(
+                (screenLiveData.value as PlaylistScreenState.Content).playlistWithTracks
+            )
+        }
+    }
 }

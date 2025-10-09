@@ -21,6 +21,9 @@ interface PlaylistDao {
     @Query("SELECT * FROM playlist WHERE id = :playlistId")
     suspend fun getPlaylistById(playlistId: Long): Playlist
 
+    @Delete
+    suspend fun deletePlaylist(playlist: Playlist)
+
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertTrack(track: Track)
 

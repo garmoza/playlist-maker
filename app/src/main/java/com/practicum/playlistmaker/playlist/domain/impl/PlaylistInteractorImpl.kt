@@ -8,8 +8,6 @@ import com.practicum.playlistmaker.playlist.domain.PlaylistInteractor
 import com.practicum.playlistmaker.playlist.domain.PlaylistRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.toList
 
 class PlaylistInteractorImpl(
     private val playlistRepository: PlaylistRepository,
@@ -48,11 +46,24 @@ class PlaylistInteractorImpl(
         }
         playlistRepository.savePlaylist(playlist.copy(trackIds = newTrackIds))
 
-        val allTrackIds = playlistRepository.getPlaylists()
-            .map { playlist.trackIds }.toList()
-            .flatten().toSet()
-        if (!allTrackIds.contains(track.trackId)) {
+        val usedTrackIds = getAllPlaylistTrackIds()
+        if (!usedTrackIds.contains(track.trackId)) {
             playlistRepository.removeTrack(track)
+        }
+    }
+
+    private suspend fun getAllPlaylistTrackIds(): Set<String> =
+        playlistRepository.getPlaylists()
+            .first().flatMap { it.trackIds }.toSet()
+
+    override suspend fun deletePlaylistWithTracks(playlistWithTracks: PlaylistWithTracks) {
+        playlistRepository.removePlaylist(playlistWithTracks.playlist)
+
+        val usedTrackIds = getAllPlaylistTrackIds()
+        playlistWithTracks.tracks.forEach { track ->
+            if (!usedTrackIds.contains(track.trackId)) {
+                playlistRepository.removeTrack(track)
+            }
         }
     }
 }
