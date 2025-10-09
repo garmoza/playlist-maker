@@ -90,6 +90,18 @@ class PlaylistFragment : Fragment() {
         binding.menuButton.setOnClickListener {
             bottomSheetPlaylistMenuBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
         }
+
+        binding.bottomSheetShare.setOnClickListener {
+            viewModel.sharePlaylist()
+        }
+
+        binding.bottomSheetEdit.setOnClickListener {
+            // todo
+        }
+
+        binding.bottomSheetDelete.setOnClickListener {
+            // todo
+        }
     }
 
     private fun onTrackClick(track: Track) {
