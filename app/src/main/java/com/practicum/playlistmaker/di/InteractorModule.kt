@@ -28,7 +28,7 @@ val interactorModule = module {
     }
 
     factory<SharingInteractor> {
-        SharingInteractorImpl(get())
+        SharingInteractorImpl(get(), get())
     }
 
     factory<FavouriteTracksInteractor> {

@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -19,6 +20,7 @@ import com.practicum.playlistmaker.common.ui.debounceClick
 import com.practicum.playlistmaker.databinding.FragmentPlaylistBinding
 import com.practicum.playlistmaker.player.ui.activity.PlayerFragment
 import com.practicum.playlistmaker.playlist.domain.model.PlaylistScreenState
+import com.practicum.playlistmaker.playlist.domain.model.PlaylistToastState
 import com.practicum.playlistmaker.playlist.ui.view_model.PlaylistViewModel
 import com.practicum.playlistmaker.search.ui.activity.TrackAdapter
 import org.koin.android.ext.android.getKoin
@@ -61,8 +63,21 @@ class PlaylistFragment : Fragment() {
         viewModel.getScreenLiveData().observe(viewLifecycleOwner) { state ->
             binding.setState(state)
         }
+        viewModel.getToastLiveData().observe(viewLifecycleOwner) { state ->
+            when (state) {
+                is PlaylistToastState.CantShareEmptyPlaylist -> {
+                    Toast.makeText(requireContext(), getString(R.string.cant_share_empty_playlist), Toast.LENGTH_SHORT).show()
+                    viewModel.toastWasShow()
+                }
+                is PlaylistToastState.None -> Unit
+            }
+        }
 
         initTrackAdapter(this::onTrackClick, this::onLongTrackClick)
+
+        binding.shareButton.setOnClickListener {
+            viewModel.sharePlaylist()
+        }
     }
 
     private fun onTrackClick(track: Track) {

@@ -31,6 +31,6 @@ val viewModelModule = module {
     viewModel { AddPlaylistViewModel(get()) }
 
     viewModel { (playlistId: Long) ->
-        PlaylistViewModel(get(), playlistId)
+        PlaylistViewModel(get(), get(), playlistId)
     }
 }
