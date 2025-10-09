@@ -21,7 +21,7 @@ import com.practicum.playlistmaker.databinding.FragmentAddPlaylistBinding
 import com.practicum.playlistmaker.playlist.ui.view_model.AddPlaylistViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class AddPlaylistFragment : Fragment() {
+open class AddPlaylistFragment : Fragment() {
 
     private val viewModel by viewModel<AddPlaylistViewModel>()
 

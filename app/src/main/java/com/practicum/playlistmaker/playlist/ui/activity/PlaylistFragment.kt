@@ -96,7 +96,9 @@ class PlaylistFragment : Fragment() {
         }
 
         binding.bottomSheetEdit.setOnClickListener {
-            // todo
+            findNavController().navigate(
+                R.id.action_playlistFragment_to_editPlaylistFragment
+            )
         }
 
         binding.bottomSheetDelete.setOnClickListener {

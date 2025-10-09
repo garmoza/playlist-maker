@@ -10,7 +10,7 @@ import com.practicum.playlistmaker.playlist.domain.PlaylistInteractor
 import com.practicum.playlistmaker.playlist.domain.model.AddPlaylistState
 import kotlinx.coroutines.launch
 
-class AddPlaylistViewModel(
+open class AddPlaylistViewModel(
     private val playlistInteractor: PlaylistInteractor
 ) : ViewModel() {
 
