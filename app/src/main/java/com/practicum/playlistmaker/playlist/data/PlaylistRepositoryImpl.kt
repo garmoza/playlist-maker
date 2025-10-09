@@ -41,7 +41,7 @@ class PlaylistRepositoryImpl(
         )
     }
 
-    override fun getTracks(trackIds: Set<String>): Flow<List<Track>> = flow {
+    override fun getTracks(trackIds: List<String>): Flow<List<Track>> = flow {
         val tracks = playlistDao
             .getTracks()
             .filter { track -> track.id in trackIds }

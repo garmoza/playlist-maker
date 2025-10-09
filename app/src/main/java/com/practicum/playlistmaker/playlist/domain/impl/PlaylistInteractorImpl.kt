@@ -27,7 +27,7 @@ class PlaylistInteractorImpl(
     }
 
     override suspend fun addTrackToPlaylist(playlist: Playlist, track: Track) {
-        val newTrackIds = playlist.trackIds.toMutableSet().apply {
+        val newTrackIds = playlist.trackIds.toMutableList().apply {
             add(track.trackId)
         }
         playlistRepository.addTrack(track)
@@ -36,12 +36,12 @@ class PlaylistInteractorImpl(
 
     override suspend fun getPlaylistWithTracks(playlistId: Long): PlaylistWithTracks {
         val playlist = playlistRepository.getPlaylistById(playlistId)
-        val tracks = playlistRepository.getTracks(playlist.trackIds).first()
+        val tracks = playlistRepository.getTracks(playlist.trackIds).first().reversed()
         return PlaylistWithTracks(playlist, tracks)
     }
 
     override suspend fun deleteTrackFromPlaylist(playlist: Playlist, track: Track) {
-        val newTrackIds = playlist.trackIds.toMutableSet().apply {
+        val newTrackIds = playlist.trackIds.toMutableList().apply {
             remove(track.trackId)
         }
         playlistRepository.savePlaylist(playlist.copy(trackIds = newTrackIds))

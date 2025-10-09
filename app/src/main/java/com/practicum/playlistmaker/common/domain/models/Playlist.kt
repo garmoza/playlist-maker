@@ -10,5 +10,5 @@ data class Playlist(
     val name: String,
     val description: String?,
     val label: Uri?,
-    val trackIds: Set<String> = emptySet()
+    val trackIds: List<String> = emptyList()
 ) : Parcelable
