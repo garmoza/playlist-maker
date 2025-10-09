@@ -205,6 +205,24 @@
             android:layout_marginTop="12dp"
             />
 
+        <TextView
+            android:id="@+id/bottomSheetShare"
+            style="@style/MenuItemStyle"
+            android:text="@string/share"
+            />
+
+        <TextView
+            android:id="@+id/bottomSheetEdit"
+            style="@style/MenuItemStyle"
+            android:text="@string/edit_information"
+            />
+
+        <TextView
+            android:id="@+id/bottomSheetDelete"
+            style="@style/MenuItemStyle"
+            android:text="@string/delete_playlist"
+            />
+
     </LinearLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

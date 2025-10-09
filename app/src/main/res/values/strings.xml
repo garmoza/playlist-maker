@@ -65,4 +65,7 @@
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="cant_share_empty_playlist">This playlist doesn\'t have a shareable track list</string>
+    <string name="share">Share</string>
+    <string name="edit_information">Edit information</string>
+    <string name="delete_playlist">Delete playlist</string>
 </resources>
