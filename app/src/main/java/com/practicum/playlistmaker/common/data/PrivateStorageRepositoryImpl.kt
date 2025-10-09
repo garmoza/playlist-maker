@@ -9,6 +9,7 @@ import androidx.core.net.toUri
 import com.practicum.playlistmaker.common.domain.PrivateStorageRepository
 import java.io.File
 import java.io.FileOutputStream
+import java.util.UUID
 
 class PrivateStorageRepositoryImpl(
     private val application: Application
@@ -20,7 +21,8 @@ class PrivateStorageRepositoryImpl(
             filePath.mkdirs()
         }
 
-        val file = File(filePath, "${playlistName}.jpg")
+        val uuid = UUID.randomUUID()
+        val file = File(filePath, "$uuid.jpg")
         val inputStream = application.contentResolver.openInputStream(uri)
         val outputStream = FileOutputStream(file)
         BitmapFactory

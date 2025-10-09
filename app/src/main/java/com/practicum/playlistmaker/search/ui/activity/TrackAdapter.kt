@@ -5,7 +5,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.practicum.playlistmaker.common.domain.models.Track
 
 class TrackAdapter(
-    private val onItemClick: (Track) -> Unit
+    private val onItemClick: (Track) -> Unit,
+    private val onLongItemClick: ((Track) -> Unit)? = null
 ) : RecyclerView.Adapter<TrackViewHolder>() {
     private var items: List<Track> = emptyList()
 
@@ -24,6 +25,11 @@ class TrackAdapter(
 
         holder.itemView.setOnClickListener {
             onItemClick(track)
+        }
+
+        holder.itemView.setOnLongClickListener {
+            onLongItemClick?.invoke(track)
+            onLongItemClick != null
         }
     }
 

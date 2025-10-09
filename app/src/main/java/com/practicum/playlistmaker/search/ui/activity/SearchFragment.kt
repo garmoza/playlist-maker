@@ -23,7 +23,7 @@ import com.practicum.playlistmaker.common.ui.DEBOUNCE_DELAY_NONE
 import com.practicum.playlistmaker.common.ui.debounceClick
 import com.practicum.playlistmaker.common.ui.debounceRequest
 import com.practicum.playlistmaker.databinding.FragmentSearchBinding
-import com.practicum.playlistmaker.palyer.ui.activity.PlayerFragment
+import com.practicum.playlistmaker.player.ui.activity.PlayerFragment
 import com.practicum.playlistmaker.search.domain.model.ErrorType
 import com.practicum.playlistmaker.search.domain.model.SearchScreenState
 import com.practicum.playlistmaker.search.ui.view_model.SearchViewModel

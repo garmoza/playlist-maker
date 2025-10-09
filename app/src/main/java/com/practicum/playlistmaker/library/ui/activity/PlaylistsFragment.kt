@@ -7,12 +7,17 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.practicum.playlistmaker.R
+import com.practicum.playlistmaker.common.domain.models.Playlist
+import com.practicum.playlistmaker.common.ui.debounceClick
 import com.practicum.playlistmaker.databinding.FragmentPlaylistsBinding
 import com.practicum.playlistmaker.library.domain.model.PlaylistsScreenState
 import com.practicum.playlistmaker.library.ui.view_model.PlaylistsViewModel
+import com.practicum.playlistmaker.playlist.ui.activity.AddPlaylistFragment
+import com.practicum.playlistmaker.playlist.ui.activity.PlaylistFragment
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class PlaylistsFragment : Fragment() {
@@ -49,7 +54,7 @@ class PlaylistsFragment : Fragment() {
             }
         }
 
-        initPlaylistRecyclerView()
+        initPlaylistRecyclerView(this::onPlaylistClick)
 
         binding.newPlaylistButton.setOnClickListener {
             findNavController().navigate(
@@ -67,8 +72,19 @@ class PlaylistsFragment : Fragment() {
             }
     }
 
-    private fun initPlaylistRecyclerView() {
-        playlistAdapter = PlaylistAdapter()
+    private fun onPlaylistClick(playlist: Playlist) {
+        findNavController().navigate(
+            R.id.action_libraryFragment_to_playlistFragment,
+            PlaylistFragment.createArgs(playlist.id!!)
+        )
+    }
+
+    private fun initPlaylistRecyclerView(onPlaylistClick: (Playlist) -> Unit) {
+        val onPlaylistDebounceClick = debounceClick(
+            coroutineScope = viewLifecycleOwner.lifecycleScope,
+            action = onPlaylistClick
+        )
+        playlistAdapter = PlaylistAdapter(onPlaylistDebounceClick)
         binding.recyclerViewPlaylist.layoutManager = GridLayoutManager(requireContext(), 2)
         binding.recyclerViewPlaylist.adapter = playlistAdapter
     }
