@@ -104,6 +104,7 @@ class PlaylistFragment : Fragment() {
         }
 
         binding.bottomSheetDelete.setOnClickListener {
+            bottomSheetPlaylistMenuBehavior.state = BottomSheetBehavior.STATE_HIDDEN
             MaterialAlertDialogBuilder(requireContext(), R.style.CustomDialogTheme)
                 .setTitle(
                     getString(R.string.want_to_delete_playlist, binding.playlistName.text)
