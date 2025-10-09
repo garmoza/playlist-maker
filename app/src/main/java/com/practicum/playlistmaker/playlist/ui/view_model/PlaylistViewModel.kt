@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.practicum.playlistmaker.common.domain.models.Playlist
 import com.practicum.playlistmaker.common.domain.models.Track
 import com.practicum.playlistmaker.playlist.domain.PlaylistInteractor
 import com.practicum.playlistmaker.playlist.domain.model.PlaylistScreenState
@@ -75,4 +76,7 @@ class PlaylistViewModel(
             )
         }
     }
+
+    fun getPlaylist(): Playlist =
+        (screenLiveData.value as PlaylistScreenState.Content).playlistWithTracks.playlist
 }

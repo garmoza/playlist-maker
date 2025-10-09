@@ -1,5 +1,6 @@
 package com.practicum.playlistmaker.playlist.ui.activity
 
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -23,10 +24,10 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 
 open class AddPlaylistFragment : Fragment() {
 
-    private val viewModel by viewModel<AddPlaylistViewModel>()
+    protected val viewModel by viewModel<AddPlaylistViewModel>()
 
     private var _binding: FragmentAddPlaylistBinding? = null
-    private val binding get() = _binding!!
+    protected val binding get() = _binding!!
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -50,10 +51,7 @@ open class AddPlaylistFragment : Fragment() {
 
         val pickMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
             if (uri != null) {
-                Glide.with(this)
-                    .load(uri)
-                    .transform(CenterCrop(), RoundedCorners(dpToPx(8F, requireContext())))
-                    .into(binding.playlistLabel)
+                bindLabel(uri)
                 viewModel.onPickPlaylistLabel(uri)
             } else {
                 Log.i("AddPlaylistFragment", "No media selected")
@@ -89,6 +87,13 @@ open class AddPlaylistFragment : Fragment() {
                 }
             }
         )
+    }
+
+    protected fun bindLabel(uri: Uri) {
+        Glide.with(this)
+            .load(uri)
+            .transform(CenterCrop(), RoundedCorners(dpToPx(8F, requireContext())))
+            .into(binding.playlistLabel)
     }
 
     private fun onNavigateUp() {

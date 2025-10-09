@@ -97,7 +97,8 @@ class PlaylistFragment : Fragment() {
 
         binding.bottomSheetEdit.setOnClickListener {
             findNavController().navigate(
-                R.id.action_playlistFragment_to_editPlaylistFragment
+                R.id.action_playlistFragment_to_editPlaylistFragment,
+                EditPlaylistFragment.createArgs(viewModel.getPlaylist())
             )
         }
 
