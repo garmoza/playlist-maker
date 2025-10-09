@@ -4,12 +4,16 @@ import android.os.Bundle
 import android.view.View
 import androidx.core.os.bundleOf
 import androidx.navigation.fragment.findNavController
+import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.common.domain.models.Playlist
 
 class EditPlaylistFragment : AddPlaylistFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        binding.toolbar.setTitle(R.string.edit)
+        binding.buttonCreate.setText(R.string.save)
 
         val playlist: Playlist = requireArguments().getParcelable(PLAYLIST_KEY)!!
 

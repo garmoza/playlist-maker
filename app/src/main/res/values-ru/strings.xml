@@ -61,4 +61,6 @@
     <string name="edit_information">Редактировать информацию</string>
     <string name="delete_playlist">Удалить плейлист</string>
     <string name="want_to_delete_playlist">Хотите удалить плейтист «%s»?</string>
+    <string name="edit">Редактировать</string>
+    <string name="save">Сохранить</string>
 </resources>
