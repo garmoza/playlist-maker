@@ -100,7 +100,16 @@ class PlaylistFragment : Fragment() {
         }
 
         binding.bottomSheetDelete.setOnClickListener {
-            // todo
+            MaterialAlertDialogBuilder(requireContext(), R.style.CustomDialogTheme)
+                .setTitle(
+                    getString(R.string.want_to_delete_playlist, binding.playlistName.text)
+                )
+                .setPositiveButton(R.string.yes) { _, _ ->
+                    viewModel.deletePlaylist()
+                    findNavController().navigateUp()
+                }.setNeutralButton(R.string.no) { _, _ ->
+                    // nothing
+                }.show()
         }
     }
 
