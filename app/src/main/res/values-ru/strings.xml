@@ -47,4 +47,21 @@
     </plurals>
     <string name="added_to_playlist">Добавлено в плейлист %s</string>
     <string name="track_already_in_playlist">Трек уже добавлен в плейлист %s</string>
+    <plurals name="number_of_minutes">
+        <item quantity="one">%d минута</item>
+        <item quantity="few">%d минуты</item>
+        <item quantity="many">%d минут</item>
+        <item quantity="other">%d минут</item>
+    </plurals>
+    <string name="want_to_delete_track">Хотите удалить трек?</string>
+    <string name="yes">Да</string>
+    <string name="no">Нет</string>
+    <string name="cant_share_empty_playlist">В этом плейлисте нет списка треков, которым можно поделиться</string>
+    <string name="share">Поделиться</string>
+    <string name="edit_information">Редактировать информацию</string>
+    <string name="delete_playlist">Удалить плейлист</string>
+    <string name="want_to_delete_playlist">Хотите удалить плейтист «%s»?</string>
+    <string name="edit">Редактировать</string>
+    <string name="save">Сохранить</string>
+    <string name="no_tracks_in_playlist">В плейлисте нет треков</string>
 </resources>
