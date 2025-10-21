@@ -16,9 +16,11 @@ class EditPlaylistViewModel(
 
     fun savePlaylist() {
         if (liveData.value?.isReadyToAdd == true) {
+            val currentPlaylist = playlist ?: return
+
             viewModelScope.launch {
                 playlistInteractor.addPlaylist(
-                    playlist!!.copy(
+                    currentPlaylist.copy(
                         name = liveData.value?.playlistName!!,
                         description = liveData.value?.playlistDescription,
                         label = liveData.value?.playlistLabelUri

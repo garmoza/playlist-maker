@@ -209,7 +209,7 @@ class PlaylistFragment : Fragment() {
 
     private fun FragmentPlaylistBinding.bindContent(model: PlaylistWithTracks) {
         model.playlist.label?.let {
-            Glide.with(this@PlaylistFragment)
+            Glide.with(requireView())
                 .load(it)
                 .placeholder(R.drawable.placeholder_track_label)
                 .transform(CenterCrop())
