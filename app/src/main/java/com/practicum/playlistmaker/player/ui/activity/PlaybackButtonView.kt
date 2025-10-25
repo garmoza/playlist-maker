@@ -1,16 +1,14 @@
 package com.practicum.playlistmaker.player.ui.activity
 
 import android.content.Context
-import android.graphics.Bitmap
 import android.graphics.Canvas
-import android.graphics.Paint
-import android.graphics.RectF
+import android.graphics.Rect
+import android.graphics.drawable.Drawable
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
 import androidx.annotation.AttrRes
 import androidx.annotation.StyleRes
-import androidx.core.graphics.drawable.toBitmap
 import com.practicum.playlistmaker.R
 
 class PlaybackButtonView @JvmOverloads constructor(
@@ -20,15 +18,11 @@ class PlaybackButtonView @JvmOverloads constructor(
     @StyleRes defStyleRes: Int = 0
 ) : View(context, attrs, defStyleAttr, defStyleRes) {
 
-    private val playImageBitmap: Bitmap?
-    private val pauseImageBitmap: Bitmap?
+    private val playImageDrawable: Drawable?
+    private val pauseImageDrawable: Drawable?
 
-    private var currentImageBitmap: Bitmap? = null
-    private var imageRect = RectF(0f, 0f, 0f, 0f)
-    private val paint = Paint().apply {
-        isFilterBitmap = true
-        isAntiAlias = true
-    }
+    private var currentImageDrawable: Drawable? = null
+    private val drawableBounds = Rect()
 
     private var isPlaying = false
 
@@ -40,10 +34,10 @@ class PlaybackButtonView @JvmOverloads constructor(
             defStyleRes
         ).apply {
             try {
-                playImageBitmap = getDrawable(R.styleable.PlaybackButtonView_playImageResId)?.toBitmap()
-                pauseImageBitmap = getDrawable(R.styleable.PlaybackButtonView_pauseImageResId)?.toBitmap()
+                playImageDrawable = getDrawable(R.styleable.PlaybackButtonView_playImageResId)
+                pauseImageDrawable = getDrawable(R.styleable.PlaybackButtonView_pauseImageResId)
 
-                currentImageBitmap = playImageBitmap
+                currentImageDrawable = playImageDrawable
             } finally {
                 recycle()
             }
@@ -53,23 +47,20 @@ class PlaybackButtonView @JvmOverloads constructor(
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
         super.onSizeChanged(w, h, oldw, oldh)
 
-        val paddingLeft = paddingLeft.toFloat()
-        val paddingTop = paddingTop.toFloat()
-        val paddingRight = paddingRight.toFloat()
-        val paddingBottom = paddingBottom.toFloat()
-
-        imageRect = RectF(
-            0f + paddingLeft,
-            0f + paddingTop,
-            measuredWidth.toFloat() - paddingRight,
-            measuredHeight.toFloat() - paddingBottom
+        drawableBounds.set(
+            paddingLeft,
+            paddingTop,
+            measuredWidth - paddingRight,
+            measuredHeight - paddingBottom
         )
+
+        playImageDrawable?.bounds = drawableBounds
+        pauseImageDrawable?.bounds = drawableBounds
+        currentImageDrawable?.bounds = drawableBounds
     }
 
     override fun onDraw(canvas: Canvas) {
-        currentImageBitmap?.let {
-            canvas.drawBitmap(it, null, imageRect, paint)
-        }
+        currentImageDrawable?.draw(canvas)
     }
 
     override fun onTouchEvent(event: MotionEvent): Boolean {
@@ -83,12 +74,17 @@ class PlaybackButtonView @JvmOverloads constructor(
         return super.onTouchEvent(event)
     }
 
+    override fun performClick(): Boolean {
+        super.performClick()
+        return true
+    }
+
     fun setPlayState(isPlaying: Boolean) {
         this.isPlaying = isPlaying
-        currentImageBitmap = if (isPlaying) {
-            pauseImageBitmap
+        currentImageDrawable = if (isPlaying) {
+            pauseImageDrawable
         } else {
-            playImageBitmap
+            playImageDrawable
         }
 
         invalidate()
