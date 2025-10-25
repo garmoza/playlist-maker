@@ -53,10 +53,18 @@ class MediaPlayerViewModel(
         mediaPlayer.setDataSource(track.previewUrl)
         mediaPlayer.prepareAsync()
         mediaPlayer.setOnPreparedListener {
-            playerLiveData.value = playerLiveData.value?.copy(isTrackAvailable = true)
+            playerLiveData.value = playerLiveData.value?.copy(
+                isTrackAvailable = true,
+                isPlaying = false
+            )
         }
         mediaPlayer.setOnCompletionListener {
-            playerLiveData.value = playerLiveData.value?.copy(isTrackAvailable = true)
+            playerLiveData.value = playerLiveData.value?.copy(
+                isTrackAvailable = true,
+                isPlaying = false,
+                progress = 0
+            )
+            mediaPlayer.seekTo(0)
         }
     }
 

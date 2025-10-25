@@ -190,11 +190,7 @@ class PlayerFragment : Fragment() {
         binding.setVisibleViews(isVisible = true)
         binding.progressBar.isVisible = false
 
-        if (status.isPlaying) {
-            binding.playButton.setImageResource(R.drawable.ic_pause_track)
-        } else {
-            binding.playButton.setImageResource(R.drawable.ic_play_track)
-        }
+        binding.playButton.setPlayState(status.isPlaying)
 
         binding.playtime.text = dateFormat.format(status.progress)
 
