@@ -1,6 +1,7 @@
 package com.practicum.playlistmaker.player.ui.view_model
 
 import android.media.MediaPlayer
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -12,6 +13,7 @@ import com.practicum.playlistmaker.playlist.domain.PlaylistInteractor
 import com.practicum.playlistmaker.player.domain.model.PlayerScreenState
 import com.practicum.playlistmaker.player.domain.model.TrackAddedToPlaylistToastState
 import com.practicum.playlistmaker.player.domain.model.TrackNotAvailableToastState
+import com.practicum.playlistmaker.player.service.AudioPlayerControl
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -34,6 +36,8 @@ class MediaPlayerViewModel(
     private val trackAddedToPlaylistToastLiveData = MutableLiveData<TrackAddedToPlaylistToastState>(
         TrackAddedToPlaylistToastState.None
     )
+
+    private var audioPlayerControl: AudioPlayerControl? = null
 
     init {
         viewModelScope.launch {
@@ -72,6 +76,20 @@ class MediaPlayerViewModel(
     fun getToastLiveData(): LiveData<TrackNotAvailableToastState> = trackNotAvailableToastLiveData
     fun getPlaylistsLiveData(): LiveData<List<Playlist>> = playlistsLiveData
     fun getTrackAddedToPlaylistLiveData(): LiveData<TrackAddedToPlaylistToastState> = trackAddedToPlaylistToastLiveData
+
+    fun setAudioPlayerControl(audioPlayerControl: AudioPlayerControl) {
+        this.audioPlayerControl = audioPlayerControl
+
+        viewModelScope.launch {
+            audioPlayerControl.getPlayerState().collect {
+                Log.d(LOG_TAG, it.toString())
+            }
+        }
+    }
+
+    fun removeAudioPlayerControl() {
+        audioPlayerControl = null
+    }
 
     fun switchBetweenPlayAndPause() {
         if (playerLiveData.value?.isPlaying == true) {
@@ -158,6 +176,8 @@ class MediaPlayerViewModel(
     }
 
     companion object {
+        private const val LOG_TAG = "MediaPlayerViewModel"
+
         private val LOADING_STATE = PlayerScreenState(
             isLoading = true,
             isTrackAvailable = false,

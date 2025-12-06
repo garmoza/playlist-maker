@@ -1,6 +1,11 @@
 package com.practicum.playlistmaker.player.ui.activity
 
+import android.content.ComponentName
+import android.content.Context
+import android.content.Intent
+import android.content.ServiceConnection
 import android.os.Bundle
+import android.os.IBinder
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -23,6 +28,7 @@ import com.practicum.playlistmaker.databinding.FragmentPlayerBinding
 import com.practicum.playlistmaker.player.domain.model.PlayerScreenState
 import com.practicum.playlistmaker.player.domain.model.TrackAddedToPlaylistToastState
 import com.practicum.playlistmaker.player.domain.model.TrackNotAvailableToastState
+import com.practicum.playlistmaker.player.service.MusicService
 import com.practicum.playlistmaker.player.ui.view_model.MediaPlayerViewModel
 import org.koin.android.ext.android.getKoin
 import org.koin.core.parameter.parametersOf
@@ -136,6 +142,8 @@ class PlayerFragment : Fragment() {
                 R.id.action_playerFragment_to_addPlaylistFragment
             )
         }
+
+        bindMusicService()
     }
 
     private fun onPlaylistClick(playlist: Playlist) {
@@ -178,6 +186,27 @@ class PlayerFragment : Fragment() {
         super.onViewStateRestored(savedInstanceState)
 
         viewModel.loadPlaylists()
+    }
+
+    private val serviceConnection = object : ServiceConnection {
+        override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
+            val binder = service as MusicService.MusicServiceBinder
+            viewModel.setAudioPlayerControl(binder.getService())
+        }
+
+        override fun onServiceDisconnected(name: ComponentName?) {
+            viewModel.removeAudioPlayerControl()
+        }
+    }
+
+    private fun bindMusicService() {
+        val intent = Intent(requireContext(), MusicService::class.java)
+
+        requireContext().bindService(intent, serviceConnection, Context.BIND_AUTO_CREATE)
+    }
+
+    private fun unbindMusicService() {
+        requireContext().unbindService(serviceConnection)
     }
 
     private fun renderPlayerStatus(status: PlayerScreenState) {
@@ -232,6 +261,7 @@ class PlayerFragment : Fragment() {
     }
 
     override fun onDestroyView() {
+        unbindMusicService()
         super.onDestroyView()
         _binding = null
     }
