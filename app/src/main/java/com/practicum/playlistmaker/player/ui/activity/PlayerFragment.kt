@@ -143,7 +143,7 @@ class PlayerFragment : Fragment() {
             )
         }
 
-        bindMusicService()
+        bindMusicService(track.previewUrl)
     }
 
     private fun onPlaylistClick(playlist: Playlist) {
@@ -199,8 +199,10 @@ class PlayerFragment : Fragment() {
         }
     }
 
-    private fun bindMusicService() {
-        val intent = Intent(requireContext(), MusicService::class.java)
+    private fun bindMusicService(trackUrl: String?) {
+        val intent = Intent(requireContext(), MusicService::class.java).apply {
+            putExtra(MusicService.TRACK_URL_EXTRA_NAME, trackUrl)
+        }
 
         requireContext().bindService(intent, serviceConnection, Context.BIND_AUTO_CREATE)
     }

@@ -11,8 +11,10 @@ import kotlinx.coroutines.flow.asStateFlow
 
 class MusicService : Service(), AudioPlayerControl {
 
-    private companion object {
+    companion object {
         private const val LOG_TAG = "MusicService"
+
+        const val TRACK_URL_EXTRA_NAME = "TRACK_URL_EXTRA_NAME"
     }
 
     private val binder = MusicServiceBinder()
@@ -22,6 +24,8 @@ class MusicService : Service(), AudioPlayerControl {
 
     override fun onBind(intent: Intent?): IBinder {
         Log.d(LOG_TAG, "onBind() call")
+        val trackUrl = intent?.getStringExtra(TRACK_URL_EXTRA_NAME)
+        Log.d(LOG_TAG, "Track URL: $trackUrl")
         return binder
     }
 
