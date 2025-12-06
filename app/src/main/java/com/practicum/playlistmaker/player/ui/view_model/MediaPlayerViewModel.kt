@@ -1,7 +1,5 @@
 package com.practicum.playlistmaker.player.ui.view_model
 
-import android.media.MediaPlayer
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -14,8 +12,6 @@ import com.practicum.playlistmaker.player.domain.model.PlayerScreenState
 import com.practicum.playlistmaker.player.domain.model.TrackAddedToPlaylistToastState
 import com.practicum.playlistmaker.player.domain.model.TrackNotAvailableToastState
 import com.practicum.playlistmaker.player.service.AudioPlayerControl
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class MediaPlayerViewModel(
@@ -23,10 +19,6 @@ class MediaPlayerViewModel(
     private val playlistInteractor: PlaylistInteractor,
     private val track: Track
 ) : ViewModel() {
-
-    private var mediaPlayer: MediaPlayer = MediaPlayer()
-
-    private var timerJob: Job? = null
 
     private val playerLiveData = MutableLiveData(LOADING_STATE)
     private val trackNotAvailableToastLiveData = MutableLiveData<TrackNotAvailableToastState>(
@@ -48,27 +40,7 @@ class MediaPlayerViewModel(
             )
         }
 
-        prepareMediaPlayer()
-
         loadPlaylists()
-    }
-
-    private fun prepareMediaPlayer() {
-        mediaPlayer.setDataSource(track.previewUrl)
-        mediaPlayer.prepareAsync()
-        mediaPlayer.setOnPreparedListener {
-            playerLiveData.value = playerLiveData.value?.copy(
-                isTrackAvailable = true,
-                isPlaying = false
-            )
-        }
-        mediaPlayer.setOnCompletionListener {
-            playerLiveData.value = playerLiveData.value?.copy(
-                isTrackAvailable = true,
-                isPlaying = false,
-                progress = 0
-            )
-        }
     }
 
     fun getPlayerLiveData(): LiveData<PlayerScreenState> = playerLiveData
@@ -81,7 +53,11 @@ class MediaPlayerViewModel(
 
         viewModelScope.launch {
             audioPlayerControl.getPlayerState().collect {
-                Log.d(LOG_TAG, it.toString())
+                playerLiveData.value = playerLiveData.value?.copy(
+                    isTrackAvailable = it.isTrackAvailable,
+                    isPlaying = it.isPlaying,
+                    progress = it.progress
+                )
             }
         }
     }
@@ -100,15 +76,7 @@ class MediaPlayerViewModel(
 
     private fun play() {
         if (playerLiveData.value?.isTrackAvailable == true) {
-            playerLiveData.value = playerLiveData.value?.copy(isPlaying = true)
-
-            // reset media player progress when needed
-            if (playerLiveData.value?.progress == 0) {
-                mediaPlayer.seekTo(0)
-            }
-
-            mediaPlayer.start()
-            updatePlaytime()
+            audioPlayerControl?.startPlayer()
         } else {
             trackNotAvailableToastLiveData.value = TrackNotAvailableToastState.Show
         }
@@ -116,27 +84,9 @@ class MediaPlayerViewModel(
 
     fun pause() {
         if (playerLiveData.value?.isTrackAvailable == true) {
-            timerJob?.cancel()
-
-            mediaPlayer.pause()
-            playerLiveData.value = playerLiveData.value?.copy(isPlaying = false)
+            audioPlayerControl?.pausePlayer()
         } else {
             trackNotAvailableToastLiveData.value = TrackNotAvailableToastState.Show
-        }
-    }
-
-    override fun onCleared() {
-        super.onCleared()
-        mediaPlayer.release()
-    }
-
-    private fun updatePlaytime() {
-        timerJob?.cancel()
-        timerJob = viewModelScope.launch {
-            while (mediaPlayer.isPlaying) {
-                playerLiveData.value = playerLiveData.value?.copy(progress = mediaPlayer.currentPosition)
-                delay(DELAY)
-            }
         }
     }
 
@@ -180,8 +130,6 @@ class MediaPlayerViewModel(
     }
 
     companion object {
-        private const val LOG_TAG = "MediaPlayerViewModel"
-
         private val LOADING_STATE = PlayerScreenState(
             isLoading = true,
             isTrackAvailable = false,
@@ -189,8 +137,6 @@ class MediaPlayerViewModel(
             isFavourite = false,
             progress = 0
         )
-
-        private const val DELAY = 300L
 
         private const val UNKNOWN_TRACK_NAME = "Track Unknown"
     }
