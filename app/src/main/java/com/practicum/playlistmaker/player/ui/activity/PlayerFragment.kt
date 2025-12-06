@@ -20,7 +20,7 @@ import com.practicum.playlistmaker.common.domain.models.Track
 import com.practicum.playlistmaker.common.ui.debounceClick
 import com.practicum.playlistmaker.common.ui.dpToPx
 import com.practicum.playlistmaker.databinding.FragmentPlayerBinding
-import com.practicum.playlistmaker.player.domain.model.PlayerState
+import com.practicum.playlistmaker.player.domain.model.PlayerScreenState
 import com.practicum.playlistmaker.player.domain.model.TrackAddedToPlaylistToastState
 import com.practicum.playlistmaker.player.domain.model.TrackNotAvailableToastState
 import com.practicum.playlistmaker.player.ui.view_model.MediaPlayerViewModel
@@ -180,7 +180,7 @@ class PlayerFragment : Fragment() {
         viewModel.loadPlaylists()
     }
 
-    private fun renderPlayerStatus(status: PlayerState) {
+    private fun renderPlayerStatus(status: PlayerScreenState) {
         if (status.isLoading) {
             binding.setVisibleViews(isVisible = false)
             binding.progressBar.isVisible = true

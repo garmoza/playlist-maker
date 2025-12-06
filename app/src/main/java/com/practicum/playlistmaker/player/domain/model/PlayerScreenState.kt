@@ -1,6 +1,6 @@
 package com.practicum.playlistmaker.player.domain.model
 
-data class PlayerState(
+data class PlayerScreenState(
     val isLoading: Boolean,
     val isTrackAvailable: Boolean,
     val isPlaying: Boolean,

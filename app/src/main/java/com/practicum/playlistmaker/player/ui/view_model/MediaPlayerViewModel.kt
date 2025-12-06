@@ -9,7 +9,7 @@ import com.practicum.playlistmaker.common.domain.models.Playlist
 import com.practicum.playlistmaker.common.domain.models.Track
 import com.practicum.playlistmaker.favourite.domain.FavouriteTracksInteractor
 import com.practicum.playlistmaker.playlist.domain.PlaylistInteractor
-import com.practicum.playlistmaker.player.domain.model.PlayerState
+import com.practicum.playlistmaker.player.domain.model.PlayerScreenState
 import com.practicum.playlistmaker.player.domain.model.TrackAddedToPlaylistToastState
 import com.practicum.playlistmaker.player.domain.model.TrackNotAvailableToastState
 import kotlinx.coroutines.Job
@@ -68,7 +68,7 @@ class MediaPlayerViewModel(
         }
     }
 
-    fun getPlayerLiveData(): LiveData<PlayerState> = playerLiveData
+    fun getPlayerLiveData(): LiveData<PlayerScreenState> = playerLiveData
     fun getToastLiveData(): LiveData<TrackNotAvailableToastState> = trackNotAvailableToastLiveData
     fun getPlaylistsLiveData(): LiveData<List<Playlist>> = playlistsLiveData
     fun getTrackAddedToPlaylistLiveData(): LiveData<TrackAddedToPlaylistToastState> = trackAddedToPlaylistToastLiveData
@@ -158,7 +158,7 @@ class MediaPlayerViewModel(
     }
 
     companion object {
-        private val LOADING_STATE = PlayerState(
+        private val LOADING_STATE = PlayerScreenState(
             isLoading = true,
             isTrackAvailable = false,
             isPlaying = false,
