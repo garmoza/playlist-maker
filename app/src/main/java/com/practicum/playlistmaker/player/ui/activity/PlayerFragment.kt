@@ -257,11 +257,6 @@ class PlayerFragment : Fragment() {
         countryValue.isVisible = isVisible
     }
 
-    override fun onPause() {
-        viewModel.pause()
-        super.onPause()
-    }
-
     override fun onDestroyView() {
         unbindMusicService()
         super.onDestroyView()

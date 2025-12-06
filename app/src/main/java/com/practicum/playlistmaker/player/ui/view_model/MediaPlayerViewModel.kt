@@ -82,7 +82,7 @@ class MediaPlayerViewModel(
         }
     }
 
-    fun pause() {
+    private fun pause() {
         if (playerLiveData.value?.isTrackAvailable == true) {
             audioPlayerControl?.pausePlayer()
         } else {
