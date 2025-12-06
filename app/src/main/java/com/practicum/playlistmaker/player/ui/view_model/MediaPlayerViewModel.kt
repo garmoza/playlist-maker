@@ -68,7 +68,6 @@ class MediaPlayerViewModel(
                 isPlaying = false,
                 progress = 0
             )
-            mediaPlayer.seekTo(0)
         }
     }
 
@@ -102,6 +101,11 @@ class MediaPlayerViewModel(
     private fun play() {
         if (playerLiveData.value?.isTrackAvailable == true) {
             playerLiveData.value = playerLiveData.value?.copy(isPlaying = true)
+
+            // reset media player progress when needed
+            if (playerLiveData.value?.progress == 0) {
+                mediaPlayer.seekTo(0)
+            }
 
             mediaPlayer.start()
             updatePlaytime()
