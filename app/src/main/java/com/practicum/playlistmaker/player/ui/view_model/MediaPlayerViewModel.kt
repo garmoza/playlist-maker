@@ -12,6 +12,7 @@ import com.practicum.playlistmaker.player.domain.model.PlayerScreenState
 import com.practicum.playlistmaker.player.domain.model.TrackAddedToPlaylistToastState
 import com.practicum.playlistmaker.player.domain.model.TrackNotAvailableToastState
 import com.practicum.playlistmaker.player.service.AudioPlayerControl
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
 class MediaPlayerViewModel(
@@ -30,6 +31,7 @@ class MediaPlayerViewModel(
     )
 
     private var audioPlayerControl: AudioPlayerControl? = null
+    private var playerStateJob: Job? = null
 
     init {
         viewModelScope.launch {
@@ -51,7 +53,8 @@ class MediaPlayerViewModel(
     fun setAudioPlayerControl(audioPlayerControl: AudioPlayerControl) {
         this.audioPlayerControl = audioPlayerControl
 
-        viewModelScope.launch {
+        playerStateJob?.cancel()
+        playerStateJob = viewModelScope.launch {
             audioPlayerControl.getPlayerState().collect {
                 playerLiveData.value = playerLiveData.value?.copy(
                     isTrackAvailable = it.isTrackAvailable,

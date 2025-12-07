@@ -12,7 +12,6 @@ import android.media.MediaPlayer
 import android.os.Binder
 import android.os.Build
 import android.os.IBinder
-import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.core.app.ServiceCompat
 import androidx.core.content.ContextCompat
@@ -29,18 +28,6 @@ import kotlinx.coroutines.launch
 
 class MusicService : Service(), AudioPlayerControl {
 
-    companion object {
-        const val TRACK_EXTRA_NAME = "TRACK_EXTRA_NAME"
-
-        private const val LOG_TAG = "MusicService"
-        private const val DELAY = 300L
-        private const val NOTIFICATION_CHANNEL_ID = "music_service_channel"
-        private const val SERVICE_NOTIFICATION_ID = 100
-
-        private const val UNKNOWN_TRACK_NAME = "Track Unknown"
-        private const val UNKNOWN_ARTIST_NAME = "Artist Unknown"
-    }
-
     private var mediaPlayer: MediaPlayer = MediaPlayer()
 
     private var timerJob: Job? = null
@@ -53,7 +40,6 @@ class MusicService : Service(), AudioPlayerControl {
     private val playerState = _playerState.asStateFlow()
 
     override fun onBind(intent: Intent?): IBinder {
-        Log.d(LOG_TAG, "onBind() call")
         track = intent?.getParcelableExtra(TRACK_EXTRA_NAME)
         prepareMediaPlayer(track?.previewUrl)
 
@@ -64,11 +50,9 @@ class MusicService : Service(), AudioPlayerControl {
         mediaPlayer.setDataSource(trackUrl)
         mediaPlayer.prepareAsync()
         mediaPlayer.setOnPreparedListener {
-            Log.d(LOG_TAG, "Media Player prepared")
             _playerState.value = PlayerState.Prepared()
         }
         mediaPlayer.setOnCompletionListener {
-            Log.d(LOG_TAG, "Playback competed")
             _playerState.value = PlayerState.Prepared()
             stopForeground()
         }
@@ -120,7 +104,6 @@ class MusicService : Service(), AudioPlayerControl {
     }
 
     override fun onUnbind(intent: Intent?): Boolean {
-        Log.d(LOG_TAG, "onUnbind() call")
         releasePlayer()
         return super.onUnbind(intent)
     }
@@ -190,5 +173,16 @@ class MusicService : Service(), AudioPlayerControl {
 
     inner class MusicServiceBinder : Binder() {
         fun getService(): MusicService = this@MusicService
+    }
+
+    companion object {
+        const val TRACK_EXTRA_NAME = "TRACK_EXTRA_NAME"
+
+        private const val DELAY = 300L
+        private const val NOTIFICATION_CHANNEL_ID = "music_service_channel"
+        private const val SERVICE_NOTIFICATION_ID = 100
+
+        private const val UNKNOWN_TRACK_NAME = "Track Unknown"
+        private const val UNKNOWN_ARTIST_NAME = "Artist Unknown"
     }
 }
