@@ -13,6 +13,7 @@ import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.core.app.ServiceCompat
 import com.practicum.playlistmaker.R
+import com.practicum.playlistmaker.common.domain.models.Track
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -25,17 +26,22 @@ import kotlinx.coroutines.launch
 class MusicService : Service(), AudioPlayerControl {
 
     companion object {
-        const val TRACK_URL_EXTRA_NAME = "TRACK_URL_EXTRA_NAME"
+        const val TRACK_EXTRA_NAME = "TRACK_EXTRA_NAME"
 
         private const val LOG_TAG = "MusicService"
         private const val DELAY = 300L
         private const val NOTIFICATION_CHANNEL_ID = "music_service_channel"
         private const val SERVICE_NOTIFICATION_ID = 100
+
+        private const val UNKNOWN_TRACK_NAME = "Track Unknown"
+        private const val UNKNOWN_ARTIST_NAME = "Artist Unknown"
     }
 
     private var mediaPlayer: MediaPlayer = MediaPlayer()
 
     private var timerJob: Job? = null
+
+    private var track: Track? = null
 
     private val binder = MusicServiceBinder()
 
@@ -44,8 +50,8 @@ class MusicService : Service(), AudioPlayerControl {
 
     override fun onBind(intent: Intent?): IBinder {
         Log.d(LOG_TAG, "onBind() call")
-        val trackUrl = intent?.getStringExtra(TRACK_URL_EXTRA_NAME)
-        prepareMediaPlayer(trackUrl)
+        track = intent?.getParcelableExtra(TRACK_EXTRA_NAME)
+        prepareMediaPlayer(track?.previewUrl)
 
         createNotificationChannel()
 
@@ -69,10 +75,10 @@ class MusicService : Service(), AudioPlayerControl {
     private fun createNotificationChannel() {
         val channel = NotificationChannel(
             NOTIFICATION_CHANNEL_ID,
-            "Music service",
+            getString(R.string.music_service_notification_channel_name),
             NotificationManager.IMPORTANCE_DEFAULT
         )
-        channel.description = "Service for playing music"
+        channel.description = getString(R.string.music_service_notification_channel_description)
 
         val notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
         notificationManager.createNotificationChannel(channel)
@@ -80,13 +86,20 @@ class MusicService : Service(), AudioPlayerControl {
 
     private fun createServiceNotification(): Notification {
         return NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID)
-            .setContentTitle("Music foreground service")
-            .setContentText("Our service is working right now!")
+            .setContentTitle(getString(R.string.music_service_notification_title))
+            .setContentText(getTrackInfo())
             .setSmallIcon(R.drawable.ic_launcher_foreground)
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
             .setCategory(NotificationCompat.CATEGORY_SERVICE)
             .build()
     }
+
+    private fun getTrackInfo(): String =
+        getString(
+            R.string.music_service_notification_text,
+            track?.artistName ?: UNKNOWN_ARTIST_NAME,
+            track?.trackName ?: UNKNOWN_TRACK_NAME
+        )
 
     private fun updatePlaytime() {
         timerJob?.cancel()

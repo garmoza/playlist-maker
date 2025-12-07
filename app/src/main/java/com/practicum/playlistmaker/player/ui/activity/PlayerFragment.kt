@@ -6,6 +6,7 @@ import android.content.Intent
 import android.content.ServiceConnection
 import android.os.Bundle
 import android.os.IBinder
+import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -143,7 +144,7 @@ class PlayerFragment : Fragment() {
             )
         }
 
-        bindMusicService(track.previewUrl)
+        bindMusicService(track)
     }
 
     private fun onPlaylistClick(playlist: Playlist) {
@@ -199,9 +200,9 @@ class PlayerFragment : Fragment() {
         }
     }
 
-    private fun bindMusicService(trackUrl: String?) {
+    private fun bindMusicService(track: Track) {
         val intent = Intent(requireContext(), MusicService::class.java).apply {
-            putExtra(MusicService.TRACK_URL_EXTRA_NAME, trackUrl)
+            putExtra(MusicService.TRACK_EXTRA_NAME, track as Parcelable)
         }
 
         requireContext().bindService(intent, serviceConnection, Context.BIND_AUTO_CREATE)
