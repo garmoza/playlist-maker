@@ -53,8 +53,6 @@ class MusicService : Service(), AudioPlayerControl {
         track = intent?.getParcelableExtra(TRACK_EXTRA_NAME)
         prepareMediaPlayer(track?.previewUrl)
 
-        createNotificationChannel()
-
         return binder
     }
 
@@ -70,6 +68,12 @@ class MusicService : Service(), AudioPlayerControl {
             _playerState.value = PlayerState.Prepared()
             stopForeground()
         }
+    }
+
+    override fun onCreate() {
+        super.onCreate()
+
+        createNotificationChannel()
     }
 
     private fun createNotificationChannel() {
