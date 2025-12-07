@@ -90,6 +90,18 @@ class MediaPlayerViewModel(
         }
     }
 
+    fun startForeground() {
+        if (playerLiveData.value?.isPlaying == true) {
+            audioPlayerControl?.startForeground()
+        }
+    }
+
+    fun stopForeground() {
+        if (playerLiveData.value?.isPlaying == true) {
+            audioPlayerControl?.stopForeground()
+        }
+    }
+
     fun toastWasShow() {
         trackNotAvailableToastLiveData.value = TrackNotAvailableToastState.None
         trackAddedToPlaylistToastLiveData.value = TrackAddedToPlaylistToastState.None

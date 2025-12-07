@@ -68,7 +68,7 @@ class MusicService : Service(), AudioPlayerControl {
         mediaPlayer.setOnCompletionListener {
             Log.d(LOG_TAG, "Playback competed")
             _playerState.value = PlayerState.Prepared()
-            ServiceCompat.stopForeground(this, ServiceCompat.STOP_FOREGROUND_REMOVE)
+            stopForeground()
         }
     }
 
@@ -136,7 +136,16 @@ class MusicService : Service(), AudioPlayerControl {
 
         mediaPlayer.start()
         updatePlaytime()
+    }
 
+    override fun pausePlayer() {
+        timerJob?.cancel()
+
+        mediaPlayer.pause()
+        _playerState.value = PlayerState.Paused(mediaPlayer.currentPosition)
+    }
+
+    override fun startForeground() {
         ServiceCompat.startForeground(
             this,
             SERVICE_NOTIFICATION_ID,
@@ -145,12 +154,7 @@ class MusicService : Service(), AudioPlayerControl {
         )
     }
 
-    override fun pausePlayer() {
-        timerJob?.cancel()
-
-        mediaPlayer.pause()
-        _playerState.value = PlayerState.Paused(mediaPlayer.currentPosition)
-
+    override fun stopForeground() {
         ServiceCompat.stopForeground(this, ServiceCompat.STOP_FOREGROUND_REMOVE)
     }
 

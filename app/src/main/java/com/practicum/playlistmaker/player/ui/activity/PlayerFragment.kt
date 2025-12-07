@@ -189,6 +189,16 @@ class PlayerFragment : Fragment() {
         viewModel.loadPlaylists()
     }
 
+    override fun onPause() {
+        super.onPause()
+        viewModel.startForeground()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.stopForeground()
+    }
+
     private val serviceConnection = object : ServiceConnection {
         override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
             val binder = service as MusicService.MusicServiceBinder
