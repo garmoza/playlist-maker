@@ -1,7 +1,10 @@
 package com.practicum.playlistmaker.main.ui.activity
 
+import android.Manifest
+import android.os.Build
 import android.os.Bundle
 import android.view.View
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
@@ -11,6 +14,12 @@ import com.practicum.playlistmaker.databinding.ActivityHostBinding
 class HostActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityHostBinding
+
+    private val requestPermissionLauncher = registerForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) {
+        // empty
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,6 +41,10 @@ class HostActivity : AppCompatActivity() {
                     binding.bottomNavigationView.visibility = View.GONE
                 }
             }
+        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
         }
     }
 }
