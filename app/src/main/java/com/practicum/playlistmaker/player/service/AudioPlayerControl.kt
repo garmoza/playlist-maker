@@ -6,6 +6,7 @@ interface AudioPlayerControl {
     fun getPlayerState(): StateFlow<PlayerState>
     fun startPlayer()
     fun pausePlayer()
+    fun stopPlayer()
     fun startForeground()
     fun stopForeground()
 }

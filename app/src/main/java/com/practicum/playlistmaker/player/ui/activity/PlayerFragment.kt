@@ -12,6 +12,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -62,8 +63,17 @@ class PlayerFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.toolbar.setNavigationOnClickListener {
-            findNavController().navigateUp()
+            onNavigateUp()
         }
+
+        requireActivity().onBackPressedDispatcher.addCallback(
+            viewLifecycleOwner,
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    onNavigateUp()
+                }
+            }
+        )
 
         val track: Track = requireArguments().getParcelable(TRACK_KEY)!!
 
@@ -198,6 +208,12 @@ class PlayerFragment : Fragment() {
         super.onResume()
         viewModel.stopForeground()
     }
+
+    private fun onNavigateUp() {
+        findNavController().navigateUp()
+        viewModel.stopPlayer()
+    }
+
 
     private val serviceConnection = object : ServiceConnection {
         override fun onServiceConnected(name: ComponentName?, service: IBinder?) {

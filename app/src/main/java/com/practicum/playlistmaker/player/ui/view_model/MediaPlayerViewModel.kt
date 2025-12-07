@@ -90,6 +90,10 @@ class MediaPlayerViewModel(
         }
     }
 
+    fun stopPlayer() {
+        audioPlayerControl?.stopPlayer()
+    }
+
     fun startForeground() {
         if (playerLiveData.value?.isPlaying == true) {
             audioPlayerControl?.startForeground()

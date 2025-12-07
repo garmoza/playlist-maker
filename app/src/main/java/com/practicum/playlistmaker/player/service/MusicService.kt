@@ -149,6 +149,13 @@ class MusicService : Service(), AudioPlayerControl {
         _playerState.value = PlayerState.Paused(mediaPlayer.currentPosition)
     }
 
+    override fun stopPlayer() {
+        timerJob?.cancel()
+
+        mediaPlayer.stop()
+        _playerState.value = PlayerState.Prepared()
+    }
+
     override fun startForeground() {
         ServiceCompat.startForeground(
             this,
