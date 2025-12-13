@@ -1,6 +1,5 @@
 package com.practicum.playlistmaker.player.ui.view_model
 
-import android.media.MediaPlayer
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -9,11 +8,11 @@ import com.practicum.playlistmaker.common.domain.models.Playlist
 import com.practicum.playlistmaker.common.domain.models.Track
 import com.practicum.playlistmaker.favourite.domain.FavouriteTracksInteractor
 import com.practicum.playlistmaker.playlist.domain.PlaylistInteractor
-import com.practicum.playlistmaker.player.domain.model.PlayerState
+import com.practicum.playlistmaker.player.domain.model.PlayerScreenState
 import com.practicum.playlistmaker.player.domain.model.TrackAddedToPlaylistToastState
 import com.practicum.playlistmaker.player.domain.model.TrackNotAvailableToastState
+import com.practicum.playlistmaker.player.service.AudioPlayerControl
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class MediaPlayerViewModel(
@@ -21,10 +20,6 @@ class MediaPlayerViewModel(
     private val playlistInteractor: PlaylistInteractor,
     private val track: Track
 ) : ViewModel() {
-
-    private var mediaPlayer: MediaPlayer = MediaPlayer()
-
-    private var timerJob: Job? = null
 
     private val playerLiveData = MutableLiveData(LOADING_STATE)
     private val trackNotAvailableToastLiveData = MutableLiveData<TrackNotAvailableToastState>(
@@ -35,6 +30,9 @@ class MediaPlayerViewModel(
         TrackAddedToPlaylistToastState.None
     )
 
+    private var audioPlayerControl: AudioPlayerControl? = null
+    private var playerStateJob: Job? = null
+
     init {
         viewModelScope.launch {
             val isFavourite = favouriteTracksInteractor.existsById(track.trackId)
@@ -44,34 +42,32 @@ class MediaPlayerViewModel(
             )
         }
 
-        prepareMediaPlayer()
-
         loadPlaylists()
     }
 
-    private fun prepareMediaPlayer() {
-        mediaPlayer.setDataSource(track.previewUrl)
-        mediaPlayer.prepareAsync()
-        mediaPlayer.setOnPreparedListener {
-            playerLiveData.value = playerLiveData.value?.copy(
-                isTrackAvailable = true,
-                isPlaying = false
-            )
-        }
-        mediaPlayer.setOnCompletionListener {
-            playerLiveData.value = playerLiveData.value?.copy(
-                isTrackAvailable = true,
-                isPlaying = false,
-                progress = 0
-            )
-            mediaPlayer.seekTo(0)
-        }
-    }
-
-    fun getPlayerLiveData(): LiveData<PlayerState> = playerLiveData
+    fun getPlayerLiveData(): LiveData<PlayerScreenState> = playerLiveData
     fun getToastLiveData(): LiveData<TrackNotAvailableToastState> = trackNotAvailableToastLiveData
     fun getPlaylistsLiveData(): LiveData<List<Playlist>> = playlistsLiveData
     fun getTrackAddedToPlaylistLiveData(): LiveData<TrackAddedToPlaylistToastState> = trackAddedToPlaylistToastLiveData
+
+    fun setAudioPlayerControl(audioPlayerControl: AudioPlayerControl) {
+        this.audioPlayerControl = audioPlayerControl
+
+        playerStateJob?.cancel()
+        playerStateJob = viewModelScope.launch {
+            audioPlayerControl.getPlayerState().collect {
+                playerLiveData.value = playerLiveData.value?.copy(
+                    isTrackAvailable = it.isTrackAvailable,
+                    isPlaying = it.isPlaying,
+                    progress = it.progress
+                )
+            }
+        }
+    }
+
+    fun removeAudioPlayerControl() {
+        audioPlayerControl = null
+    }
 
     fun switchBetweenPlayAndPause() {
         if (playerLiveData.value?.isPlaying == true) {
@@ -83,38 +79,33 @@ class MediaPlayerViewModel(
 
     private fun play() {
         if (playerLiveData.value?.isTrackAvailable == true) {
-            playerLiveData.value = playerLiveData.value?.copy(isPlaying = true)
-
-            mediaPlayer.start()
-            updatePlaytime()
+            audioPlayerControl?.startPlayer()
         } else {
             trackNotAvailableToastLiveData.value = TrackNotAvailableToastState.Show
         }
     }
 
-    fun pause() {
+    private fun pause() {
         if (playerLiveData.value?.isTrackAvailable == true) {
-            timerJob?.cancel()
-
-            mediaPlayer.pause()
-            playerLiveData.value = playerLiveData.value?.copy(isPlaying = false)
+            audioPlayerControl?.pausePlayer()
         } else {
             trackNotAvailableToastLiveData.value = TrackNotAvailableToastState.Show
         }
     }
 
-    override fun onCleared() {
-        super.onCleared()
-        mediaPlayer.release()
+    fun stopPlayer() {
+        audioPlayerControl?.stopPlayer()
     }
 
-    private fun updatePlaytime() {
-        timerJob?.cancel()
-        timerJob = viewModelScope.launch {
-            while (mediaPlayer.isPlaying) {
-                playerLiveData.value = playerLiveData.value?.copy(progress = mediaPlayer.currentPosition)
-                delay(DELAY)
-            }
+    fun startForeground() {
+        if (playerLiveData.value?.isPlaying == true) {
+            audioPlayerControl?.startForeground()
+        }
+    }
+
+    fun stopForeground() {
+        if (playerLiveData.value?.isPlaying == true) {
+            audioPlayerControl?.stopForeground()
         }
     }
 
@@ -158,15 +149,13 @@ class MediaPlayerViewModel(
     }
 
     companion object {
-        private val LOADING_STATE = PlayerState(
+        private val LOADING_STATE = PlayerScreenState(
             isLoading = true,
             isTrackAvailable = false,
             isPlaying = false,
             isFavourite = false,
             progress = 0
         )
-
-        private const val DELAY = 300L
 
         private const val UNKNOWN_TRACK_NAME = "Track Unknown"
     }

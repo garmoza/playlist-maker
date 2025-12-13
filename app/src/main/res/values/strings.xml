@@ -72,4 +72,9 @@
     <string name="edit">Edit</string>
     <string name="save">Save</string>
     <string name="no_tracks_in_playlist">There are no tracks in the playlist</string>
+
+    <string name="music_service_notification_channel_name">Music service</string>
+    <string name="music_service_notification_channel_description">Service for playing music</string>
+    <string name="music_service_notification_title" translatable="false">Playlist Maker</string>
+    <string name="music_service_notification_text" translatable="false">%s - %s</string>
 </resources>

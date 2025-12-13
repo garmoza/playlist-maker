@@ -1,11 +1,18 @@
 package com.practicum.playlistmaker.player.ui.activity
 
+import android.content.ComponentName
+import android.content.Context
+import android.content.Intent
+import android.content.ServiceConnection
 import android.os.Bundle
+import android.os.IBinder
+import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -20,9 +27,10 @@ import com.practicum.playlistmaker.common.domain.models.Track
 import com.practicum.playlistmaker.common.ui.debounceClick
 import com.practicum.playlistmaker.common.ui.dpToPx
 import com.practicum.playlistmaker.databinding.FragmentPlayerBinding
-import com.practicum.playlistmaker.player.domain.model.PlayerState
+import com.practicum.playlistmaker.player.domain.model.PlayerScreenState
 import com.practicum.playlistmaker.player.domain.model.TrackAddedToPlaylistToastState
 import com.practicum.playlistmaker.player.domain.model.TrackNotAvailableToastState
+import com.practicum.playlistmaker.player.service.MusicService
 import com.practicum.playlistmaker.player.ui.view_model.MediaPlayerViewModel
 import org.koin.android.ext.android.getKoin
 import org.koin.core.parameter.parametersOf
@@ -55,8 +63,17 @@ class PlayerFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.toolbar.setNavigationOnClickListener {
-            findNavController().navigateUp()
+            onNavigateUp()
         }
+
+        requireActivity().onBackPressedDispatcher.addCallback(
+            viewLifecycleOwner,
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    onNavigateUp()
+                }
+            }
+        )
 
         val track: Track = requireArguments().getParcelable(TRACK_KEY)!!
 
@@ -136,6 +153,8 @@ class PlayerFragment : Fragment() {
                 R.id.action_playerFragment_to_addPlaylistFragment
             )
         }
+
+        bindMusicService(track)
     }
 
     private fun onPlaylistClick(playlist: Playlist) {
@@ -180,7 +199,46 @@ class PlayerFragment : Fragment() {
         viewModel.loadPlaylists()
     }
 
-    private fun renderPlayerStatus(status: PlayerState) {
+    override fun onPause() {
+        super.onPause()
+        viewModel.startForeground()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.stopForeground()
+    }
+
+    private fun onNavigateUp() {
+        findNavController().navigateUp()
+        viewModel.stopPlayer()
+    }
+
+
+    private val serviceConnection = object : ServiceConnection {
+        override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
+            val binder = service as MusicService.MusicServiceBinder
+            viewModel.setAudioPlayerControl(binder.getService())
+        }
+
+        override fun onServiceDisconnected(name: ComponentName?) {
+            viewModel.removeAudioPlayerControl()
+        }
+    }
+
+    private fun bindMusicService(track: Track) {
+        val intent = Intent(requireContext(), MusicService::class.java).apply {
+            putExtra(MusicService.TRACK_EXTRA_NAME, track as Parcelable)
+        }
+
+        requireContext().bindService(intent, serviceConnection, Context.BIND_AUTO_CREATE)
+    }
+
+    private fun unbindMusicService() {
+        requireContext().unbindService(serviceConnection)
+    }
+
+    private fun renderPlayerStatus(status: PlayerScreenState) {
         if (status.isLoading) {
             binding.setVisibleViews(isVisible = false)
             binding.progressBar.isVisible = true
@@ -226,12 +284,8 @@ class PlayerFragment : Fragment() {
         countryValue.isVisible = isVisible
     }
 
-    override fun onPause() {
-        viewModel.pause()
-        super.onPause()
-    }
-
     override fun onDestroyView() {
+        unbindMusicService()
         super.onDestroyView()
         _binding = null
     }

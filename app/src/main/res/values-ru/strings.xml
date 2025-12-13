@@ -64,4 +64,6 @@
     <string name="edit">Редактировать</string>
     <string name="save">Сохранить</string>
     <string name="no_tracks_in_playlist">В плейлисте нет треков</string>
+    <string name="music_service_notification_channel_name">Музыкальный сервис</string>
+    <string name="music_service_notification_channel_description">Сервис для воспроизведения музыки</string>
 </resources>
