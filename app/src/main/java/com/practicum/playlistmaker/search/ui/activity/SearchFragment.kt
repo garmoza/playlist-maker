@@ -12,6 +12,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
+import androidx.compose.ui.platform.ComposeView
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
@@ -23,9 +24,11 @@ import com.practicum.playlistmaker.common.ui.DEBOUNCE_DELAY_NONE
 import com.practicum.playlistmaker.common.ui.debounceClick
 import com.practicum.playlistmaker.common.ui.debounceRequest
 import com.practicum.playlistmaker.databinding.FragmentSearchBinding
+import com.practicum.playlistmaker.main.ui.theme.Theme
 import com.practicum.playlistmaker.player.ui.activity.PlayerFragment
 import com.practicum.playlistmaker.search.domain.model.ErrorType
 import com.practicum.playlistmaker.search.domain.model.SearchScreenState
+import com.practicum.playlistmaker.search.ui.compose.Search
 import com.practicum.playlistmaker.search.ui.view_model.SearchViewModel
 import kotlinx.coroutines.Job
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -50,122 +53,137 @@ class SearchFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentSearchBinding.inflate(inflater, container, false)
-        return binding.root
+//        _binding = FragmentSearchBinding.inflate(inflater, container, false)
+//        return binding.root
+
+        return ComposeView(requireContext()).apply {
+            setContent {
+                Theme {
+                    Search(
+                        onTrackClick = { track ->
+                            findNavController().navigate(
+                                R.id.action_searchFragment_to_playerFragment,
+                                PlayerFragment.createArgs(track)
+                            )
+                        }
+                    )
+                }
+            }
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        handler = Handler(Looper.getMainLooper())
-
-        viewModel.getSearchScreenLiveData().observe(viewLifecycleOwner) { state ->
-            when (state) {
-                is SearchScreenState.Content -> {
-                    if (state.tracks.isEmpty()) {
-                        binding.setState(SearchActivityState.EMPTY)
-                    } else {
-                        trackAdapter.setItems(state.tracks)
-                        binding.setState(SearchActivityState.TRACK_LIST)
-                    }
-                }
-                is SearchScreenState.History -> {
-                    if (state.tracks.isEmpty()) {
-                        binding.setState(SearchActivityState.EMPTY)
-                    } else {
-                        trackHistoryAdapter.setItems(state.tracks)
-                        binding.setState(SearchActivityState.HISTORY)
-                    }
-                }
-                is SearchScreenState.Loading -> binding.setState(SearchActivityState.SEARCHING)
-                is SearchScreenState.Error -> {
-                    when (state.type) {
-                        ErrorType.TRACK_NOT_FOUND -> binding.setState(SearchActivityState.TRACK_NOT_FOUND)
-                        ErrorType.NETWORK_PROBLEM -> binding.setState(SearchActivityState.NETWORK_PROBLEM)
-                    }
-                }
-            }
-        }
-
-        initTrackAdapter(this::onTrackClick)
-        initTrackHistoryAdapter(this::onTrackClick)
-
-        binding.imageViewClear.setOnClickListener {
-            trackAdapter.setItems(emptyList())
-            binding.editTextSearch.setText("")
-            binding.editTextSearch.clearFocus()
-            val manager = requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-            manager.hideSoftInputFromWindow(binding.editTextSearch.windowToken, 0)
-            binding.setState(SearchActivityState.EMPTY)
-        }
-
-        val debounceSearch = debounceRequest(viewLifecycleOwner.lifecycleScope) { changedText: String ->
-            viewModel.searchTracks(changedText)
-        }
-        val searchTextWatcher = object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-                // empty
-            }
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                searchedValue = s.toString()
-                binding.imageViewClear.isVisible = if (s.isNullOrEmpty()) {
-                    searchJob?.cancel()
-                    false
-                } else {
-                    searchJob = debounceSearch(searchedValue, DEBOUNCE_REQUEST_DELAY_DEFAULT)
-                    true
-                }
-            }
-
-            override fun afterTextChanged(s: Editable?) {
-                // empty
-            }
-        }
-        binding.editTextSearch.addTextChangedListener(searchTextWatcher)
-
-        binding.editTextSearch.setOnEditorActionListener { _, actionId, _ ->
-            if (actionId == EditorInfo.IME_ACTION_DONE) {
-                Log.i(TAG, "Search action editor click")
-                searchJob = debounceSearch(searchedValue, DEBOUNCE_DELAY_NONE)
-            }
-            false
-        }
-
-        binding.placeholderButton.setOnClickListener {
-            Log.i(TAG, "Search action button click")
-            searchJob = debounceSearch(searchedValue, DEBOUNCE_DELAY_NONE)
-        }
-
-        binding.editTextSearch.setOnFocusChangeListener { v, hasFocus ->
-            if (binding.editTextSearch.hasFocus() && binding.editTextSearch.text.isEmpty()) {
-                viewModel.displayHistory()
-            } else {
-                binding.setState(SearchActivityState.TRACK_LIST)
-            }
-        }
-
-        binding.editTextSearch.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-            }
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                if (binding.editTextSearch.hasFocus() && binding.editTextSearch.text.isEmpty()) {
-                    viewModel.displayHistory()
-                } else {
-                    binding.setState(SearchActivityState.TRACK_LIST)
-                }
-            }
-
-            override fun afterTextChanged(s: Editable?) {
-            }
-        })
-
-        binding.clearHistoryButton.setOnClickListener {
-            viewModel.clearHistory()
-        }
-
-        onRestoreInstanceState(savedInstanceState)
+//        handler = Handler(Looper.getMainLooper())
+//
+//        viewModel.getSearchScreenLiveData().observe(viewLifecycleOwner) { state ->
+//            when (state) {
+//                is SearchScreenState.Content -> {
+//                    if (state.tracks.isEmpty()) {
+//                        binding.setState(SearchActivityState.EMPTY)
+//                    } else {
+//                        trackAdapter.setItems(state.tracks)
+//                        binding.setState(SearchActivityState.TRACK_LIST)
+//                    }
+//                }
+//                is SearchScreenState.History -> {
+//                    if (state.tracks.isEmpty()) {
+//                        binding.setState(SearchActivityState.EMPTY)
+//                    } else {
+//                        trackHistoryAdapter.setItems(state.tracks)
+//                        binding.setState(SearchActivityState.HISTORY)
+//                    }
+//                }
+//                is SearchScreenState.Loading -> binding.setState(SearchActivityState.SEARCHING)
+//                is SearchScreenState.Error -> {
+//                    when (state.type) {
+//                        ErrorType.TRACK_NOT_FOUND -> binding.setState(SearchActivityState.TRACK_NOT_FOUND)
+//                        ErrorType.NETWORK_PROBLEM -> binding.setState(SearchActivityState.NETWORK_PROBLEM)
+//                    }
+//                }
+//            }
+//        }
+//
+//        initTrackAdapter(this::onTrackClick)
+//        initTrackHistoryAdapter(this::onTrackClick)
+//
+//        binding.imageViewClear.setOnClickListener {
+//            trackAdapter.setItems(emptyList())
+//            binding.editTextSearch.setText("")
+//            binding.editTextSearch.clearFocus()
+//            val manager = requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+//            manager.hideSoftInputFromWindow(binding.editTextSearch.windowToken, 0)
+//            binding.setState(SearchActivityState.EMPTY)
+//        }
+//
+//        val debounceSearch = debounceRequest(viewLifecycleOwner.lifecycleScope) { changedText: String ->
+//            viewModel.searchTracks(changedText)
+//        }
+//        val searchTextWatcher = object : TextWatcher {
+//            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+//                // empty
+//            }
+//
+//            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+//                searchedValue = s.toString()
+//                binding.imageViewClear.isVisible = if (s.isNullOrEmpty()) {
+//                    searchJob?.cancel()
+//                    false
+//                } else {
+//                    searchJob = debounceSearch(searchedValue, DEBOUNCE_REQUEST_DELAY_DEFAULT)
+//                    true
+//                }
+//            }
+//
+//            override fun afterTextChanged(s: Editable?) {
+//                // empty
+//            }
+//        }
+//        binding.editTextSearch.addTextChangedListener(searchTextWatcher)
+//
+//        binding.editTextSearch.setOnEditorActionListener { _, actionId, _ ->
+//            if (actionId == EditorInfo.IME_ACTION_DONE) {
+//                Log.i(TAG, "Search action editor click")
+//                searchJob = debounceSearch(searchedValue, DEBOUNCE_DELAY_NONE)
+//            }
+//            false
+//        }
+//
+//        binding.placeholderButton.setOnClickListener {
+//            Log.i(TAG, "Search action button click")
+//            searchJob = debounceSearch(searchedValue, DEBOUNCE_DELAY_NONE)
+//        }
+//
+//        binding.editTextSearch.setOnFocusChangeListener { v, hasFocus ->
+//            if (binding.editTextSearch.hasFocus() && binding.editTextSearch.text.isEmpty()) {
+//                viewModel.displayHistory()
+//            } else {
+//                binding.setState(SearchActivityState.TRACK_LIST)
+//            }
+//        }
+//
+//        binding.editTextSearch.addTextChangedListener(object : TextWatcher {
+//            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+//            }
+//
+//            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+//                if (binding.editTextSearch.hasFocus() && binding.editTextSearch.text.isEmpty()) {
+//                    viewModel.displayHistory()
+//                } else {
+//                    binding.setState(SearchActivityState.TRACK_LIST)
+//                }
+//            }
+//
+//            override fun afterTextChanged(s: Editable?) {
+//            }
+//        })
+//
+//        binding.clearHistoryButton.setOnClickListener {
+//            viewModel.clearHistory()
+//        }
+//
+//        onRestoreInstanceState(savedInstanceState)
     }
 
     private fun onTrackClick(track: Track) {
